@@ -13,7 +13,6 @@
 		39E84C6E260B32BF00776AE7 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 39E84C6D260B32BF00776AE7 /* Preview Assets.xcassets */; };
 		39E84C7A260B32BF00776AE7 /* StaticRouteHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39E84C79260B32BF00776AE7 /* StaticRouteHelperTests.swift */; };
 		39E84C85260B32BF00776AE7 /* StaticRouteHelperUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39E84C84260B32BF00776AE7 /* StaticRouteHelperUITests.swift */; };
-		39E84CA3260B898500776AE7 /* passView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39E84CA2260B898500776AE7 /* passView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,7 +46,6 @@
 		39E84C80260B32BF00776AE7 /* StaticRouteHelperUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StaticRouteHelperUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		39E84C84260B32BF00776AE7 /* StaticRouteHelperUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticRouteHelperUITests.swift; sourceTree = "<group>"; };
 		39E84C86260B32BF00776AE7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		39E84CA2260B898500776AE7 /* passView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = passView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,7 +98,6 @@
 			children = (
 				39E84C66260B32BD00776AE7 /* StaticRouteHelperApp.swift */,
 				39E84C68260B32BD00776AE7 /* ContentView.swift */,
-				39E84CA2260B898500776AE7 /* passView.swift */,
 				39E84C6A260B32BF00776AE7 /* Assets.xcassets */,
 				39E84C6F260B32BF00776AE7 /* Info.plist */,
 				39E84C70260B32BF00776AE7 /* StaticRouteHelper.entitlements */,
@@ -264,7 +261,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				39E84CA3260B898500776AE7 /* passView.swift in Sources */,
 				39E84C69260B32BD00776AE7 /* ContentView.swift in Sources */,
 				39E84C67260B32BD00776AE7 /* StaticRouteHelperApp.swift in Sources */,
 			);

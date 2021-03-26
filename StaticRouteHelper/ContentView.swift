@@ -41,7 +41,7 @@ struct ContentView: View {
 
                         let taskTwo = Process()
                         taskTwo.launchPath = "/usr/bin/sudo"
-                        taskTwo.arguments = ["-S", "route","-n","add","-net",network,"-netmask",mask,gateway]
+                        taskTwo.arguments = ["-S", "/sbin/route","-n","add","-net",network,"-netmask",mask,gateway]
                         
 //                        taskTwo.launchPath = "/sbin/route"
 //                        taskTwo.arguments = ["-n","add","-net","192.168.2.0","-netmask","255.255.255.0","192.168.3.4"]
@@ -52,7 +52,8 @@ struct ContentView: View {
                         let pipeToMe = Pipe()
                         taskTwo.standardOutput = pipeToMe
                         taskTwo.standardError = pipeToMe
-
+                        print(taskTwo.arguments)
+                        print(input)
                         taskOne.launch()
                         taskTwo.launch()
                         let data = pipeToMe.fileHandleForReading.readDataToEndOfFile()

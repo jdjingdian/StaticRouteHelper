@@ -12,7 +12,6 @@ struct StaticRouteHelperApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-//            PassView()
         }
     }
 }

@@ -4,10 +4,38 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>Helper.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
 		<key>StaticRouteHelper.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>0</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>39E84C62260B32BD00776AE7</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>39E84C74260B32BF00776AE7</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>39E84C7F260B32BF00776AE7</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>39E84CAD260C655D00776AE7</key>
+		<dict>
+			<key>primary</key>
+			<true/>
 		</dict>
 	</dict>
 </dict>
