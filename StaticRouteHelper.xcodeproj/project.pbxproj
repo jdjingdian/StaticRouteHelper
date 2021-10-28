@@ -7,8 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		397520C12728EBE900E2D96A /* ProcessHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397520C02728EBE900E2D96A /* ProcessHelper.swift */; };
+		397520C42729336C00E2D96A /* PassEnterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397520C32729336C00E2D96A /* PassEnterView.swift */; };
+		397520C62729381300E2D96A /* ContentScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397520C52729381300E2D96A /* ContentScrollView.swift */; };
+		397520C82729397A00E2D96A /* AppModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397520C72729397A00E2D96A /* AppModels.swift */; };
+		3982A19F272A72A7002BBF63 /* RouteEnterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3982A19E272A72A7002BBF63 /* RouteEnterView.swift */; };
+		3982A1A1272A9166002BBF63 /* BuyCoffeeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3982A1A0272A9166002BBF63 /* BuyCoffeeView.swift */; };
+		3982A1A3272A947A002BBF63 /* HelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3982A1A2272A947A002BBF63 /* HelpView.swift */; };
+		399201C42729962700654ADE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 399201C32729962700654ADE /* ContentView.swift */; };
 		39E84C67260B32BD00776AE7 /* StaticRouteHelperApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39E84C66260B32BD00776AE7 /* StaticRouteHelperApp.swift */; };
-		39E84C69260B32BD00776AE7 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39E84C68260B32BD00776AE7 /* ContentView.swift */; };
 		39E84C6B260B32BF00776AE7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 39E84C6A260B32BF00776AE7 /* Assets.xcassets */; };
 		39E84C6E260B32BF00776AE7 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 39E84C6D260B32BF00776AE7 /* Preview Assets.xcassets */; };
 		39E84C7A260B32BF00776AE7 /* StaticRouteHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39E84C79260B32BF00776AE7 /* StaticRouteHelperTests.swift */; };
@@ -33,9 +40,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		397520C02728EBE900E2D96A /* ProcessHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessHelper.swift; sourceTree = "<group>"; };
+		397520C32729336C00E2D96A /* PassEnterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassEnterView.swift; sourceTree = "<group>"; };
+		397520C52729381300E2D96A /* ContentScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentScrollView.swift; sourceTree = "<group>"; };
+		397520C72729397A00E2D96A /* AppModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModels.swift; sourceTree = "<group>"; };
+		3982A19E272A72A7002BBF63 /* RouteEnterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteEnterView.swift; sourceTree = "<group>"; };
+		3982A1A0272A9166002BBF63 /* BuyCoffeeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuyCoffeeView.swift; sourceTree = "<group>"; };
+		3982A1A2272A947A002BBF63 /* HelpView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelpView.swift; sourceTree = "<group>"; };
+		399201C32729962700654ADE /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		39E84C63260B32BD00776AE7 /* StaticRouteHelper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StaticRouteHelper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		39E84C66260B32BD00776AE7 /* StaticRouteHelperApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticRouteHelperApp.swift; sourceTree = "<group>"; };
-		39E84C68260B32BD00776AE7 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		39E84C6A260B32BF00776AE7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		39E84C6D260B32BF00776AE7 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		39E84C6F260B32BF00776AE7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -73,6 +87,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		397520C22729335700E2D96A /* ChildViews */ = {
+			isa = PBXGroup;
+			children = (
+				397520C32729336C00E2D96A /* PassEnterView.swift */,
+				3982A1A2272A947A002BBF63 /* HelpView.swift */,
+				3982A1A0272A9166002BBF63 /* BuyCoffeeView.swift */,
+				3982A19E272A72A7002BBF63 /* RouteEnterView.swift */,
+				397520C52729381300E2D96A /* ContentScrollView.swift */,
+			);
+			path = ChildViews;
+			sourceTree = "<group>";
+		};
 		39E84C5A260B32BD00776AE7 = {
 			isa = PBXGroup;
 			children = (
@@ -97,7 +123,10 @@
 			isa = PBXGroup;
 			children = (
 				39E84C66260B32BD00776AE7 /* StaticRouteHelperApp.swift */,
-				39E84C68260B32BD00776AE7 /* ContentView.swift */,
+				397520C02728EBE900E2D96A /* ProcessHelper.swift */,
+				399201C32729962700654ADE /* ContentView.swift */,
+				397520C72729397A00E2D96A /* AppModels.swift */,
+				397520C22729335700E2D96A /* ChildViews */,
 				39E84C6A260B32BF00776AE7 /* Assets.xcassets */,
 				39E84C6F260B32BF00776AE7 /* Info.plist */,
 				39E84C70260B32BF00776AE7 /* StaticRouteHelper.entitlements */,
@@ -261,7 +290,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				39E84C69260B32BD00776AE7 /* ContentView.swift in Sources */,
+				397520C82729397A00E2D96A /* AppModels.swift in Sources */,
+				3982A1A1272A9166002BBF63 /* BuyCoffeeView.swift in Sources */,
+				397520C12728EBE900E2D96A /* ProcessHelper.swift in Sources */,
+				399201C42729962700654ADE /* ContentView.swift in Sources */,
+				3982A1A3272A947A002BBF63 /* HelpView.swift in Sources */,
+				3982A19F272A72A7002BBF63 /* RouteEnterView.swift in Sources */,
+				397520C42729336C00E2D96A /* PassEnterView.swift in Sources */,
+				397520C62729381300E2D96A /* ContentScrollView.swift in Sources */,
 				39E84C67260B32BD00776AE7 /* StaticRouteHelperApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -419,6 +455,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = StaticRouteHelper/StaticRouteHelper.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"StaticRouteHelper/Preview Content\"";
@@ -431,6 +468,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = cn.magicdian.StaticRouteHelper;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -443,6 +481,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = StaticRouteHelper/StaticRouteHelper.entitlements;
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"StaticRouteHelper/Preview Content\"";
@@ -455,6 +494,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = cn.magicdian.StaticRouteHelper;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
