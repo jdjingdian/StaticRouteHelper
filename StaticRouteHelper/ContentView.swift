@@ -25,7 +25,7 @@ struct ContentView: View {
     @State var interface: String = ""
     @ObservedObject var suCheck = SuHelper()
     @ObservedObject var proHelper = ProcessHelper()
-    
+    let coreDM:CoreDataManager
     var scrollHelper = ContentScrollView()
     var body: some View {
         VStack{
@@ -47,6 +47,10 @@ struct ContentView: View {
                         
                 }
                 BuyCoffeeView(likeCount: $likeCount)
+                    .onChange(of: manualList.count) { newValue in
+                        coreDM.resetData()
+                        coreDM.saveData(array: manualList)
+                    }
             }.padding(10)
             scrollHelper.manualRouteView(manualArray: $manualList, frameSettings: FramePreference(maxWidth:.infinity,idealHeight: 300), proHelper: proHelper, password: $password,setCount: $setCount)
                 .frame(maxWidth:.infinity)
@@ -89,6 +93,7 @@ struct ContentView: View {
                         self.passLock = true
                     }
                 }
+                self.manualList = coreDM.getAllData()
             }
             proHelper.checkRoute()
         }
@@ -99,7 +104,7 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView(password: .constant("jingdian"), likeCount: .constant(1), setCount: .constant(200))
+        ContentView(password: .constant("jingdian"), likeCount: .constant(1), setCount: .constant(200), coreDM: CoreDataManager())
     }
 }
 

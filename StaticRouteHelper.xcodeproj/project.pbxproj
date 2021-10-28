@@ -15,28 +15,12 @@
 		3982A1A1272A9166002BBF63 /* BuyCoffeeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3982A1A0272A9166002BBF63 /* BuyCoffeeView.swift */; };
 		3982A1A3272A947A002BBF63 /* HelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3982A1A2272A947A002BBF63 /* HelpView.swift */; };
 		3982A1A6272AAF24002BBF63 /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3982A1A4272AAF24002BBF63 /* DataModel.xcdatamodeld */; };
+		3982A1A8272AB19D002BBF63 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3982A1A7272AB19D002BBF63 /* CoreDataManager.swift */; };
 		399201C42729962700654ADE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 399201C32729962700654ADE /* ContentView.swift */; };
 		39E84C67260B32BD00776AE7 /* StaticRouteHelperApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39E84C66260B32BD00776AE7 /* StaticRouteHelperApp.swift */; };
 		39E84C6B260B32BF00776AE7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 39E84C6A260B32BF00776AE7 /* Assets.xcassets */; };
 		39E84C6E260B32BF00776AE7 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 39E84C6D260B32BF00776AE7 /* Preview Assets.xcassets */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		39E84C76260B32BF00776AE7 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 39E84C5B260B32BD00776AE7 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 39E84C62260B32BD00776AE7;
-			remoteInfo = StaticRouteHelper;
-		};
-		39E84C81260B32BF00776AE7 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 39E84C5B260B32BD00776AE7 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 39E84C62260B32BD00776AE7;
-			remoteInfo = StaticRouteHelper;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		397520C02728EBE900E2D96A /* ProcessHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessHelper.swift; sourceTree = "<group>"; };
@@ -47,6 +31,7 @@
 		3982A1A0272A9166002BBF63 /* BuyCoffeeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuyCoffeeView.swift; sourceTree = "<group>"; };
 		3982A1A2272A947A002BBF63 /* HelpView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelpView.swift; sourceTree = "<group>"; };
 		3982A1A5272AAF24002BBF63 /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
+		3982A1A7272AB19D002BBF63 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		399201C32729962700654ADE /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		39E84C63260B32BD00776AE7 /* StaticRouteHelper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StaticRouteHelper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		39E84C66260B32BD00776AE7 /* StaticRouteHelperApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticRouteHelperApp.swift; sourceTree = "<group>"; };
@@ -54,26 +39,10 @@
 		39E84C6D260B32BF00776AE7 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		39E84C6F260B32BF00776AE7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		39E84C70260B32BF00776AE7 /* StaticRouteHelper.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = StaticRouteHelper.entitlements; sourceTree = "<group>"; };
-		39E84C75260B32BF00776AE7 /* StaticRouteHelperTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StaticRouteHelperTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		39E84C80260B32BF00776AE7 /* StaticRouteHelperUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StaticRouteHelperUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		39E84C60260B32BD00776AE7 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		39E84C72260B32BF00776AE7 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		39E84C7D260B32BF00776AE7 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -107,8 +76,6 @@
 			isa = PBXGroup;
 			children = (
 				39E84C63260B32BD00776AE7 /* StaticRouteHelper.app */,
-				39E84C75260B32BF00776AE7 /* StaticRouteHelperTests.xctest */,
-				39E84C80260B32BF00776AE7 /* StaticRouteHelperUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -120,6 +87,7 @@
 				397520C02728EBE900E2D96A /* ProcessHelper.swift */,
 				399201C32729962700654ADE /* ContentView.swift */,
 				397520C72729397A00E2D96A /* AppModels.swift */,
+				3982A1A7272AB19D002BBF63 /* CoreDataManager.swift */,
 				397520C22729335700E2D96A /* ChildViews */,
 				39E84C6A260B32BF00776AE7 /* Assets.xcassets */,
 				3982A1A4272AAF24002BBF63 /* DataModel.xcdatamodeld */,
@@ -158,42 +126,6 @@
 			productReference = 39E84C63260B32BD00776AE7 /* StaticRouteHelper.app */;
 			productType = "com.apple.product-type.application";
 		};
-		39E84C74260B32BF00776AE7 /* StaticRouteHelperTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 39E84C8C260B32BF00776AE7 /* Build configuration list for PBXNativeTarget "StaticRouteHelperTests" */;
-			buildPhases = (
-				39E84C71260B32BF00776AE7 /* Sources */,
-				39E84C72260B32BF00776AE7 /* Frameworks */,
-				39E84C73260B32BF00776AE7 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				39E84C77260B32BF00776AE7 /* PBXTargetDependency */,
-			);
-			name = StaticRouteHelperTests;
-			productName = StaticRouteHelperTests;
-			productReference = 39E84C75260B32BF00776AE7 /* StaticRouteHelperTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		39E84C7F260B32BF00776AE7 /* StaticRouteHelperUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 39E84C8F260B32BF00776AE7 /* Build configuration list for PBXNativeTarget "StaticRouteHelperUITests" */;
-			buildPhases = (
-				39E84C7C260B32BF00776AE7 /* Sources */,
-				39E84C7D260B32BF00776AE7 /* Frameworks */,
-				39E84C7E260B32BF00776AE7 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				39E84C82260B32BF00776AE7 /* PBXTargetDependency */,
-			);
-			name = StaticRouteHelperUITests;
-			productName = StaticRouteHelperUITests;
-			productReference = 39E84C80260B32BF00776AE7 /* StaticRouteHelperUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -205,14 +137,6 @@
 				TargetAttributes = {
 					39E84C62260B32BD00776AE7 = {
 						CreatedOnToolsVersion = 12.4;
-					};
-					39E84C74260B32BF00776AE7 = {
-						CreatedOnToolsVersion = 12.4;
-						TestTargetID = 39E84C62260B32BD00776AE7;
-					};
-					39E84C7F260B32BF00776AE7 = {
-						CreatedOnToolsVersion = 12.4;
-						TestTargetID = 39E84C62260B32BD00776AE7;
 					};
 				};
 			};
@@ -230,8 +154,6 @@
 			projectRoot = "";
 			targets = (
 				39E84C62260B32BD00776AE7 /* StaticRouteHelper */,
-				39E84C74260B32BF00776AE7 /* StaticRouteHelperTests */,
-				39E84C7F260B32BF00776AE7 /* StaticRouteHelperUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -246,20 +168,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		39E84C73260B32BF00776AE7 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		39E84C7E260B32BF00776AE7 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -268,6 +176,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				397520C82729397A00E2D96A /* AppModels.swift in Sources */,
+				3982A1A8272AB19D002BBF63 /* CoreDataManager.swift in Sources */,
 				3982A1A6272AAF24002BBF63 /* DataModel.xcdatamodeld in Sources */,
 				3982A1A1272A9166002BBF63 /* BuyCoffeeView.swift in Sources */,
 				397520C12728EBE900E2D96A /* ProcessHelper.swift in Sources */,
@@ -280,34 +189,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		39E84C71260B32BF00776AE7 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		39E84C7C260B32BF00776AE7 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		39E84C77260B32BF00776AE7 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 39E84C62260B32BD00776AE7 /* StaticRouteHelper */;
-			targetProxy = 39E84C76260B32BF00776AE7 /* PBXContainerItemProxy */;
-		};
-		39E84C82260B32BF00776AE7 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 39E84C62260B32BD00776AE7 /* StaticRouteHelper */;
-			targetProxy = 39E84C81260B32BF00776AE7 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		39E84C87260B32BF00776AE7 /* Debug */ = {
@@ -477,90 +359,6 @@
 			};
 			name = Release;
 		};
-		39E84C8D260B32BF00776AE7 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = BR63YT2EJJ;
-				INFOPLIST_FILE = StaticRouteHelperTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@loader_path/../Frameworks",
-				);
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				PRODUCT_BUNDLE_IDENTIFIER = cn.magicdian.StaticRouteHelperTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/StaticRouteHelper.app/Contents/MacOS/StaticRouteHelper";
-			};
-			name = Debug;
-		};
-		39E84C8E260B32BF00776AE7 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = BR63YT2EJJ;
-				INFOPLIST_FILE = StaticRouteHelperTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@loader_path/../Frameworks",
-				);
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				PRODUCT_BUNDLE_IDENTIFIER = cn.magicdian.StaticRouteHelperTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/StaticRouteHelper.app/Contents/MacOS/StaticRouteHelper";
-			};
-			name = Release;
-		};
-		39E84C90260B32BF00776AE7 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = BR63YT2EJJ;
-				INFOPLIST_FILE = StaticRouteHelperUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@loader_path/../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = cn.magicdian.StaticRouteHelperUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TEST_TARGET_NAME = StaticRouteHelper;
-			};
-			name = Debug;
-		};
-		39E84C91260B32BF00776AE7 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = BR63YT2EJJ;
-				INFOPLIST_FILE = StaticRouteHelperUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@loader_path/../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = cn.magicdian.StaticRouteHelperUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TEST_TARGET_NAME = StaticRouteHelper;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -578,24 +376,6 @@
 			buildConfigurations = (
 				39E84C8A260B32BF00776AE7 /* Debug */,
 				39E84C8B260B32BF00776AE7 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		39E84C8C260B32BF00776AE7 /* Build configuration list for PBXNativeTarget "StaticRouteHelperTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				39E84C8D260B32BF00776AE7 /* Debug */,
-				39E84C8E260B32BF00776AE7 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		39E84C8F260B32BF00776AE7 /* Build configuration list for PBXNativeTarget "StaticRouteHelperUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				39E84C90260B32BF00776AE7 /* Debug */,
-				39E84C91260B32BF00776AE7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

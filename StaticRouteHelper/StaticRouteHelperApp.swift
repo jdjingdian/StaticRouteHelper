@@ -15,7 +15,7 @@ struct StaticRouteHelperApp: App {
     var version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
     var body: some Scene {
         WindowGroup {
-            ContentView(password: $password,likeCount: $likeCount,setCount: $setCount)
+            ContentView(password: $password,likeCount: $likeCount,setCount: $setCount, coreDM: CoreDataManager())
                 .navigationTitle("Static Route Helper")
                 .navigationSubtitle(version ?? "")
         }.windowToolbarStyle(UnifiedWindowToolbarStyle())

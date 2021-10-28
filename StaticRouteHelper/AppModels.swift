@@ -42,7 +42,7 @@ enum netType {
     case expire
 }
 
-struct routeData:Hashable {
+struct routeData:Hashable,Codable {
     var network:String = "192.168.3.0"
     var mask:String = "255.255.255.0"
     var gateway:String = "192.168.4.1"

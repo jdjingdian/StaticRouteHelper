@@ -24,7 +24,21 @@ struct HelpView: View{
                             .fontWeight(.bold)
                     }
                 }
-                NavigationLink(destination: ResetView()){
+                
+                NavigationLink(destination: ResetCoreDataView()){
+                    HStack(){
+                        Image(systemName: "gobackward")
+                            .resizable()
+                            .foregroundColor(.black)
+                            .frame(width: 15, height: 15, alignment: .center)
+                            .scaledToFit()
+                        Text("Reset")
+                            .fontWeight(.bold)
+                    }
+                    
+                }
+                
+                NavigationLink(destination: ResetStateView()){
                     HStack(){
                         Image(systemName: "gobackward")
                             .resizable()
@@ -51,7 +65,7 @@ struct HelpView_Previews: PreviewProvider {
     }
 }
 
-struct ResetView: View{
+struct ResetStateView: View{
     var body: some View {
         VStack{
             Text("⚠️Tap the button to reset the app.⚠️")
@@ -78,6 +92,20 @@ struct ResetView: View{
     }
 }
 
+struct ResetCoreDataView:View{
+    let coreDM:CoreDataManager = CoreDataManager()
+    var body: some View{
+        Button {
+            coreDM.resetData()
+            DispatchQueue.main.asyncAfter(deadline: .now()+0.5 ){
+                NSApp.terminate(self)
+            }
+        } label: {
+            Text("Reset Routing Database")
+        }
+
+    }
+}
 
 struct TutorialView:View{
     var body: some View{
