@@ -12,7 +12,12 @@
 
 
 
+## TODO
 
+- 重写SwiftUI，MVVM
+- 使用Network Extension的方式添加路由（比较遥远，网上似乎没什么教程，而且要开通付费开发者账号……但这样的话iOS也可以使用了(V2)
+- 想办法复用Views
+- 添加汉语支持
 
 License
 -------
