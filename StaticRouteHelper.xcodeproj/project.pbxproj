@@ -17,6 +17,8 @@
 		3982A1A6272AAF24002BBF63 /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3982A1A4272AAF24002BBF63 /* DataModel.xcdatamodeld */; };
 		3982A1A8272AB19D002BBF63 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3982A1A7272AB19D002BBF63 /* CoreDataManager.swift */; };
 		399201C42729962700654ADE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 399201C32729962700654ADE /* ContentView.swift */; };
+		3995F0552801CDBB00510A59 /* RouteCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3995F0542801CDBB00510A59 /* RouteCore.swift */; };
+		3995F0572801CDDC00510A59 /* RouteInterpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3995F0562801CDDC00510A59 /* RouteInterpreter.swift */; };
 		39E84C67260B32BD00776AE7 /* StaticRouteHelperApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39E84C66260B32BD00776AE7 /* StaticRouteHelperApp.swift */; };
 		39E84C6B260B32BF00776AE7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 39E84C6A260B32BF00776AE7 /* Assets.xcassets */; };
 		39E84C6E260B32BF00776AE7 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 39E84C6D260B32BF00776AE7 /* Preview Assets.xcassets */; };
@@ -33,6 +35,8 @@
 		3982A1A5272AAF24002BBF63 /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
 		3982A1A7272AB19D002BBF63 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		399201C32729962700654ADE /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		3995F0542801CDBB00510A59 /* RouteCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteCore.swift; sourceTree = "<group>"; };
+		3995F0562801CDDC00510A59 /* RouteInterpreter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteInterpreter.swift; sourceTree = "<group>"; };
 		39E84C63260B32BD00776AE7 /* StaticRouteHelper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StaticRouteHelper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		39E84C66260B32BD00776AE7 /* StaticRouteHelperApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticRouteHelperApp.swift; sourceTree = "<group>"; };
 		39E84C6A260B32BF00776AE7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -85,6 +89,8 @@
 			children = (
 				39E84C66260B32BD00776AE7 /* StaticRouteHelperApp.swift */,
 				397520C02728EBE900E2D96A /* ProcessHelper.swift */,
+				3995F0542801CDBB00510A59 /* RouteCore.swift */,
+				3995F0562801CDDC00510A59 /* RouteInterpreter.swift */,
 				399201C32729962700654ADE /* ContentView.swift */,
 				397520C72729397A00E2D96A /* AppModels.swift */,
 				3982A1A7272AB19D002BBF63 /* CoreDataManager.swift */,
@@ -178,9 +184,11 @@
 				397520C82729397A00E2D96A /* AppModels.swift in Sources */,
 				3982A1A8272AB19D002BBF63 /* CoreDataManager.swift in Sources */,
 				3982A1A6272AAF24002BBF63 /* DataModel.xcdatamodeld in Sources */,
+				3995F0572801CDDC00510A59 /* RouteInterpreter.swift in Sources */,
 				3982A1A1272A9166002BBF63 /* BuyCoffeeView.swift in Sources */,
 				397520C12728EBE900E2D96A /* ProcessHelper.swift in Sources */,
 				399201C42729962700654ADE /* ContentView.swift in Sources */,
+				3995F0552801CDBB00510A59 /* RouteCore.swift in Sources */,
 				3982A1A3272A947A002BBF63 /* HelpView.swift in Sources */,
 				3982A19F272A72A7002BBF63 /* RouteEnterView.swift in Sources */,
 				397520C42729336C00E2D96A /* PassEnterView.swift in Sources */,

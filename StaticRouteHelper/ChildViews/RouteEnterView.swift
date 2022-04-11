@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 struct RouteEnterView: View {
-
+    @ObservedObject var netinfo: RouteInterpreter
     @Binding var manualData: routeData
     @Binding var manualList: [routeData]
     @State var plusColor:Color = .blue
@@ -34,21 +34,28 @@ struct RouteEnterView: View {
                 .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.gray,lineWidth: 1))
                 .onTapGesture {
                     plusColor = Color("highlight")
-                    
-                    var trueData = manualData
-                    var falseData = manualData
-                    trueData.isOn = true
-                    falseData.isOn = false
-                    
-                    if manualList.contains(trueData){
-                        print("数据已存在")
-                    }else if manualList.contains(falseData){
-                        print("数据已存在")
-                    }else{
-                        manualList.append(manualData)
+//
+//                    var trueData = manualData
+//                    var falseData = manualData
+//                    trueData.isOn = true
+//                    falseData.isOn = false
+//
+//                    if manualList.contains(trueData){
+//                        print("数据已存在")
+//                    }else if manualList.contains(falseData){
+//                        print("数据已存在")
+//                    }else{
+//                        manualList.append(manualData)
+//                    }
+//
+//
+//                    print(manualList)
+                    if manualData.gateway == ""{
+                        netinfo.AddRoute(network: manualData.network, mask: manualData.mask, isGateway: false, gate: manualData.interface)
+                    }else if manualData.interface == ""{
+                        netinfo.AddRoute(network: manualData.network, mask: manualData.mask, isGateway: true, gate: manualData.gateway)
                     }
                     
-                    print(manualList)
                     DispatchQueue.main.asyncAfter(deadline: .now()+0.1) {
                         plusColor = .blue
                     }

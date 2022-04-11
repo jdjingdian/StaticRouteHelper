@@ -12,10 +12,11 @@ struct StaticRouteHelperApp: App {
     @AppStorage("password") var password = ""
     @AppStorage("likeCount") var likeCount:Int = 0
     @AppStorage("setCount") var setCount:Int = 0
+    let netinfo = RouteInterpreter()
     var version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
     var body: some Scene {
         WindowGroup {
-            ContentView(password: $password,likeCount: $likeCount,setCount: $setCount, coreDM: CoreDataManager())
+            ContentView(netinfo: netinfo, password: $password,likeCount: $likeCount,setCount: $setCount, coreDM: CoreDataManager())
                 .navigationTitle("Static Route Helper")
                 .navigationSubtitle(version ?? "")
         }.windowToolbarStyle(UnifiedWindowToolbarStyle())

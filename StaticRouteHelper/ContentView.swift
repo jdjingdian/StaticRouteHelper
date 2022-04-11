@@ -10,6 +10,7 @@ import Foundation
 
 
 struct ContentView: View {
+    @ObservedObject var netinfo: RouteInterpreter
     @Binding var password:String
     @Binding var likeCount:Int
     @Binding var setCount:Int
@@ -30,15 +31,17 @@ struct ContentView: View {
     var body: some View {
         VStack{
             HStack{
-                RouteEnterView(manualData: $manualData, manualList: $manualList)
+                RouteEnterView(netinfo: netinfo, manualData: $manualData, manualList: $manualList)
                     .padding(10)
                     .opacity(passLock ? 1:0)
                 Button {
-                    if let url = URL(string: "static://help") { //replace myapp with your app's name
-                        NSWorkspace.shared.open(url)
-                    }
+//                    if let url = URL(string: "static://help") { //replace myapp with your app's name
+//                        NSWorkspace.shared.open(url)
+//                    }
+                    netinfo.AddRoute(network: "123", mask: "1w23", isGateway: true, gate: "1234")
                     
                 } label: {
+                    Text("Size of Array: \(netinfo.routes.count)")
                     Image(systemName: "questionmark.circle.fill")
                         .resizable()
                         .foregroundColor(.yellow)
@@ -46,21 +49,19 @@ struct ContentView: View {
                         .scaledToFit()
                         
                 }
-                BuyCoffeeView(likeCount: $likeCount)
-                    .onChange(of: manualList.count) { newValue in
-                        coreDM.resetData()
-                        coreDM.saveData(array: manualList)
-                    }
             }.padding(10)
-            scrollHelper.manualRouteView(manualArray: $manualList, frameSettings: FramePreference(maxWidth:.infinity,idealHeight: 300), proHelper: proHelper, password: $password,setCount: $setCount)
-                .frame(maxWidth:.infinity)
-                .overlay(RoundedRectangle(cornerRadius: 0).stroke(Color.gray,lineWidth: 1))
-                .padding(10)
-                .opacity(passLock ? 1:0)
-            scrollHelper.netStatView(netArray :$proHelper.netArray, frameSettings: FramePreference(maxWidth:.infinity,idealHeight: 300))
-                .overlay(RoundedRectangle(cornerRadius: 0).stroke(Color.gray,lineWidth: 1))
-                .padding(10)
-                .opacity(passLock ? 1:0)
+//            scrollHelper.manualRouteView(manualArray: $manualList, frameSettings: FramePreference(maxWidth:.infinity,idealHeight: 300), proHelper: proHelper, password: $password,setCount: $setCount)
+//                .frame(maxWidth:.infinity)
+//                .overlay(RoundedRectangle(cornerRadius: 0).stroke(Color.gray,lineWidth: 1))
+//                .padding(10)
+//                .opacity(passLock ? 1:0)
+            LazyVGrid(columns:[GridItem(.adaptive(minimum: 65))]){
+                ForEach(netinfo.routes){ route in
+                    Text("Test")
+                                         
+                
+                }
+            }
             HStack(){
             PassEnterView(password: $password, passLock: $passLock, suCheck: suCheck)
                 .padding(10)
@@ -104,7 +105,8 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView(password: .constant("jingdian"), likeCount: .constant(1), setCount: .constant(200), coreDM: CoreDataManager())
+        let netinfo = RouteInterpreter()
+        ContentView(netinfo: netinfo, password: .constant("jingdian"), likeCount: .constant(1), setCount: .constant(200), coreDM: CoreDataManager())
     }
 }
 
