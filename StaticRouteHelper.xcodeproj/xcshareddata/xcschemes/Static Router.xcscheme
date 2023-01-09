@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "39E84C62260B32BD00776AE7"
-               BuildableName = "StaticRouteHelper.app"
-               BlueprintName = "StaticRouteHelper"
+               BuildableName = "Static Router.app"
+               BlueprintName = "Static Router"
                ReferencedContainer = "container:StaticRouteHelper.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -65,8 +65,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "39E84C62260B32BD00776AE7"
-            BuildableName = "StaticRouteHelper.app"
-            BlueprintName = "StaticRouteHelper"
+            BuildableName = "Static Router.app"
+            BlueprintName = "Static Router"
             ReferencedContainer = "container:StaticRouteHelper.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -82,8 +82,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "39E84C62260B32BD00776AE7"
-            BuildableName = "StaticRouteHelper.app"
-            BlueprintName = "StaticRouteHelper"
+            BuildableName = "Static Router.app"
+            BlueprintName = "Static Router"
             ReferencedContainer = "container:StaticRouteHelper.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
