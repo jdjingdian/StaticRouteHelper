@@ -1,0 +1,13 @@
+/* 
+  Localizable.strings
+  StaticRouteHelper
+
+  Created by 经典 on 9/1/2023.
+  
+*/
+
+"Privileged Helper Tool not installed!" = "助手后台程序没有安装！";
+"The Static Route Helper need to be installed in order to modified system route." = "静态路由助手只有在安装后才有权限修改系统路由表。";
+"Cancel" = "取消";
+"Install" = "安装";
+"Install Helper to modify system route" = "安装助手后可以控制系统路由表";

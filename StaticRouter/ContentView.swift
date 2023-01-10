@@ -8,8 +8,8 @@
 import SwiftUI
 import Foundation
 
-
 struct ContentView: View {
+    @ObservedObject var router:RouterCoreConnector
     @Binding var password:String
     @Binding var likeCount:Int
     @Binding var setCount:Int
@@ -25,8 +25,11 @@ struct ContentView: View {
     @State var interface: String = ""
     @ObservedObject var suCheck = SuHelper()
     @ObservedObject var proHelper = ProcessHelper()
+    
+    @State var testALert: Bool = true;
     let coreDM:CoreDataManager
     var scrollHelper = ContentScrollView()
+    private let installMessage:String = "Install Helper to modify system route"
     var body: some View {
         VStack{
             HStack{
@@ -62,9 +65,9 @@ struct ContentView: View {
                 .padding(10)
                 .opacity(passLock ? 1:0)
             HStack(){
-            PassEnterView(password: $password, passLock: $passLock, suCheck: suCheck)
-                .padding(10)
-                .opacity(passLock ? 0:1)
+//            PassEnterView(password: $password, passLock: $passLock, suCheck: suCheck)
+//                .padding(10)
+//                .opacity(passLock ? 0:1)
                 
                 Button {
                     for line in self.manualList{
@@ -83,6 +86,12 @@ struct ContentView: View {
                 } label: {
                     Text("Exit")
                 }
+                
+                Button{
+                    router.CheckInstallState()
+                }label: {
+                    Text("Check Install")
+                }
             }
 
         }.onAppear {
@@ -96,6 +105,13 @@ struct ContentView: View {
                 self.manualList = coreDM.getAllData()
             }
             proHelper.checkRoute()
+        }.alert(isPresented: .constant(true)) {
+            return Alert(title: Text("Privileged Helper Tool not installed!"),message: Text("The Static Route Helper need to be installed in order to modified system route."), primaryButton: .default(Text("Install")){
+                print("user try install helper")
+                router.InstallHelper(message: LocalizedStringKey(installMessage).toString()+"\n\n")
+            }, secondaryButton: .default(Text("Cancel")){
+                print("user cancel alert")
+            })
         }
     }
 }
@@ -104,7 +120,34 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView(password: .constant("jingdian"), likeCount: .constant(1), setCount: .constant(200), coreDM: CoreDataManager())
+        ContentView(router: RouterCoreConnector(), password: .constant("jingdian"), likeCount: .constant(1), setCount: .constant(200), coreDM: CoreDataManager())
     }
 }
 
+extension LocalizedStringKey {
+
+    /**
+     Return localized value of thisLocalizedStringKey
+     */
+    public func toString() -> String {
+        //use reflection
+        let mirror = Mirror(reflecting: self)
+        
+        //try to find 'key' attribute value
+        let attributeLabelAndValue = mirror.children.first { (arg0) -> Bool in
+            let (label, _) = arg0
+            if(label == "key"){
+                return true;
+            }
+            return false;
+        }
+        
+        if(attributeLabelAndValue != nil) {
+            //ask for localization of found key via NSLocalizedString
+            return String.localizedStringWithFormat(NSLocalizedString(attributeLabelAndValue!.value as! String, comment: ""));
+        }
+        else {
+            return "Swift LocalizedStringKey signature must have changed. @see Apple documentation."
+        }
+    }
+}
