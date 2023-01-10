@@ -1,0 +1,13 @@
+/* 
+  Localizable.strings
+  StaticRouteHelper
+
+  Created by 经典 on 9/1/2023.
+  
+*/
+
+"Privileged Helper Tool not installed!" = "Privileged Helper Tool not installed!";
+"The Static Route Helper need to be installed in order to modified system route." = "The Static Route Helper need to be installed in order to modified system route.";
+"Cancel" = "Cancel";
+"Install" = "Install";
+"Install Helper to modify system route" = "Install Helper to modify system route";
