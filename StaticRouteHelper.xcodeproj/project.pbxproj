@@ -23,6 +23,7 @@
 		39625607296C442F00DB6000 /* HelperToolInfoPropertyList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39625605296C442F00DB6000 /* HelperToolInfoPropertyList.swift */; };
 		39625609296C54D400DB6000 /* HelperToolLaunchdPropertyList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39625608296C54D400DB6000 /* HelperToolLaunchdPropertyList.swift */; };
 		3962560A296C54D400DB6000 /* HelperToolLaunchdPropertyList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39625608296C54D400DB6000 /* HelperToolLaunchdPropertyList.swift */; };
+		3962560C296E4C8500DB6000 /* ContentViewDev.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3962560B296E4C8500DB6000 /* ContentViewDev.swift */; };
 		397520C12728EBE900E2D96A /* ProcessHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397520C02728EBE900E2D96A /* ProcessHelper.swift */; };
 		397520C42729336C00E2D96A /* PassEnterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397520C32729336C00E2D96A /* PassEnterView.swift */; };
 		397520C62729381300E2D96A /* ContentScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397520C52729381300E2D96A /* ContentScrollView.swift */; };
@@ -73,6 +74,7 @@
 		39625603296C204200DB6000 /* HelperToolMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelperToolMonitor.swift; sourceTree = "<group>"; };
 		39625605296C442F00DB6000 /* HelperToolInfoPropertyList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelperToolInfoPropertyList.swift; sourceTree = "<group>"; };
 		39625608296C54D400DB6000 /* HelperToolLaunchdPropertyList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelperToolLaunchdPropertyList.swift; sourceTree = "<group>"; };
+		3962560B296E4C8500DB6000 /* ContentViewDev.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewDev.swift; sourceTree = "<group>"; };
 		397520C02728EBE900E2D96A /* ProcessHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessHelper.swift; sourceTree = "<group>"; };
 		397520C32729336C00E2D96A /* PassEnterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassEnterView.swift; sourceTree = "<group>"; };
 		397520C52729381300E2D96A /* ContentScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentScrollView.swift; sourceTree = "<group>"; };
@@ -206,6 +208,7 @@
 				396255FF296C15E900DB6000 /* RouterCore.swift */,
 				39625601296C161000DB6000 /* RouterCoreConnector.swift */,
 				39625603296C204200DB6000 /* HelperToolMonitor.swift */,
+				3962560B296E4C8500DB6000 /* ContentViewDev.swift */,
 			);
 			path = StaticRouter;
 			sourceTree = "<group>";
@@ -271,7 +274,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1420;
-				LastUpgradeCheck = 1240;
+				LastUpgradeCheck = 1420;
 				TargetAttributes = {
 					396255DC296C075400DB6000 = {
 						CreatedOnToolsVersion = 14.2;
@@ -342,6 +345,7 @@
 				399201C42729962700654ADE /* ContentView.swift in Sources */,
 				39625600296C15E900DB6000 /* RouterCore.swift in Sources */,
 				39625602296C161000DB6000 /* RouterCoreConnector.swift in Sources */,
+				3962560C296E4C8500DB6000 /* ContentViewDev.swift in Sources */,
 				3982A1A3272A947A002BBF63 /* HelpView.swift in Sources */,
 				3982A19F272A72A7002BBF63 /* RouteEnterView.swift in Sources */,
 				396255F5296C0E8900DB6000 /* SharedConstant.swift in Sources */,
@@ -373,7 +377,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = BR63YT2EJJ;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/RouteHelper/Info.plist";
@@ -388,6 +394,7 @@
 					__launchd_plist,
 					RouteHelper/Launchd.plist,
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = cn.magicdian.staticrouter.helper;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = HELPER;
 				SWIFT_VERSION = 5.0;
@@ -398,7 +405,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = BR63YT2EJJ;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/RouteHelper/Info.plist";
@@ -413,6 +422,7 @@
 					__launchd_plist,
 					RouteHelper/Launchd.plist,
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = cn.magicdian.staticrouter.helper;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = HELPER;
 				SWIFT_VERSION = 5.0;
@@ -454,6 +464,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -516,6 +527,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -546,6 +558,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"$(SRCROOT)/StaticRouter/Preview Content\"";
 				DEVELOPMENT_TEAM = BR63YT2EJJ;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -574,6 +587,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"$(SRCROOT)/StaticRouter/Preview Content\"";
 				DEVELOPMENT_TEAM = BR63YT2EJJ;
 				ENABLE_HARDENED_RUNTIME = YES;
