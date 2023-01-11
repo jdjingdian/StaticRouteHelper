@@ -16,8 +16,9 @@ struct RouterCore {
     private (set) var helperInstallState:HelperToolInstallationState = .notInstalled
     private (set) var monitor: HelperToolMonitor
     private let sharedConstants:SharedConstant
-    
+    private var xpcClient: XPCClient
     init(){
+        xpcClient = XPCClient.forMachService(named: "cn.magicdian.staticrouter.helper")
         self.helperInstallState = .notInstalled
         do{
             sharedConstants = try SharedConstant()
@@ -32,10 +33,27 @@ struct RouterCore {
         self.monitor = HelperToolMonitor(constants: sharedConstants)
         self.updateInstallationStatus(self.monitor.determineStatus())
     }
+}
+
+extension RouterCore {
+    //MARK: XPC with Helper Functions
+    func SendDebugCmd(){
+        Task{
+            try await xpcClient.send(to:SharedConstant.debugRoute)
+        }
+    }
     
-    
-    
-    
+    func SendUninstallCmd() {
+        Task {
+            try await xpcClient.send(to: SharedConstant.uninstallRoute)
+        }
+    }
+}
+
+
+extension RouterCore {
+    //MARK: Helper Tool Management Functions [Install/Uninstall/CheckState]
+    /// Update the install state
     mutating func updateHelperInstallState(installed: HelperToolInstallationState){
         self.helperInstallState = installed
     }
@@ -54,15 +72,8 @@ struct RouterCore {
     }
     
     mutating func CheckInstallationState(){
-        //        self.updateInstallationStatus(self.monitor.determineStatus(), completion: RouterCore.updateHelperInstallState(&self))
+        self.updateInstallationStatus(self.monitor.determineStatus())
     }
-    
-    mutating func updateInstallation(_ status:HelperToolMonitor.InstallationStatus){
-        //        updateInstallationStatus(self.monitor.determineStatus(), completion: self.updateHelperInstallState)
-    }
-}
-
-extension RouterCore {
     mutating func CheckAndUpdateStatus(_ status:HelperToolInstallationState){
         if(self.helperInstallState != status){
             self.helperInstallState = status
