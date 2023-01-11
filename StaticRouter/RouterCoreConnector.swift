@@ -25,6 +25,14 @@ class RouterCoreConnector: ObservableObject {
         netcore.InstallHelper(InstallMessage: message)
     }
     
+    func SendDebugMsg(){
+        netcore.SendDebugCmd()
+    }
+    
+    func SendUninstallCmd(){
+        netcore.SendUninstallCmd()
+    }
+    
     func CheckInstallState(){
         netcore.CheckInstallationState()
     }

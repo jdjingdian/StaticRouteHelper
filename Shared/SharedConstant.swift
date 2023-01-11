@@ -12,6 +12,12 @@ import EmbeddedPropertyList
 
 
 struct SharedConstant {
+    //MARK: XPC START
+    static let debugRoute = XPCRoute.named("debug")
+    static let uninstallRoute = XPCRoute.named("uninstall")
+    //MARK: XPC END
+    
+    
     
     enum SharedConstantsError: Error {
         /// The helper tool's launchd property list's value for `MachServices` array has no elements.
@@ -74,4 +80,12 @@ struct SharedConstant {
         }
         self.machServiceName = machServiceName
     }
+}
+
+
+
+
+extension SharedConstant {
+    //MARK: XPC Service
+    
 }

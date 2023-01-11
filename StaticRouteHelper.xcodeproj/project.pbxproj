@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		396255E0296C075400DB6000 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 396255DF296C075400DB6000 /* main.swift */; };
-		396255E7296C08D700DB6000 /* cn.magicdian.staticrouter.helper in CopyFiles */ = {isa = PBXBuildFile; fileRef = 396255DD296C075400DB6000 /* cn.magicdian.staticrouter.helper */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		396255EA296C0D7E00DB6000 /* Blessed in Frameworks */ = {isa = PBXBuildFile; productRef = 396255E9296C0D7E00DB6000 /* Blessed */; };
 		396255ED296C0D9300DB6000 /* SecureXPC in Frameworks */ = {isa = PBXBuildFile; productRef = 396255EC296C0D9300DB6000 /* SecureXPC */; };
 		396255F0296C0D9C00DB6000 /* Blessed in Frameworks */ = {isa = PBXBuildFile; productRef = 396255EF296C0D9C00DB6000 /* Blessed */; };
@@ -24,6 +23,11 @@
 		39625609296C54D400DB6000 /* HelperToolLaunchdPropertyList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39625608296C54D400DB6000 /* HelperToolLaunchdPropertyList.swift */; };
 		3962560A296C54D400DB6000 /* HelperToolLaunchdPropertyList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39625608296C54D400DB6000 /* HelperToolLaunchdPropertyList.swift */; };
 		3962560C296E4C8500DB6000 /* ContentViewDev.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3962560B296E4C8500DB6000 /* ContentViewDev.swift */; };
+		39625611296EB1E400DB6000 /* ProcessRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39625610296EB1E400DB6000 /* ProcessRunner.swift */; };
+		39625612296EB3FA00DB6000 /* cn.magicdian.staticrouter.helper in CopyFiles */ = {isa = PBXBuildFile; fileRef = 396255DD296C075400DB6000 /* cn.magicdian.staticrouter.helper */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		39625614296EBB1E00DB6000 /* SelfUninstaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39625613296EBB1E00DB6000 /* SelfUninstaller.swift */; };
+		39625616296EBDC900DB6000 /* CodeInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39625615296EBDC900DB6000 /* CodeInfo.swift */; };
+		39625617296EBDC900DB6000 /* CodeInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39625615296EBDC900DB6000 /* CodeInfo.swift */; };
 		397520C12728EBE900E2D96A /* ProcessHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397520C02728EBE900E2D96A /* ProcessHelper.swift */; };
 		397520C42729336C00E2D96A /* PassEnterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397520C32729336C00E2D96A /* PassEnterView.swift */; };
 		397520C62729381300E2D96A /* ContentScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397520C52729381300E2D96A /* ContentScrollView.swift */; };
@@ -55,7 +59,7 @@
 			dstPath = Contents/Library/LaunchServices;
 			dstSubfolderSpec = 1;
 			files = (
-				396255E7296C08D700DB6000 /* cn.magicdian.staticrouter.helper in CopyFiles */,
+				39625612296EB3FA00DB6000 /* cn.magicdian.staticrouter.helper in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -75,6 +79,9 @@
 		39625605296C442F00DB6000 /* HelperToolInfoPropertyList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelperToolInfoPropertyList.swift; sourceTree = "<group>"; };
 		39625608296C54D400DB6000 /* HelperToolLaunchdPropertyList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelperToolLaunchdPropertyList.swift; sourceTree = "<group>"; };
 		3962560B296E4C8500DB6000 /* ContentViewDev.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewDev.swift; sourceTree = "<group>"; };
+		39625610296EB1E400DB6000 /* ProcessRunner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessRunner.swift; sourceTree = "<group>"; };
+		39625613296EBB1E00DB6000 /* SelfUninstaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfUninstaller.swift; sourceTree = "<group>"; };
+		39625615296EBDC900DB6000 /* CodeInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeInfo.swift; sourceTree = "<group>"; };
 		397520C02728EBE900E2D96A /* ProcessHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessHelper.swift; sourceTree = "<group>"; };
 		397520C32729336C00E2D96A /* PassEnterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassEnterView.swift; sourceTree = "<group>"; };
 		397520C52729381300E2D96A /* ContentScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentScrollView.swift; sourceTree = "<group>"; };
@@ -121,6 +128,8 @@
 				396255DF296C075400DB6000 /* main.swift */,
 				396255E4296C07FB00DB6000 /* Info.plist */,
 				396255E5296C082900DB6000 /* Launchd.plist */,
+				39625610296EB1E400DB6000 /* ProcessRunner.swift */,
+				39625613296EBB1E00DB6000 /* SelfUninstaller.swift */,
 			);
 			path = RouteHelper;
 			sourceTree = "<group>";
@@ -138,6 +147,7 @@
 				396255F4296C0E8900DB6000 /* SharedConstant.swift */,
 				39625605296C442F00DB6000 /* HelperToolInfoPropertyList.swift */,
 				39625608296C54D400DB6000 /* HelperToolLaunchdPropertyList.swift */,
+				39625615296EBDC900DB6000 /* CodeInfo.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -197,6 +207,7 @@
 				39E84C66260B32BD00776AE7 /* StaticRouteHelperApp.swift */,
 				397520C02728EBE900E2D96A /* ProcessHelper.swift */,
 				399201C32729962700654ADE /* ContentView.swift */,
+				3962560B296E4C8500DB6000 /* ContentViewDev.swift */,
 				397520C72729397A00E2D96A /* AppModels.swift */,
 				3982A1A7272AB19D002BBF63 /* CoreDataManager.swift */,
 				397520C22729335700E2D96A /* ChildViews */,
@@ -208,7 +219,6 @@
 				396255FF296C15E900DB6000 /* RouterCore.swift */,
 				39625601296C161000DB6000 /* RouterCoreConnector.swift */,
 				39625603296C204200DB6000 /* HelperToolMonitor.swift */,
-				3962560B296E4C8500DB6000 /* ContentViewDev.swift */,
 			);
 			path = StaticRouter;
 			sourceTree = "<group>";
@@ -329,7 +339,10 @@
 				3962560A296C54D400DB6000 /* HelperToolLaunchdPropertyList.swift in Sources */,
 				396255F6296C0E8900DB6000 /* SharedConstant.swift in Sources */,
 				39625607296C442F00DB6000 /* HelperToolInfoPropertyList.swift in Sources */,
+				39625611296EB1E400DB6000 /* ProcessRunner.swift in Sources */,
 				396255E0296C075400DB6000 /* main.swift in Sources */,
+				39625617296EBDC900DB6000 /* CodeInfo.swift in Sources */,
+				39625614296EBB1E00DB6000 /* SelfUninstaller.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -347,6 +360,7 @@
 				39625602296C161000DB6000 /* RouterCoreConnector.swift in Sources */,
 				3962560C296E4C8500DB6000 /* ContentViewDev.swift in Sources */,
 				3982A1A3272A947A002BBF63 /* HelpView.swift in Sources */,
+				39625616296EBDC900DB6000 /* CodeInfo.swift in Sources */,
 				3982A19F272A72A7002BBF63 /* RouteEnterView.swift in Sources */,
 				396255F5296C0E8900DB6000 /* SharedConstant.swift in Sources */,
 				39625604296C204200DB6000 /* HelperToolMonitor.swift in Sources */,
@@ -378,6 +392,7 @@
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = BR63YT2EJJ;
@@ -406,6 +421,7 @@
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = BR63YT2EJJ;
