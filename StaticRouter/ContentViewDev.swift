@@ -30,6 +30,24 @@ struct ContentViewDev: View{
             }
             
             Button {
+                router.ShowRoute()
+            } label: {
+                 Text("Show System route")
+            }
+            
+            Button {
+                router.ModifyRoute(true, "192.168.5.0", "255.255.255.0", "en0", .interface)
+            } label: {
+                Text("add 192.168.5.0")
+            }
+            
+            Button {
+                router.ModifyRoute(false, "192.168.5.0", "255.255.255.0", "en0", .interface)
+            } label: {
+                Text("del 192.168.5.0")
+            }
+            
+            Button {
                 router.InstallHelper(message: "ContentViewDev TEST")
             } label: {
                 Text("Manual Install Helper")
@@ -74,8 +92,6 @@ extension ContentViewDev {
                 return "Helper Installed"
             case .notInstalled:
                 return "Helper Not Installed"
-            default:
-                return "UNDEFINED ERROR"
             }
         } set: { Value in
             
