@@ -16,10 +16,10 @@ struct StaticRouteHelperApp: App {
     var version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
     var body: some Scene {
         WindowGroup {
-//            ContentView(router: router, password: $password,likeCount: $likeCount,setCount: $setCount, coreDM: CoreDataManager())
-//                .navigationTitle("Static Route Helper")
-//                .navigationSubtitle(version ?? "")
-            ContentViewDev(router: router)
+            ContentView(router: router, password: $password,likeCount: $likeCount,setCount: $setCount, coreDM: CoreDataManager())
+                .navigationTitle("Static Route Helper")
+                .navigationSubtitle(version ?? "")
+//            ContentViewDev(router: router) //MARK: DEBUG
         }.windowToolbarStyle(UnifiedWindowToolbarStyle())
         WindowGroup("Donate") {
             BuyCoffeeSubview(runCount: $setCount, likeCount: $likeCount)
