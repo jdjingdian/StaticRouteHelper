@@ -41,11 +41,41 @@ extension RouterCore {
         Task{
             try await xpcClient.send(to:SharedConstant.debugRoute)
         }
+        print("Try send command message")
     }
     
     func SendUninstallCmd() {
         Task {
             try await xpcClient.send(to: SharedConstant.uninstallRoute)
+        }
+    }
+    
+    func ShowSystemRoute() {
+        let command = RouterCommand.BuildPrintRouteCommand()
+        Task {
+            xpcClient.sendMessage(command,to: SharedConstant.commandRoute,withResponse: self.commandReply(_:))
+        }
+    }
+    
+    func ModifySystemRoute(_ addToRoute: Bool, _ network: String, _ netmask: String, _ gateway: String, _ gatewayType: RouterCommand.GatewayType){
+        let command = RouterCommand.BuildManageRouteCommand(addToRoute: addToRoute, network: network, mask: netmask, gateway: gateway ,gatewayType: .interface)
+        Task{
+            xpcClient.sendMessage(command,to: SharedConstant.commandRoute,withResponse: self.commandReply(_:))
+        }
+    }
+    
+    func commandReply(_ result: Result<RouterCommandReply, XPCError>) {
+        print("Command Reply!")
+        DispatchQueue.main.async {
+            switch result {
+            case let .success(reply):
+                print("command success \(String(describing: reply.standardOutput))")
+                if let output = reply.standardOutput{
+                    print("Command Reply output: \(output)")
+                }
+            case let .failure(error):
+                print("Command Reply Error: \(error)")
+            }
         }
     }
 }

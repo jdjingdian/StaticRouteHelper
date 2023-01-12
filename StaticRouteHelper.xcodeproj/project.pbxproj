@@ -28,6 +28,8 @@
 		39625614296EBB1E00DB6000 /* SelfUninstaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39625613296EBB1E00DB6000 /* SelfUninstaller.swift */; };
 		39625616296EBDC900DB6000 /* CodeInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39625615296EBDC900DB6000 /* CodeInfo.swift */; };
 		39625617296EBDC900DB6000 /* CodeInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39625615296EBDC900DB6000 /* CodeInfo.swift */; };
+		3962561B296EE01B00DB6000 /* RouterCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3962561A296EE01B00DB6000 /* RouterCommand.swift */; };
+		3962561C296EE01B00DB6000 /* RouterCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3962561A296EE01B00DB6000 /* RouterCommand.swift */; };
 		397520C12728EBE900E2D96A /* ProcessHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397520C02728EBE900E2D96A /* ProcessHelper.swift */; };
 		397520C42729336C00E2D96A /* PassEnterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397520C32729336C00E2D96A /* PassEnterView.swift */; };
 		397520C62729381300E2D96A /* ContentScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397520C52729381300E2D96A /* ContentScrollView.swift */; };
@@ -82,6 +84,7 @@
 		39625610296EB1E400DB6000 /* ProcessRunner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessRunner.swift; sourceTree = "<group>"; };
 		39625613296EBB1E00DB6000 /* SelfUninstaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfUninstaller.swift; sourceTree = "<group>"; };
 		39625615296EBDC900DB6000 /* CodeInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeInfo.swift; sourceTree = "<group>"; };
+		3962561A296EE01B00DB6000 /* RouterCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouterCommand.swift; sourceTree = "<group>"; };
 		397520C02728EBE900E2D96A /* ProcessHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessHelper.swift; sourceTree = "<group>"; };
 		397520C32729336C00E2D96A /* PassEnterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassEnterView.swift; sourceTree = "<group>"; };
 		397520C52729381300E2D96A /* ContentScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentScrollView.swift; sourceTree = "<group>"; };
@@ -148,6 +151,7 @@
 				39625605296C442F00DB6000 /* HelperToolInfoPropertyList.swift */,
 				39625608296C54D400DB6000 /* HelperToolLaunchdPropertyList.swift */,
 				39625615296EBDC900DB6000 /* CodeInfo.swift */,
+				3962561A296EE01B00DB6000 /* RouterCommand.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -342,6 +346,7 @@
 				39625611296EB1E400DB6000 /* ProcessRunner.swift in Sources */,
 				396255E0296C075400DB6000 /* main.swift in Sources */,
 				39625617296EBDC900DB6000 /* CodeInfo.swift in Sources */,
+				3962561C296EE01B00DB6000 /* RouterCommand.swift in Sources */,
 				39625614296EBB1E00DB6000 /* SelfUninstaller.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -368,6 +373,7 @@
 				397520C42729336C00E2D96A /* PassEnterView.swift in Sources */,
 				397520C62729381300E2D96A /* ContentScrollView.swift in Sources */,
 				39625609296C54D400DB6000 /* HelperToolLaunchdPropertyList.swift in Sources */,
+				3962561B296EE01B00DB6000 /* RouterCommand.swift in Sources */,
 				39E84C67260B32BD00776AE7 /* StaticRouteHelperApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

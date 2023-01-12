@@ -29,8 +29,16 @@ class RouterCoreConnector: ObservableObject {
         netcore.SendDebugCmd()
     }
     
+    func ShowRoute(){
+        netcore.ShowSystemRoute()
+    }
+    
     func SendUninstallCmd(){
         netcore.SendUninstallCmd()
+    }
+    
+    func ModifyRoute(_ addToRoute: Bool, _ network: String, _ netmask: String, _ gateway: String, _ gatewayType: RouterCommand.GatewayType){
+        netcore.ModifySystemRoute(addToRoute, network, netmask, gateway, gatewayType)
     }
     
     func CheckInstallState(){

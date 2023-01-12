@@ -32,6 +32,8 @@ if CommandLine.arguments.count > 1 {
     NSLog("StaticRouterHelper set debugRoute Complete")
 //    server.registerRoute(SharedConstant.uninstallRoute, handler: SelfUninstaller.uninstall)
     server.registerRoute(SharedConstant.uninstallRoute, handler: SelfUninstaller.uninstall)
+    server.registerRoute(SharedConstant.commandRoute, handler: ProcessRunner.runCommand(wrapCmd:))
+    
     NSLog("StaticRouterHelper set uninstallRoute Complete")
     ///
     server.setErrorHandler { error in
