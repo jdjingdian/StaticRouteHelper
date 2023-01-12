@@ -3,12 +3,33 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		396255E0296C075400DB6000 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 396255DF296C075400DB6000 /* main.swift */; };
-		396255E7296C08D700DB6000 /* cn.magicdian.staticrouter.helper in CopyFiles */ = {isa = PBXBuildFile; fileRef = 396255DD296C075400DB6000 /* cn.magicdian.staticrouter.helper */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		396255EA296C0D7E00DB6000 /* Blessed in Frameworks */ = {isa = PBXBuildFile; productRef = 396255E9296C0D7E00DB6000 /* Blessed */; };
+		396255ED296C0D9300DB6000 /* SecureXPC in Frameworks */ = {isa = PBXBuildFile; productRef = 396255EC296C0D9300DB6000 /* SecureXPC */; };
+		396255F0296C0D9C00DB6000 /* Blessed in Frameworks */ = {isa = PBXBuildFile; productRef = 396255EF296C0D9C00DB6000 /* Blessed */; };
+		396255F2296C0D9C00DB6000 /* SecureXPC in Frameworks */ = {isa = PBXBuildFile; productRef = 396255F1296C0D9C00DB6000 /* SecureXPC */; };
+		396255F5296C0E8900DB6000 /* SharedConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 396255F4296C0E8900DB6000 /* SharedConstant.swift */; };
+		396255F6296C0E8900DB6000 /* SharedConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 396255F4296C0E8900DB6000 /* SharedConstant.swift */; };
+		396255FB296C124E00DB6000 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 396255FD296C124E00DB6000 /* Localizable.strings */; };
+		39625600296C15E900DB6000 /* RouterCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 396255FF296C15E900DB6000 /* RouterCore.swift */; };
+		39625602296C161000DB6000 /* RouterCoreConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39625601296C161000DB6000 /* RouterCoreConnector.swift */; };
+		39625604296C204200DB6000 /* HelperToolMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39625603296C204200DB6000 /* HelperToolMonitor.swift */; };
+		39625606296C442F00DB6000 /* HelperToolInfoPropertyList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39625605296C442F00DB6000 /* HelperToolInfoPropertyList.swift */; };
+		39625607296C442F00DB6000 /* HelperToolInfoPropertyList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39625605296C442F00DB6000 /* HelperToolInfoPropertyList.swift */; };
+		39625609296C54D400DB6000 /* HelperToolLaunchdPropertyList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39625608296C54D400DB6000 /* HelperToolLaunchdPropertyList.swift */; };
+		3962560A296C54D400DB6000 /* HelperToolLaunchdPropertyList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39625608296C54D400DB6000 /* HelperToolLaunchdPropertyList.swift */; };
+		3962560C296E4C8500DB6000 /* ContentViewDev.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3962560B296E4C8500DB6000 /* ContentViewDev.swift */; };
+		39625611296EB1E400DB6000 /* ProcessRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39625610296EB1E400DB6000 /* ProcessRunner.swift */; };
+		39625612296EB3FA00DB6000 /* cn.magicdian.staticrouter.helper in CopyFiles */ = {isa = PBXBuildFile; fileRef = 396255DD296C075400DB6000 /* cn.magicdian.staticrouter.helper */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		39625614296EBB1E00DB6000 /* SelfUninstaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39625613296EBB1E00DB6000 /* SelfUninstaller.swift */; };
+		39625616296EBDC900DB6000 /* CodeInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39625615296EBDC900DB6000 /* CodeInfo.swift */; };
+		39625617296EBDC900DB6000 /* CodeInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39625615296EBDC900DB6000 /* CodeInfo.swift */; };
+		3962561B296EE01B00DB6000 /* RouterCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3962561A296EE01B00DB6000 /* RouterCommand.swift */; };
+		3962561C296EE01B00DB6000 /* RouterCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3962561A296EE01B00DB6000 /* RouterCommand.swift */; };
 		397520C12728EBE900E2D96A /* ProcessHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397520C02728EBE900E2D96A /* ProcessHelper.swift */; };
 		397520C42729336C00E2D96A /* PassEnterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397520C32729336C00E2D96A /* PassEnterView.swift */; };
 		397520C62729381300E2D96A /* ContentScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397520C52729381300E2D96A /* ContentScrollView.swift */; };
@@ -40,7 +61,7 @@
 			dstPath = Contents/Library/LaunchServices;
 			dstSubfolderSpec = 1;
 			files = (
-				396255E7296C08D700DB6000 /* cn.magicdian.staticrouter.helper in CopyFiles */,
+				39625612296EB3FA00DB6000 /* cn.magicdian.staticrouter.helper in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -51,6 +72,19 @@
 		396255DF296C075400DB6000 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		396255E4296C07FB00DB6000 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		396255E5296C082900DB6000 /* Launchd.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Launchd.plist; sourceTree = "<group>"; };
+		396255F4296C0E8900DB6000 /* SharedConstant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedConstant.swift; sourceTree = "<group>"; };
+		396255FC296C124E00DB6000 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		396255FE296C12B700DB6000 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		396255FF296C15E900DB6000 /* RouterCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouterCore.swift; sourceTree = "<group>"; };
+		39625601296C161000DB6000 /* RouterCoreConnector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouterCoreConnector.swift; sourceTree = "<group>"; };
+		39625603296C204200DB6000 /* HelperToolMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelperToolMonitor.swift; sourceTree = "<group>"; };
+		39625605296C442F00DB6000 /* HelperToolInfoPropertyList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelperToolInfoPropertyList.swift; sourceTree = "<group>"; };
+		39625608296C54D400DB6000 /* HelperToolLaunchdPropertyList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelperToolLaunchdPropertyList.swift; sourceTree = "<group>"; };
+		3962560B296E4C8500DB6000 /* ContentViewDev.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewDev.swift; sourceTree = "<group>"; };
+		39625610296EB1E400DB6000 /* ProcessRunner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessRunner.swift; sourceTree = "<group>"; };
+		39625613296EBB1E00DB6000 /* SelfUninstaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfUninstaller.swift; sourceTree = "<group>"; };
+		39625615296EBDC900DB6000 /* CodeInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeInfo.swift; sourceTree = "<group>"; };
+		3962561A296EE01B00DB6000 /* RouterCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouterCommand.swift; sourceTree = "<group>"; };
 		397520C02728EBE900E2D96A /* ProcessHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessHelper.swift; sourceTree = "<group>"; };
 		397520C32729336C00E2D96A /* PassEnterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassEnterView.swift; sourceTree = "<group>"; };
 		397520C52729381300E2D96A /* ContentScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentScrollView.swift; sourceTree = "<group>"; };
@@ -74,6 +108,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				396255F0296C0D9C00DB6000 /* Blessed in Frameworks */,
+				396255F2296C0D9C00DB6000 /* SecureXPC in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -81,6 +117,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				396255EA296C0D7E00DB6000 /* Blessed in Frameworks */,
+				396255ED296C0D9300DB6000 /* SecureXPC in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -93,8 +131,45 @@
 				396255DF296C075400DB6000 /* main.swift */,
 				396255E4296C07FB00DB6000 /* Info.plist */,
 				396255E5296C082900DB6000 /* Launchd.plist */,
+				39625610296EB1E400DB6000 /* ProcessRunner.swift */,
+				39625613296EBB1E00DB6000 /* SelfUninstaller.swift */,
 			);
 			path = RouteHelper;
+			sourceTree = "<group>";
+		};
+		396255EE296C0D9C00DB6000 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		396255F3296C0E7700DB6000 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				396255F4296C0E8900DB6000 /* SharedConstant.swift */,
+				39625605296C442F00DB6000 /* HelperToolInfoPropertyList.swift */,
+				39625608296C54D400DB6000 /* HelperToolLaunchdPropertyList.swift */,
+				39625615296EBDC900DB6000 /* CodeInfo.swift */,
+				3962561A296EE01B00DB6000 /* RouterCommand.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		396255F7296C120700DB6000 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				396255F8296C121600DB6000 /* Locale */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		396255F8296C121600DB6000 /* Locale */ = {
+			isa = PBXGroup;
+			children = (
+				396255FD296C124E00DB6000 /* Localizable.strings */,
+			);
+			path = Locale;
 			sourceTree = "<group>";
 		};
 		397520C22729335700E2D96A /* ChildViews */ = {
@@ -112,9 +187,12 @@
 		39E84C5A260B32BD00776AE7 = {
 			isa = PBXGroup;
 			children = (
+				396255F7296C120700DB6000 /* Resources */,
+				396255F3296C0E7700DB6000 /* Shared */,
 				39E84C65260B32BD00776AE7 /* StaticRouter */,
 				396255DE296C075400DB6000 /* RouteHelper */,
 				39E84C64260B32BD00776AE7 /* Products */,
+				396255EE296C0D9C00DB6000 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -133,6 +211,7 @@
 				39E84C66260B32BD00776AE7 /* StaticRouteHelperApp.swift */,
 				397520C02728EBE900E2D96A /* ProcessHelper.swift */,
 				399201C32729962700654ADE /* ContentView.swift */,
+				3962560B296E4C8500DB6000 /* ContentViewDev.swift */,
 				397520C72729397A00E2D96A /* AppModels.swift */,
 				3982A1A7272AB19D002BBF63 /* CoreDataManager.swift */,
 				397520C22729335700E2D96A /* ChildViews */,
@@ -141,6 +220,9 @@
 				39E84C6F260B32BF00776AE7 /* Info.plist */,
 				39E84C70260B32BF00776AE7 /* StaticRouteHelper.entitlements */,
 				39E84C6C260B32BF00776AE7 /* Preview Content */,
+				396255FF296C15E900DB6000 /* RouterCore.swift */,
+				39625601296C161000DB6000 /* RouterCoreConnector.swift */,
+				39625603296C204200DB6000 /* HelperToolMonitor.swift */,
 			);
 			path = StaticRouter;
 			sourceTree = "<group>";
@@ -169,6 +251,10 @@
 			dependencies = (
 			);
 			name = cn.magicdian.staticrouter.helper;
+			packageProductDependencies = (
+				396255EF296C0D9C00DB6000 /* Blessed */,
+				396255F1296C0D9C00DB6000 /* SecureXPC */,
+			);
 			productName = RouterHelper;
 			productReference = 396255DD296C075400DB6000 /* cn.magicdian.staticrouter.helper */;
 			productType = "com.apple.product-type.tool";
@@ -187,6 +273,10 @@
 			dependencies = (
 			);
 			name = "Static Router";
+			packageProductDependencies = (
+				396255E9296C0D7E00DB6000 /* Blessed */,
+				396255EC296C0D9300DB6000 /* SecureXPC */,
+			);
 			productName = StaticRouteHelper;
 			productReference = 39E84C63260B32BD00776AE7 /* Static Router.app */;
 			productType = "com.apple.product-type.application";
@@ -198,7 +288,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1420;
-				LastUpgradeCheck = 1240;
+				LastUpgradeCheck = 1420;
 				TargetAttributes = {
 					396255DC296C075400DB6000 = {
 						CreatedOnToolsVersion = 14.2;
@@ -215,8 +305,13 @@
 			knownRegions = (
 				en,
 				Base,
+				"zh-Hans",
 			);
 			mainGroup = 39E84C5A260B32BD00776AE7;
+			packageReferences = (
+				396255E8296C0D7E00DB6000 /* XCRemoteSwiftPackageReference "Blessed" */,
+				396255EB296C0D9300DB6000 /* XCRemoteSwiftPackageReference "SecureXPC" */,
+			);
 			productRefGroup = 39E84C64260B32BD00776AE7 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -233,6 +328,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				39E84C6E260B32BF00776AE7 /* Preview Assets.xcassets in Resources */,
+				396255FB296C124E00DB6000 /* Localizable.strings in Resources */,
 				39E84C6B260B32BF00776AE7 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -244,7 +340,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3962560A296C54D400DB6000 /* HelperToolLaunchdPropertyList.swift in Sources */,
+				396255F6296C0E8900DB6000 /* SharedConstant.swift in Sources */,
+				39625607296C442F00DB6000 /* HelperToolInfoPropertyList.swift in Sources */,
+				39625611296EB1E400DB6000 /* ProcessRunner.swift in Sources */,
 				396255E0296C075400DB6000 /* main.swift in Sources */,
+				39625617296EBDC900DB6000 /* CodeInfo.swift in Sources */,
+				3962561C296EE01B00DB6000 /* RouterCommand.swift in Sources */,
+				39625614296EBB1E00DB6000 /* SelfUninstaller.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -258,22 +361,46 @@
 				3982A1A1272A9166002BBF63 /* BuyCoffeeView.swift in Sources */,
 				397520C12728EBE900E2D96A /* ProcessHelper.swift in Sources */,
 				399201C42729962700654ADE /* ContentView.swift in Sources */,
+				39625600296C15E900DB6000 /* RouterCore.swift in Sources */,
+				39625602296C161000DB6000 /* RouterCoreConnector.swift in Sources */,
+				3962560C296E4C8500DB6000 /* ContentViewDev.swift in Sources */,
 				3982A1A3272A947A002BBF63 /* HelpView.swift in Sources */,
+				39625616296EBDC900DB6000 /* CodeInfo.swift in Sources */,
 				3982A19F272A72A7002BBF63 /* RouteEnterView.swift in Sources */,
+				396255F5296C0E8900DB6000 /* SharedConstant.swift in Sources */,
+				39625604296C204200DB6000 /* HelperToolMonitor.swift in Sources */,
+				39625606296C442F00DB6000 /* HelperToolInfoPropertyList.swift in Sources */,
 				397520C42729336C00E2D96A /* PassEnterView.swift in Sources */,
 				397520C62729381300E2D96A /* ContentScrollView.swift in Sources */,
+				39625609296C54D400DB6000 /* HelperToolLaunchdPropertyList.swift in Sources */,
+				3962561B296EE01B00DB6000 /* RouterCommand.swift in Sources */,
 				39E84C67260B32BD00776AE7 /* StaticRouteHelperApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXVariantGroup section */
+		396255FD296C124E00DB6000 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				396255FC296C124E00DB6000 /* en */,
+				396255FE296C12B700DB6000 /* zh-Hans */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
 		396255E2296C075500DB6000 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = BR63YT2EJJ;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/RouteHelper/Info.plist";
@@ -288,7 +415,9 @@
 					__launchd_plist,
 					RouteHelper/Launchd.plist,
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = cn.magicdian.staticrouter.helper;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = HELPER;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -297,7 +426,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = BR63YT2EJJ;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/RouteHelper/Info.plist";
@@ -312,7 +444,9 @@
 					__launchd_plist,
 					RouteHelper/Launchd.plist,
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = cn.magicdian.staticrouter.helper;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = HELPER;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
@@ -321,6 +455,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -351,6 +486,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -382,6 +518,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -412,6 +549,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -442,6 +580,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"$(SRCROOT)/StaticRouter/Preview Content\"";
 				DEVELOPMENT_TEAM = BR63YT2EJJ;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -455,6 +594,7 @@
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = cn.magicdian.staticrouter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = ROUTER;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -469,6 +609,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"$(SRCROOT)/StaticRouter/Preview Content\"";
 				DEVELOPMENT_TEAM = BR63YT2EJJ;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -482,6 +623,7 @@
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = cn.magicdian.staticrouter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = ROUTER;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
@@ -517,6 +659,48 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		396255E8296C0D7E00DB6000 /* XCRemoteSwiftPackageReference "Blessed" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/trilemma-dev/Blessed";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.6.0;
+			};
+		};
+		396255EB296C0D9300DB6000 /* XCRemoteSwiftPackageReference "SecureXPC" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/trilemma-dev/SecureXPC";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.8.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		396255E9296C0D7E00DB6000 /* Blessed */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 396255E8296C0D7E00DB6000 /* XCRemoteSwiftPackageReference "Blessed" */;
+			productName = Blessed;
+		};
+		396255EC296C0D9300DB6000 /* SecureXPC */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 396255EB296C0D9300DB6000 /* XCRemoteSwiftPackageReference "SecureXPC" */;
+			productName = SecureXPC;
+		};
+		396255EF296C0D9C00DB6000 /* Blessed */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 396255E8296C0D7E00DB6000 /* XCRemoteSwiftPackageReference "Blessed" */;
+			productName = Blessed;
+		};
+		396255F1296C0D9C00DB6000 /* SecureXPC */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 396255EB296C0D9300DB6000 /* XCRemoteSwiftPackageReference "SecureXPC" */;
+			productName = SecureXPC;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		3982A1A4272AAF24002BBF63 /* DataModel.xcdatamodeld */ = {
