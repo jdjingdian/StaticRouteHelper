@@ -8,6 +8,7 @@
 import Foundation
 import Cocoa
 
+//MARK: Deprecated
 class ProcessHelper:ObservableObject {
     @Published var netstat: String = ""
     @Published var netArray: [netData] = []

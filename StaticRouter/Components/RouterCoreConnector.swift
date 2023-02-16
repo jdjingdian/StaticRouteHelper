@@ -21,6 +21,20 @@ class RouterCoreConnector: ObservableObject {
     
     //MARK: Users Intend
     
+    func HelperToolAutoInstall(state: HelperToolInstallationState){
+        switch state {
+        case .notCompatible:
+                //do reinstall
+            InstallHelper(message: "Repair Helper to modify system route")
+        case .needUpgrade:
+            InstallHelper(message: "Upgrade Helper to modify system route")
+        case .notInstalled:
+            InstallHelper(message: "Install Helper to modify system route")
+        case .installed:
+            print("Helper already installed.")
+        }
+    }
+    
     func InstallHelper(message: String){
         netcore.InstallHelper(InstallMessage: message)
     }

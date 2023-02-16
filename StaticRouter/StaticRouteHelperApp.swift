@@ -13,19 +13,42 @@ struct StaticRouteHelperApp: App {
     @AppStorage("likeCount") var likeCount:Int = 0
     @AppStorage("setCount") var setCount:Int = 0
     let router = RouterCoreConnector()
-    var version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
+    let profileSwitcher = LocationProfileSwitcher()
+    let app_version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
     var body: some Scene {
         WindowGroup {
-            ContentView(router: router, password: $password,likeCount: $likeCount,setCount: $setCount, coreDM: CoreDataManager())
+            MainWindow(profileSwitcher: profileSwitcher)
                 .navigationTitle("Static Route Helper")
-                .navigationSubtitle(version ?? "")
-//            ContentViewDev(router: router) //MARK: DEBUG
-        }.windowToolbarStyle(UnifiedWindowToolbarStyle())
-        WindowGroup("Donate") {
-            BuyCoffeeSubview(runCount: $setCount, likeCount: $likeCount)
-        }.handlesExternalEvents(matching: Set(arrayLiteral: "like"))
-        WindowGroup("Help") {
-            HelpView()
-        }.handlesExternalEvents(matching: Set(arrayLiteral: "help"))
+                .navigationSubtitle(app_version ?? "").onReceive(NotificationCenter.default.publisher(for: NSApplication.willUpdateNotification)) { _ in
+                    hideZoomButton()
+                }
+        }.commands {
+            MenuBarCommand()
+        }
+        Settings {
+            SettingsView()
+        }
+    }
+    
+    func hideZoomButton() {
+
+        for window in NSApplication.shared.windows {
+
+            guard let button: NSButton = window.standardWindowButton(NSWindow.ButtonType.zoomButton) else {
+                continue
+            }
+
+            button.isEnabled = false
+        }
     }
 }
+
+
+
+//        .windowToolbarStyle(UnifiedWindowToolbarStyle())
+//        WindowGroup("Donate") {
+//            BuyCoffeeSubview(runCount: $setCount, likeCount: $likeCount)
+//        }.handlesExternalEvents(matching: Set(arrayLiteral: "like"))
+//        WindowGroup("Help") {
+//            HelpView()
+//        }.handlesExternalEvents(matching: Set(arrayLiteral: "help"))
