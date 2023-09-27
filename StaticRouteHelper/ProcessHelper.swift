@@ -90,8 +90,11 @@ class ProcessHelper:ObservableObject {
                         
                     }
                     else{
-                        let dataLine = netData(index: count, gateway: String(splitType[1]), destination: String(splitType[0]), flags: String(splitType[2]), interface: String(splitType[3]),expire: "STATIC")
-                        self.netArray.append(dataLine)
+                        if(splitType.count>3){
+                            let dataLine = netData(index: count, gateway: String(splitType[1]), destination: String(splitType[0]), flags: String(splitType[2]), interface: String(splitType[3]),expire: "STATIC")
+                            self.netArray.append(dataLine)
+                        }
+                        
                     }
                     
                     count += 1;
