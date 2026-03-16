@@ -19,6 +19,7 @@ struct RouteListView: View {
     @Query(sort: \RouteRule.createdAt) private var allRoutes: [RouteRule]
 
     @State private var showAddSheet = false
+    @State private var tableSelection: Set<UUID> = []
     @State private var routeToEdit: RouteRule? = nil
     @State private var routeToDelete: RouteRule? = nil
     @State private var routeToAssignGroups: RouteRule? = nil
@@ -128,7 +129,7 @@ struct RouteListView: View {
     // MARK: - Route Table
 
     private var routeTable: some View {
-        Table(routes) {
+        Table(routes, selection: $tableSelection) {
             TableColumn("目标网络 / CIDR") { rule in
                 Text(rule.cidrNotation)
                     .font(.system(.body, design: .monospaced))
@@ -159,18 +160,57 @@ struct RouteListView: View {
                 .disabled(routerService.helperStatus != .installed)
             }
             .width(60)
+            TableColumn("操作") { rule in
+                HStack(spacing: 6) {
+                    Button {
+                        routeToEdit = rule
+                    } label: {
+                        Image(systemName: "pencil")
+                            .imageScale(.small)
+                            .frame(width: 22, height: 22)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .tint(.green)
+                    .help("编辑")
+
+                    Button {
+                        routeToAssignGroups = rule
+                    } label: {
+                        Image(systemName: "folder.badge.person.crop")
+                            .imageScale(.small)
+                            .frame(width: 22, height: 22)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .tint(.blue)
+                    .help("管理分组")
+
+                    Button {
+                        routeToDelete = rule
+                    } label: {
+                        Image(systemName: "trash")
+                            .imageScale(.small)
+                            .frame(width: 22, height: 22)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .tint(.red)
+                    .help("删除")
+                }
+            }
+            .width(120)
         }
-        .contextMenu(forSelectionType: RouteRule.self) { selectedRules in
-            if let rule = selectedRules.first {
+        .contextMenu(forSelectionType: UUID.self) { selectedIDs in
+            if let id = selectedIDs.first, let rule = routes.first(where: { $0.id == id }) {
                 Button("编辑") { routeToEdit = rule }
                 Button("管理分组…") { routeToAssignGroups = rule }
                 Button("删除", role: .destructive) { routeToDelete = rule }
                 Divider()
                 Button("复制路由信息") { copyRouteInfo(rule) }
             }
-        } primaryAction: { selectedRules in
+        } primaryAction: { selectedIDs in
             // Double-click = edit
-            if let rule = selectedRules.first { routeToEdit = rule }
+            if let id = selectedIDs.first, let rule = routes.first(where: { $0.id == id }) {
+                routeToEdit = rule
+            }
         }
     }
 
