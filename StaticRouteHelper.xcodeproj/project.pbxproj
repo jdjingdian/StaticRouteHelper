@@ -36,6 +36,7 @@
 		39625617296EBDC900DB6000 /* CodeInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39625615296EBDC900DB6000 /* CodeInfo.swift */; };
 		3962561B296EE01B00DB6000 /* RouterCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3962561A296EE01B00DB6000 /* RouterCommand.swift */; };
 		3962561C296EE01B00DB6000 /* RouterCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3962561A296EE01B00DB6000 /* RouterCommand.swift */; };
+		3962561D296EE01C00DB6000 /* PFRouteWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3962561E296EE01C00DB6000 /* PFRouteWriter.swift */; };
 		397520C82729397A00E2D96A /* AppModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397520C72729397A00E2D96A /* AppModels.swift */; };
 		39E84C67260B32BD00776AE7 /* StaticRouteHelperApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39E84C66260B32BD00776AE7 /* StaticRouteHelperApp.swift */; };
 		39E84C6B260B32BF00776AE7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 39E84C6A260B32BF00776AE7 /* Assets.xcassets */; };
@@ -46,15 +47,38 @@
 		AA000001000000000000AA04 /* RouterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000000000000AA04 /* RouterService.swift */; };
 		AA000001000000000000AA05 /* CoreDataMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000000000000AA05 /* CoreDataMigrator.swift */; };
 		AA000001000000000000AA06 /* RouteStateCalibrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000000000000AA06 /* RouteStateCalibrator.swift */; };
-		AA000001000000000000AA20 /* RouteUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000000000000AA20 /* RouteUtils.swift */; };
-		AA000001000000000000AA21 /* SystemRouteReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000000000000AA21 /* SystemRouteReader.swift */; };
 		AA000001000000000000AA07 /* SidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000000000000AA07 /* SidebarView.swift */; };
 		AA000001000000000000AA08 /* GroupSheets.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000000000000AA08 /* GroupSheets.swift */; };
 		AA000001000000000000AA09 /* RouteListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000000000000AA09 /* RouteListView.swift */; };
 		AA000001000000000000AA10 /* RouteEditSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000000000000AA10 /* RouteEditSheet.swift */; };
 		AA000001000000000000AA11 /* SystemRouteTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000000000000AA11 /* SystemRouteTableView.swift */; };
 		AA000001000000000000AA12 /* LegacyTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000000000000AA12 /* LegacyTextField.swift */; };
+		AA000001000000000000AA20 /* RouteUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000000000000AA20 /* RouteUtils.swift */; };
+		AA000001000000000000AA21 /* SystemRouteReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000000000000AA21 /* SystemRouteReader.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		BB000001000000000000BB01 /* Preprocess Info.plist */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/RouteHelper/Info.plist",
+			);
+			name = "Preprocess Info.plist";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/ProcessedInfo.plist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Expand build setting variables in RouteHelper/Info.plist\nPROCESSED=\"${DERIVED_FILE_DIR}/ProcessedInfo.plist\"\ncp \"${SRCROOT}/RouteHelper/Info.plist\" \"${PROCESSED}\"\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion ${CURRENT_PROJECT_VERSION}\" \"${PROCESSED}\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		396255DB296C075400DB6000 /* CopyFiles */ = {
@@ -102,6 +126,7 @@
 		39625613296EBB1E00DB6000 /* SelfUninstaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfUninstaller.swift; sourceTree = "<group>"; };
 		39625615296EBDC900DB6000 /* CodeInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeInfo.swift; sourceTree = "<group>"; };
 		3962561A296EE01B00DB6000 /* RouterCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouterCommand.swift; sourceTree = "<group>"; };
+		3962561E296EE01C00DB6000 /* PFRouteWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PFRouteWriter.swift; sourceTree = "<group>"; };
 		397520C72729397A00E2D96A /* AppModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModels.swift; sourceTree = "<group>"; };
 		39E84C63260B32BD00776AE7 /* Static Router.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Static Router.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		39E84C66260B32BD00776AE7 /* StaticRouteHelperApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticRouteHelperApp.swift; sourceTree = "<group>"; };
@@ -115,14 +140,14 @@
 		AA000002000000000000AA04 /* RouterService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouterService.swift; sourceTree = "<group>"; };
 		AA000002000000000000AA05 /* CoreDataMigrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataMigrator.swift; sourceTree = "<group>"; };
 		AA000002000000000000AA06 /* RouteStateCalibrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteStateCalibrator.swift; sourceTree = "<group>"; };
-		AA000002000000000000AA20 /* RouteUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteUtils.swift; sourceTree = "<group>"; };
-		AA000002000000000000AA21 /* SystemRouteReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemRouteReader.swift; sourceTree = "<group>"; };
 		AA000002000000000000AA07 /* SidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarView.swift; sourceTree = "<group>"; };
 		AA000002000000000000AA08 /* GroupSheets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupSheets.swift; sourceTree = "<group>"; };
 		AA000002000000000000AA09 /* RouteListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteListView.swift; sourceTree = "<group>"; };
 		AA000002000000000000AA10 /* RouteEditSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteEditSheet.swift; sourceTree = "<group>"; };
 		AA000002000000000000AA11 /* SystemRouteTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemRouteTableView.swift; sourceTree = "<group>"; };
 		AA000002000000000000AA12 /* LegacyTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyTextField.swift; sourceTree = "<group>"; };
+		AA000002000000000000AA20 /* RouteUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteUtils.swift; sourceTree = "<group>"; };
+		AA000002000000000000AA21 /* SystemRouteReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemRouteReader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -219,6 +244,7 @@
 				396255E4296C07FB00DB6000 /* Info.plist */,
 				396255E5296C082900DB6000 /* Launchd.plist */,
 				39625610296EB1E400DB6000 /* ProcessRunner.swift */,
+				3962561E296EE01C00DB6000 /* PFRouteWriter.swift */,
 				39625613296EBB1E00DB6000 /* SelfUninstaller.swift */,
 			);
 			path = RouteHelper;
@@ -296,6 +322,14 @@
 			path = StaticRouter;
 			sourceTree = "<group>";
 		};
+		39E84C6C260B32BF00776AE7 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				39E84C6D260B32BF00776AE7 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
 		AA000003000000000000AA01 /* Services */ = {
 			isa = PBXGroup;
 			children = (
@@ -308,14 +342,6 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
-		39E84C6C260B32BF00776AE7 /* Preview Content */ = {
-			isa = PBXGroup;
-			children = (
-				39E84C6D260B32BF00776AE7 /* Preview Assets.xcassets */,
-			);
-			path = "Preview Content";
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -323,6 +349,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 396255E1296C075500DB6000 /* Build configuration list for PBXNativeTarget "cn.magicdian.staticrouter.helper" */;
 			buildPhases = (
+				BB000001000000000000BB01 /* Preprocess Info.plist */,
 				396255D9296C075400DB6000 /* Sources */,
 				396255DA296C075400DB6000 /* Frameworks */,
 				396255DB296C075400DB6000 /* CopyFiles */,
@@ -425,6 +452,7 @@
 				396255F6296C0E8900DB6000 /* SharedConstant.swift in Sources */,
 				39625607296C442F00DB6000 /* HelperToolInfoPropertyList.swift in Sources */,
 				39625611296EB1E400DB6000 /* ProcessRunner.swift in Sources */,
+				3962561D296EE01C00DB6000 /* PFRouteWriter.swift in Sources */,
 				396255E0296C075400DB6000 /* main.swift in Sources */,
 				39625617296EBDC900DB6000 /* CodeInfo.swift in Sources */,
 				3962561C296EE01B00DB6000 /* RouterCommand.swift in Sources */,
@@ -492,6 +520,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1.3.1;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = BR63YT2EJJ;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -501,7 +530,7 @@
 					"-sectcreate",
 					__TEXT,
 					__info_plist,
-					RouteHelper/Info.plist,
+					"$(DERIVED_FILE_DIR)/ProcessedInfo.plist",
 					"-sectcreate",
 					__TEXT,
 					__launchd_plist,
@@ -521,6 +550,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1.3.1;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = BR63YT2EJJ;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -530,7 +560,7 @@
 					"-sectcreate",
 					__TEXT,
 					__info_plist,
-					RouteHelper/Info.plist,
+					"$(DERIVED_FILE_DIR)/ProcessedInfo.plist",
 					"-sectcreate",
 					__TEXT,
 					__launchd_plist,
@@ -596,8 +626,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-			MACOSX_DEPLOYMENT_TARGET = 15.0;
-			MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -653,8 +683,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-			MACOSX_DEPLOYMENT_TARGET = 15.0;
-			MTL_ENABLE_DEBUG_INFO = NO;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -682,8 +712,9 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				CURRENT_PROJECT_VERSION = 1.3.1;
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				MARKETING_VERSION = 1.2.0;
+				MARKETING_VERSION = 1.3.1;
 				PRODUCT_BUNDLE_IDENTIFIER = cn.magicdian.staticrouter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = ROUTER;
@@ -711,8 +742,9 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				CURRENT_PROJECT_VERSION = 1.3.1;
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				MARKETING_VERSION = 1.2.0;
+				MARKETING_VERSION = 1.3.1;
 				PRODUCT_BUNDLE_IDENTIFIER = cn.magicdian.staticrouter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = ROUTER;
@@ -793,7 +825,6 @@
 			productName = SecureXPC;
 		};
 /* End XCSwiftPackageProductDependency section */
-
 	};
 	rootObject = 39E84C5B260B32BD00776AE7 /* Project object */;
 }

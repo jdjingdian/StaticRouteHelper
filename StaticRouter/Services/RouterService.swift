@@ -37,8 +37,8 @@ struct SystemRouteEntry: Identifiable {
 enum RouterError: LocalizedError {
     /// Helper 未安装或不可达
     case helperNotAvailable
-    /// route/netstat 命令执行失败
-    case commandFailed(exitCode: Int32, stderr: String)
+    /// PF_ROUTE socket 写入失败
+    case routeWriteFailed(String)
     /// XPC 通信错误
     case xpcError(String)
 
@@ -46,9 +46,8 @@ enum RouterError: LocalizedError {
         switch self {
         case .helperNotAvailable:
             return "Helper 工具未安装或不可用，请前往设置安装。"
-        case .commandFailed(let code, let stderr):
-            let detail = stderr.isEmpty ? "退出码：\(code)" : stderr.trimmingCharacters(in: .whitespacesAndNewlines)
-            return "命令执行失败：\(detail)"
+        case .routeWriteFailed(let message):
+            return "路由操作失败：\(message)"
         case .xpcError(let msg):
             return "XPC 通信错误：\(msg)"
         }
@@ -118,14 +117,14 @@ final class RouterService {
         guard helperStatus == .installed else {
             throw RouterError.helperNotAvailable
         }
-        let command = RouterCommand.BuildManageRouteCommand(
-            addToRoute: true,
+        let request = RouteWriteRequest(
             network: rule.network,
             mask: rule.subnetMask,
             gateway: rule.gateway,
-            gatewayType: rule.gatewayType == .ipAddress ? .ipaddr : .interface
+            gatewayType: rule.gatewayType == .ipAddress ? .ipAddress : .interface,
+            add: true
         )
-        try await sendCommand(command)
+        try await sendCommand(request)
     }
 
     /// 停用路由（从系统路由表删除一条静态路由）
@@ -133,14 +132,14 @@ final class RouterService {
         guard helperStatus == .installed else {
             throw RouterError.helperNotAvailable
         }
-        let command = RouterCommand.BuildManageRouteCommand(
-            addToRoute: false,
+        let request = RouteWriteRequest(
             network: rule.network,
             mask: rule.subnetMask,
             gateway: rule.gateway,
-            gatewayType: rule.gatewayType == .ipAddress ? .ipaddr : .interface
+            gatewayType: rule.gatewayType == .ipAddress ? .ipAddress : .interface,
+            add: false
         )
-        try await sendCommand(command)
+        try await sendCommand(request)
     }
 
     // MARK: - System Routes
@@ -179,11 +178,11 @@ final class RouterService {
 
     // MARK: - Private Helpers
 
-    /// 发送命令并等待回复，解析错误
-    private func sendCommandWithReply(_ command: RouterCommand) async throws -> RouterCommandReply {
+    /// 发送 RouteWriteRequest 并等待回复
+    private func sendCommandWithReply(_ request: RouteWriteRequest) async throws -> RouteWriteReply {
         do {
             return try await withCheckedThrowingContinuation { continuation in
-                xpcClient.sendMessage(command, to: SharedConstant.commandRoute) { result in
+                xpcClient.sendMessage(request, to: SharedConstant.commandRoute) { result in
                     switch result {
                     case .success(let reply):
                         continuation.resume(returning: reply)
@@ -199,14 +198,11 @@ final class RouterService {
         }
     }
 
-    /// 发送命令（仅检查回复的退出码，不返回输出）
-    private func sendCommand(_ command: RouterCommand) async throws {
-        let reply = try await sendCommandWithReply(command)
-        if reply.terminationStatus != 0 {
-            throw RouterError.commandFailed(
-                exitCode: reply.terminationStatus,
-                stderr: reply.standardError ?? ""
-            )
+    /// 发送 RouteWriteRequest 并将失败回复映射为 routeWriteFailed 错误
+    private func sendCommand(_ request: RouteWriteRequest) async throws {
+        let reply = try await sendCommandWithReply(request)
+        if !reply.success {
+            throw RouterError.routeWriteFailed(reply.errorMessage ?? "Unknown error")
         }
     }
 

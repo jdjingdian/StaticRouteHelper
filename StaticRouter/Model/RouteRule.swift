@@ -6,12 +6,6 @@
 import Foundation
 import SwiftData
 
-/// 路由网关类型
-enum GatewayType: String, Codable {
-    case ipAddress   // 通过 IP 地址网关
-    case interface   // 通过网络接口（如 utun3、en0）
-}
-
 /// 表示一条用户定义的静态路由规则
 @Model
 final class RouteRule {
