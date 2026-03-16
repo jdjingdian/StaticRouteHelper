@@ -1,9 +1,8 @@
 /* 
   Localizable.strings
-  StaticRouteHelper
+  StaticRouteHelper (zh-Hans)
 
-  Created by 经典 on 9/1/2023.
-  
+  遗留条目（保持向后兼容）
 */
 
 "Privileged Helper Tool not installed!" = "助手后台程序没有安装！";
@@ -12,3 +11,127 @@
 "Install" = "安装";
 "Install Helper to modify system route" = "安装助手后可以控制系统路由表";
 "Confirm" = "应用";
+
+/* ── MainWindow ── */
+"helper.banner.message" = "帮助程序未安装，路由操作不可用。请前往设置安装。";
+"helper.banner.goto_settings" = "前往设置";
+
+/* ── RouteListView ── */
+"route.list.all_routes.title" = "所有路由";
+"route.list.stats" = "%lld 条路由 · %lld 条已激活";
+"route.list.add.tooltip" = "添加路由";
+"route.list.empty.label" = "暂无路由";
+"route.list.empty.add_button" = "添加路由";
+"route.list.column.destination" = "目标网络 / CIDR";
+"route.list.column.gateway" = "网关 / 接口";
+"route.list.column.groups" = "分组";
+"route.list.column.active" = "激活";
+"route.list.column.actions" = "操作";
+"route.list.action.edit.tooltip" = "编辑";
+"route.list.action.assign_groups.tooltip" = "管理分组";
+"route.list.action.delete.tooltip" = "删除";
+"route.list.context.edit" = "编辑";
+"route.list.context.assign_groups" = "管理分组…";
+"route.list.context.delete" = "删除";
+"route.list.context.copy" = "复制路由信息";
+"route.list.alert.delete.title" = "删除路由？";
+"route.list.alert.delete.active_message" = "该路由当前处于激活状态，删除前将自动停用。";
+"route.list.alert.delete.message" = "此操作无法撤销。";
+"route.list.alert.delete.confirm" = "删除";
+"route.list.alert.activation_error.title" = "激活失败";
+"route.list.alert.activation_error.confirm" = "确定";
+"route.list.alert.activation_error.unknown" = "未知错误";
+
+/* ── SidebarView ── */
+"sidebar.all_routes" = "所有路由";
+"sidebar.section.groups" = "分组";
+"sidebar.section.system" = "系统";
+"sidebar.system.route_table" = "路由表";
+"sidebar.group.context.rename" = "重命名";
+"sidebar.group.context.delete" = "删除";
+"sidebar.group.alert.delete.title" = "删除分组「%@」？";
+"sidebar.group.alert.delete.message" = "分组内的路由不会被删除，仅解除关联。";
+"sidebar.group.alert.delete.confirm" = "删除";
+"sidebar.group.alert.delete.cancel" = "取消";
+"sidebar.toolbar.add_group.tooltip" = "添加分组";
+"sidebar.toolbar.settings.tooltip" = "设置";
+
+/* ── RouteEditSheet ── */
+"route.edit.title.add" = "添加路由";
+"route.edit.title.edit" = "编辑路由";
+"route.edit.field.destination.label" = "目标网络";
+"route.edit.field.prefix_error" = "前缀长度必须在 0-32 之间";
+"route.edit.field.network_error" = "请输入有效的 IPv4 地址";
+"route.edit.field.gateway.label" = "路由方式";
+"route.edit.gateway.ip_option" = "IP 网关";
+"route.edit.gateway.interface_option" = "网络接口";
+"route.edit.gateway.ip_error" = "请输入有效的网关 IP 地址";
+"route.edit.gateway.interface_error" = "接口名称不能为空";
+"route.edit.field.groups.label" = "所属分组";
+"route.edit.mask_preview.invalid" = "无效";
+"route.edit.button.cancel" = "取消";
+"route.edit.button.add" = "添加";
+"route.edit.button.save" = "保存";
+
+/* ── GroupSheets ── */
+"group.add.title" = "添加分组";
+"group.add.name.label" = "分组名称";
+"group.add.icon.label" = "图标";
+"group.add.button.cancel" = "取消";
+"group.add.button.add" = "添加";
+"group.assign.title" = "管理分组";
+"group.assign.empty" = "尚无分组，请先在侧栏创建分组";
+"group.assign.button.cancel" = "取消";
+"group.assign.button.save" = "保存";
+"group.rename.title" = "重命名分组";
+"group.rename.field.placeholder" = "分组名称";
+"group.rename.button.cancel" = "取消";
+"group.rename.button.save" = "保存";
+
+/* ── SystemRouteTableView ── */
+"system.route.title" = "系统路由表";
+"system.route.search.placeholder" = "搜索";
+"system.route.filter.my_routes" = "仅我的路由";
+"system.route.filter.my_routes.tooltip" = "仅显示本应用添加的路由";
+"system.route.refresh.tooltip" = "刷新路由表";
+"system.route.helper_required" = "需要安装帮助程序才能查看系统路由表";
+"system.route.empty.label" = "路由表为空";
+"system.route.empty.load_button" = "加载路由表";
+"system.route.my_routes.empty.label" = "当前没有本应用添加的路由";
+"system.route.search.no_results" = "未找到匹配的我的路由";
+"system.route.column.destination" = "目标";
+"system.route.column.gateway" = "网关";
+"system.route.column.flags" = "标志";
+"system.route.column.interface" = "接口";
+"system.route.column.expire" = "过期";
+"system.route.status.my_routes_with_time" = "共 %lld 条我的路由（共 %lld 条系统路由）· 最后刷新：%@";
+"system.route.status.my_routes" = "共 %lld 条我的路由（共 %lld 条系统路由）";
+"system.route.status.all_with_time" = "共 %lld 条路由 · 最后刷新：%@";
+"system.route.status.all" = "共 %lld 条路由";
+
+/* ── Settings / Helper State ── */
+"settings.helper.state.label" = "帮助程序状态：";
+"settings.helper.button.installed" = "已安装";
+"settings.helper.button.upgrade" = "升级";
+"settings.helper.button.repair" = "修复";
+"settings.helper.button.install" = "安装";
+"settings.helper.footer.installed" = "帮助程序已安装，现在可以轻松管理系统路由";
+"settings.helper.footer.needs_upgrade" = "帮助程序已安装但不是最新版本，建议升级";
+"settings.helper.footer.not_compatible" = "帮助程序已安装但版本可能不兼容，建议重新安装";
+"settings.helper.footer.not_installed" = "需要安装帮助程序，路由命令需要特权才能执行";
+"settings.helper.uninstall.button" = "卸载帮助程序";
+"settings.helper.uninstall.alert.title" = "确定要卸载帮助程序吗？";
+"settings.helper.uninstall.alert.message" = "卸载完成后，此工具将无法修改系统路由。";
+"settings.helper.uninstall.alert.confirm" = "卸载";
+"settings.helper.uninstall.alert.cancel" = "取消";
+
+/* ── SettingsView ── */
+"settings.tab.general" = "通用";
+"settings.tab.about" = "关于";
+
+/* ── About ── */
+"about.app.subtitle" = "帮助你管理 macOS 网络路由。";
+"about.version" = "版本：%@";
+"about.license" = "StaticRouteHelper 基于 GPLv3 协议开源。";
+"about.copyright" = "版权所有 © 2021，Derek Jing";
+"about.homepage.button" = "项目主页";

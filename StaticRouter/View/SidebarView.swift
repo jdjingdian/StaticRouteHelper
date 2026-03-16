@@ -18,21 +18,21 @@ struct SidebarView: View {
     var body: some View {
         List(selection: $selection) {
             // MARK: All Routes
-            Label("所有路由", systemImage: "list.bullet")
+            Label(String(localized: "sidebar.all_routes"), systemImage: "list.bullet")
                 .badge(allRoutes.count)
                 .tag(SidebarItem.allRoutes)
 
             // MARK: Groups Section
             if !groups.isEmpty {
-                Section("分组") {
+                Section(String(localized: "sidebar.section.groups")) {
                     ForEach(groups) { group in
                         Label(group.name, systemImage: group.iconName ?? "folder")
                             .badge(group.routes.count)
                             .tag(SidebarItem.group(group))
                             .contextMenu {
-                                Button("重命名") { groupToRename = group }
+                                Button(String(localized: "sidebar.group.context.rename")) { groupToRename = group }
                                 Divider()
-                                Button("删除", role: .destructive) { groupToDelete = group }
+                                Button(String(localized: "sidebar.group.context.delete"), role: .destructive) { groupToDelete = group }
                             }
                     }
                     .onMove { from, to in
@@ -42,8 +42,8 @@ struct SidebarView: View {
             }
 
             // MARK: System Section
-            Section("系统") {
-                Label("路由表", systemImage: "network")
+            Section(String(localized: "sidebar.section.system")) {
+                Label(String(localized: "sidebar.system.route_table"), systemImage: "network")
                     .tag(SidebarItem.systemRoutes)
             }
         }
@@ -58,21 +58,20 @@ struct SidebarView: View {
             RenameGroupSheet(group: group)
         }
         .alert(
-            "删除分组「\(groupToDelete?.name ?? "")」？",
+            String(localized: "sidebar.group.alert.delete.title").replacing("%@", with: groupToDelete?.name ?? ""),
             isPresented: Binding(get: { groupToDelete != nil }, set: { if !$0 { groupToDelete = nil } })
         ) {
-            Button("删除", role: .destructive) {
+            Button(String(localized: "sidebar.group.alert.delete.confirm"), role: .destructive) {
                 if let group = groupToDelete { deleteGroup(group) }
                 groupToDelete = nil
             }
-            Button("取消", role: .cancel) { groupToDelete = nil }
+            Button(String(localized: "sidebar.group.alert.delete.cancel"), role: .cancel) { groupToDelete = nil }
         } message: {
-            Text("分组内的路由不会被删除，仅解除关联。")
+            Text(String(localized: "sidebar.group.alert.delete.message"))
         }
     }
 
     private func deleteGroup(_ group: RouteGroup) {
-        // 在删除前判断，避免删除后对象引用失效
         let isCurrentlySelected: Bool
         if case .group(let selected) = selection {
             isCurrentlySelected = selected.id == group.id
@@ -86,7 +85,6 @@ struct SidebarView: View {
         modelContext.delete(group)
         try? modelContext.save()
 
-        // 若删除的是当前选中分组，跳转至"所有路由"
         if isCurrentlySelected {
             selection = .allRoutes
         }
@@ -102,7 +100,7 @@ struct SidebarView: View {
                 Image(systemName: "plus")
             }
             .buttonStyle(.plain)
-            .help("添加分组")
+            .help(String(localized: "sidebar.toolbar.add_group.tooltip"))
 
             Spacer()
 
@@ -110,7 +108,7 @@ struct SidebarView: View {
                 Image(systemName: "gear")
             }
             .buttonStyle(.plain)
-            .help("设置")
+            .help(String(localized: "sidebar.toolbar.settings.tooltip"))
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 8)
@@ -134,18 +132,17 @@ struct SidebarView: View {
 // MARK: - Group Context Menu
 
 /// Context menu buttons for a sidebar group row.
-/// The actual sheet/alert presentation happens on the row in SidebarView.
 struct GroupContextMenu: View {
     let group: RouteGroup
     @Binding var showRenameSheet: Bool
     @Binding var showDeleteAlert: Bool
 
     var body: some View {
-        Button("重命名") {
+        Button(String(localized: "sidebar.group.context.rename")) {
             showRenameSheet = true
         }
         Divider()
-        Button("删除", role: .destructive) {
+        Button(String(localized: "sidebar.group.context.delete"), role: .destructive) {
             showDeleteAlert = true
         }
     }

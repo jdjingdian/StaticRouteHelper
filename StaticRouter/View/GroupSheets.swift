@@ -29,11 +29,11 @@ struct AddGroupSheet: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("添加分组")
+            Text(String(localized: "group.add.title"))
                 .font(.headline)
 
             VStack(alignment: .leading, spacing: 6) {
-                Text("分组名称")
+                Text(String(localized: "group.add.name.label"))
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                 TextField("例如：Office VPN", text: $name)
@@ -42,7 +42,7 @@ struct AddGroupSheet: View {
             }
 
             VStack(alignment: .leading, spacing: 8) {
-                Text("图标")
+                Text(String(localized: "group.add.icon.label"))
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                 HStack(spacing: 8) {
@@ -63,9 +63,9 @@ struct AddGroupSheet: View {
 
             HStack {
                 Spacer()
-                Button("取消") { dismiss() }
+                Button(String(localized: "group.add.button.cancel")) { dismiss() }
                     .keyboardShortcut(.cancelAction)
-                Button("添加") { save() }
+                Button(String(localized: "group.add.button.add")) { save() }
                     .keyboardShortcut(.defaultAction)
                     .disabled(!isValid)
             }
@@ -105,11 +105,11 @@ struct AssignGroupsSheet: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("管理分组")
+            Text(String(localized: "group.assign.title"))
                 .font(.headline)
 
             if allGroups.isEmpty {
-                Text("尚无分组，请先在侧栏创建分组")
+                Text(String(localized: "group.assign.empty"))
                     .foregroundStyle(.secondary)
                     .frame(maxWidth: .infinity, alignment: .center)
                     .padding(.vertical, 12)
@@ -140,9 +140,9 @@ struct AssignGroupsSheet: View {
 
             HStack {
                 Spacer()
-                Button("取消") { dismiss() }
+                Button(String(localized: "group.assign.button.cancel")) { dismiss() }
                     .keyboardShortcut(.cancelAction)
-                Button("保存") { save() }
+                Button(String(localized: "group.assign.button.save")) { save() }
                     .keyboardShortcut(.defaultAction)
             }
         }
@@ -192,18 +192,18 @@ struct RenameGroupSheet: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("重命名分组")
+            Text(String(localized: "group.rename.title"))
                 .font(.headline)
 
-            TextField("分组名称", text: $name)
+            TextField(String(localized: "group.rename.field.placeholder"), text: $name)
                 .textFieldStyle(.roundedBorder)
                 .onSubmit { if isValid { save() } }
 
             HStack {
                 Spacer()
-                Button("取消") { dismiss() }
+                Button(String(localized: "group.rename.button.cancel")) { dismiss() }
                     .keyboardShortcut(.cancelAction)
-                Button("保存") { save() }
+                Button(String(localized: "group.rename.button.save")) { save() }
                     .keyboardShortcut(.defaultAction)
                     .disabled(!isValid || !hasChanged)
             }

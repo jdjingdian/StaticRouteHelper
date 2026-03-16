@@ -17,6 +17,7 @@ struct RouterCommand : Encodable,Decodable {
         case interface
     }
     
+    @available(*, deprecated, message: "Use SystemRouteReader.readRoutes() instead. BuildPrintRouteCommand() will be removed in v1.3.0.")
     static func BuildPrintRouteCommand() -> RouterCommand {
         return RouterCommand(commandType: .netstat, commandArgs: ["-nr","-f","inet"])/// | sed '1,4d' // not working here
     }

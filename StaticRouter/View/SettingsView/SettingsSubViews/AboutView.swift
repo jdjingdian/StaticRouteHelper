@@ -20,18 +20,18 @@ struct AboutView: View {
                 VStack(alignment: .leading) {
                     Text("Static Route Helper")
                         .font(.largeTitle.bold())
-                    Text("Help you manage macOS network routes.")
+                    Text(String(localized: "about.app.subtitle"))
                         .font(.title3)
                     PaddedDivider(padding: nil)
-                    Text("Version: \(appVersion)")
+                    Text(String(format: String(localized: "about.version"), appVersion))
                         .font(.caption.italic())
                 }
             }
             PaddedDivider(padding: nil)
             HStack {
                 VStack(alignment: .leading) {
-                    Text("StaticRouteHelper is licensed under the GPLv3 license.")
-                    Text("Copyright © 2021, [Derek Jing](https://github.com/jdjingdian)")
+                    Text(String(localized: "about.license"))
+                    Text(String(localized: "about.copyright"))
                 }
                 Spacer()
                 Button {
@@ -39,7 +39,7 @@ struct AboutView: View {
                 } label: {
                     HStack {
                         Image(systemName: "house")
-                        Text("Project Home Page")
+                        Text(String(localized: "about.homepage.button"))
                             .font(.footnote)
                     }
                 }

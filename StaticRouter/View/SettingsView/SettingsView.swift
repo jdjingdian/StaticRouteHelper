@@ -12,10 +12,10 @@ struct SettingsView: View {
     var body: some View {
         TabView {
             GeneralSettingsView().tabItem {
-                Label("General", systemImage: "gear")
+                Label(String(localized: "settings.tab.general"), systemImage: "gear")
             }
             AboutView().tabItem {
-                Label("About", systemImage: "questionmark.circle")
+                Label(String(localized: "settings.tab.about"), systemImage: "questionmark.circle")
             }
         }
         .frame(width: width)
