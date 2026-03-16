@@ -30,6 +30,7 @@
 		39625609296C54D400DB6000 /* HelperToolLaunchdPropertyList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39625608296C54D400DB6000 /* HelperToolLaunchdPropertyList.swift */; };
 		3962560A296C54D400DB6000 /* HelperToolLaunchdPropertyList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39625608296C54D400DB6000 /* HelperToolLaunchdPropertyList.swift */; };
 		39625611296EB1E400DB6000 /* ProcessRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39625610296EB1E400DB6000 /* ProcessRunner.swift */; };
+		3962561D296EE01C00DB6000 /* PFRouteWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3962561E296EE01C00DB6000 /* PFRouteWriter.swift */; };
 		39625612296EB3FA00DB6000 /* cn.magicdian.staticrouter.helper in CopyFiles */ = {isa = PBXBuildFile; fileRef = 396255DD296C075400DB6000 /* cn.magicdian.staticrouter.helper */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		39625614296EBB1E00DB6000 /* SelfUninstaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39625613296EBB1E00DB6000 /* SelfUninstaller.swift */; };
 		39625616296EBDC900DB6000 /* CodeInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39625615296EBDC900DB6000 /* CodeInfo.swift */; };
@@ -99,6 +100,7 @@
 		39625605296C442F00DB6000 /* HelperToolInfoPropertyList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelperToolInfoPropertyList.swift; sourceTree = "<group>"; };
 		39625608296C54D400DB6000 /* HelperToolLaunchdPropertyList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelperToolLaunchdPropertyList.swift; sourceTree = "<group>"; };
 		39625610296EB1E400DB6000 /* ProcessRunner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessRunner.swift; sourceTree = "<group>"; };
+		3962561E296EE01C00DB6000 /* PFRouteWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PFRouteWriter.swift; sourceTree = "<group>"; };
 		39625613296EBB1E00DB6000 /* SelfUninstaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfUninstaller.swift; sourceTree = "<group>"; };
 		39625615296EBDC900DB6000 /* CodeInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeInfo.swift; sourceTree = "<group>"; };
 		3962561A296EE01B00DB6000 /* RouterCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouterCommand.swift; sourceTree = "<group>"; };
@@ -219,6 +221,7 @@
 				396255E4296C07FB00DB6000 /* Info.plist */,
 				396255E5296C082900DB6000 /* Launchd.plist */,
 				39625610296EB1E400DB6000 /* ProcessRunner.swift */,
+				3962561E296EE01C00DB6000 /* PFRouteWriter.swift */,
 				39625613296EBB1E00DB6000 /* SelfUninstaller.swift */,
 			);
 			path = RouteHelper;
@@ -425,6 +428,7 @@
 				396255F6296C0E8900DB6000 /* SharedConstant.swift in Sources */,
 				39625607296C442F00DB6000 /* HelperToolInfoPropertyList.swift in Sources */,
 				39625611296EB1E400DB6000 /* ProcessRunner.swift in Sources */,
+				3962561D296EE01C00DB6000 /* PFRouteWriter.swift in Sources */,
 				396255E0296C075400DB6000 /* main.swift in Sources */,
 				39625617296EBDC900DB6000 /* CodeInfo.swift in Sources */,
 				3962561C296EE01B00DB6000 /* RouterCommand.swift in Sources */,

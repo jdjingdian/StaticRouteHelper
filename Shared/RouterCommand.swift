@@ -7,68 +7,59 @@
 
 import Foundation
 
+// MARK: - GatewayType
 
-struct RouterCommand : Encodable,Decodable {
+/// Describes how the gateway for a route is specified.
+enum GatewayType: String, Codable, CaseIterable {
+    /// The gateway is an IPv4 address (e.g. "192.168.1.1").
+    case ipAddress
+    /// The gateway is a network interface name (e.g. "en0").
+    case interface
+}
+
+// MARK: - RouteWriteRequest
+
+/// XPC message sent from the main app to the Helper to add or remove a route via PF_ROUTE socket.
+struct RouteWriteRequest: Codable {
+    let network: String
+    let mask: String
+    let gateway: String
+    let gatewayType: GatewayType
+    let add: Bool
+}
+
+// MARK: - RouteWriteReply
+
+/// XPC reply returned by the Helper after a PF_ROUTE socket write attempt.
+struct RouteWriteReply: Codable {
+    let success: Bool
+    let errorMessage: String?
+}
+
+// MARK: - RouterCommand (legacy — netstat path only)
+
+struct RouterCommand: Encodable, Decodable {
     let commandType: RouterCommandType
-    let commandArgs:[String]
-    
-    enum GatewayType {
-        case ipaddr
-        case interface
-    }
-    
+    let commandArgs: [String]
+
     @available(*, deprecated, message: "Use SystemRouteReader.readRoutes() instead. BuildPrintRouteCommand() will be removed in v1.3.0.")
     static func BuildPrintRouteCommand() -> RouterCommand {
-        return RouterCommand(commandType: .netstat, commandArgs: ["-nr","-f","inet"])/// | sed '1,4d' // not working here
-    }
-    
-    static func BuildManageRouteCommand(addToRoute: Bool,network: String, mask: String, gateway: String, gatewayType: GatewayType) -> RouterCommand{
-        return RouterCommand(commandType: .route, commandArgs: self.BuildRouteArgs(addToRoute, network, mask, gateway, gatewayType))
-    }
-    static func BuildRouteArgs(_ addToRoute: Bool,_ network: String,_ mask: String,_ gateway: String,_ gatewayType: GatewayType) -> [String] {
-        let gateway_para: String
-        var args: [String] = []
-        switch addToRoute {
-        case true:
-            args.append("add")
-        case false:
-            args.append("delete")
-        }
-        args.append("-net")
-        args.append(network)
-        args.append("-netmask")
-        args.append(mask)
-        switch gatewayType {
-        case .interface:
-            gateway_para = "-iface"
-        case .ipaddr:
-            gateway_para = "-gateway"
-        }
-        args.append(gateway_para)
-        args.append(gateway)
-        return args
+        return RouterCommand(commandType: .netstat, commandArgs: ["-nr", "-f", "inet"])
     }
 }
 
 enum RouterCommandType: Codable, CaseIterable {
     case netstat
-    case route
-    
-    var launchPath: String{
-        switch self{
+
+    var launchPath: String {
+        switch self {
         case .netstat:
             return "/usr/sbin/netstat"
-        case .route:
-            return "/sbin/route"
         }
     }
 }
 
-struct RouterCommandReply: Codable {
-    let terminationStatus: Int32
-    let standardOutput: String?
-    let standardError: String?
-}
+// MARK: - RouterCommandError (DEBUG)
 
 //DEBUG useless
 enum RouterCommandError: Error, Codable {

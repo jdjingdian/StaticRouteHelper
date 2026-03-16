@@ -15,7 +15,7 @@ struct SharedConstant {
     //MARK: XPC START
     static let debugRoute = XPCRoute.named("debug")
     static let uninstallRoute = XPCRoute.named("uninstall")
-    static let commandRoute = XPCRoute.named("command").withMessageType(RouterCommand.self).withReplyType(RouterCommandReply.self).throwsType(RouterCommandError.self)
+    static let commandRoute = XPCRoute.named("command").withMessageType(RouteWriteRequest.self).withReplyType(RouteWriteReply.self).throwsType(RouterCommandError.self)
     //MARK: XPC END
     
     

@@ -32,7 +32,7 @@ if CommandLine.arguments.count > 1 {
     NSLog("StaticRouterHelper set debugRoute Complete")
 //    server.registerRoute(SharedConstant.uninstallRoute, handler: SelfUninstaller.uninstall)
     server.registerRoute(SharedConstant.uninstallRoute, handler: SelfUninstaller.uninstall)
-    server.registerRoute(SharedConstant.commandRoute, handler: ProcessRunner.runCommand(wrapCmd:))
+    server.registerRoute(SharedConstant.commandRoute, handler: PFRouteWriter.write(request:))
     
     NSLog("StaticRouterHelper set uninstallRoute Complete")
     ///
