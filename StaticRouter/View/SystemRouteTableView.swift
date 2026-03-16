@@ -11,6 +11,7 @@ struct SystemRouteTableView: View {
     @Query private var userRoutes: [RouteRule]
 
     @State private var searchText = ""
+    @AppStorage("systemRouteTable.showOnlyMyRoutes") private var showOnlyMyRoutes: Bool = false
     @State private var lastRefreshTime: Date? = nil
     @State private var isRefreshing = false
     @State private var errorMessage: String? = nil
@@ -54,6 +55,10 @@ struct SystemRouteTableView: View {
         filteredRoutes.filter { !isUserRoute($0) }
     }
 
+    private var displayedRoutes: [SystemRouteEntry] {
+        showOnlyMyRoutes ? myRoutes : filteredRoutes
+    }
+
     // MARK: - Body
 
     var body: some View {
@@ -66,6 +71,11 @@ struct SystemRouteTableView: View {
                 TextField("搜索", text: $searchText)
                     .textFieldStyle(.roundedBorder)
                     .frame(width: 200)
+                Toggle(isOn: $showOnlyMyRoutes) {
+                    Label("仅我的路由", systemImage: "person.fill")
+                }
+                .toggleStyle(.button)
+                .help("仅显示本应用添加的路由")
                 Button {
                     refresh()
                 } label: {
@@ -113,14 +123,26 @@ struct SystemRouteTableView: View {
             // Status bar
             Divider()
             HStack {
-                if let time = lastRefreshTime {
-                    Text("共 \(routerService.systemRoutes.count) 条路由 · 最后刷新：\(time, style: .time)")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                if showOnlyMyRoutes {
+                    if let time = lastRefreshTime {
+                        Text("共 \(myRoutes.count) 条我的路由（共 \(routerService.systemRoutes.count) 条系统路由）· 最后刷新：\(time, style: .time)")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    } else {
+                        Text("共 \(myRoutes.count) 条我的路由（共 \(routerService.systemRoutes.count) 条系统路由）")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
                 } else {
-                    Text("共 \(routerService.systemRoutes.count) 条路由")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                    if let time = lastRefreshTime {
+                        Text("共 \(routerService.systemRoutes.count) 条路由 · 最后刷新：\(time, style: .time)")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    } else {
+                        Text("共 \(routerService.systemRoutes.count) 条路由")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
                 }
                 Spacer()
                 if let err = errorMessage {
@@ -143,42 +165,61 @@ struct SystemRouteTableView: View {
     // MARK: - Route Table
 
     private var routeTable: some View {
-        Table(filteredRoutes) {
-            TableColumn("目标") { entry in
-                HStack(spacing: 4) {
-                    if isUserRoute(entry) {
-                        Image(systemName: "person.fill")
-                            .foregroundStyle(Color.accentColor)
-                            .imageScale(.small)
+        Group {
+            if displayedRoutes.isEmpty {
+                Spacer()
+                VStack(spacing: 8) {
+                    Image(systemName: "person.slash")
+                        .font(.system(size: 36))
+                        .foregroundStyle(.tertiary)
+                    if showOnlyMyRoutes && searchText.isEmpty {
+                        Text("当前没有本应用添加的路由")
+                            .foregroundStyle(.secondary)
+                    } else {
+                        Text("未找到匹配的我的路由")
+                            .foregroundStyle(.secondary)
                     }
-                    Text(entry.destination)
-                        .font(.system(.body, design: .monospaced))
                 }
-                .padding(.vertical, 1)
-                .background(isUserRoute(entry) ? Color.accentColor.opacity(0.08) : Color.clear)
+                Spacer()
+            } else {
+                Table(displayedRoutes) {
+                    TableColumn("目标") { entry in
+                        HStack(spacing: 4) {
+                            if isUserRoute(entry) {
+                                Image(systemName: "person.fill")
+                                    .foregroundStyle(Color.accentColor)
+                                    .imageScale(.small)
+                            }
+                            Text(entry.destination)
+                                .font(.system(.body, design: .monospaced))
+                        }
+                        .padding(.vertical, 1)
+                        .background(isUserRoute(entry) ? Color.accentColor.opacity(0.08) : Color.clear)
+                    }
+                    TableColumn("网关") { entry in
+                        Text(entry.gateway)
+                            .font(.system(.body, design: .monospaced))
+                            .background(isUserRoute(entry) ? Color.accentColor.opacity(0.08) : Color.clear)
+                    }
+                    TableColumn("标志") { entry in
+                        Text(entry.flags)
+                            .font(.system(.body, design: .monospaced))
+                            .foregroundStyle(.secondary)
+                    }
+                    .width(80)
+                    TableColumn("接口") { entry in
+                        Text(entry.networkInterface)
+                            .font(.system(.body, design: .monospaced))
+                    }
+                    .width(70)
+                    TableColumn("过期") { entry in
+                        Text(entry.expire.isEmpty ? "—" : entry.expire)
+                            .font(.system(.body, design: .monospaced))
+                            .foregroundStyle(.secondary)
+                    }
+                    .width(60)
+                }
             }
-            TableColumn("网关") { entry in
-                Text(entry.gateway)
-                    .font(.system(.body, design: .monospaced))
-                    .background(isUserRoute(entry) ? Color.accentColor.opacity(0.08) : Color.clear)
-            }
-            TableColumn("标志") { entry in
-                Text(entry.flags)
-                    .font(.system(.body, design: .monospaced))
-                    .foregroundStyle(.secondary)
-            }
-            .width(80)
-            TableColumn("接口") { entry in
-                Text(entry.networkInterface)
-                    .font(.system(.body, design: .monospaced))
-            }
-            .width(70)
-            TableColumn("过期") { entry in
-                Text(entry.expire.isEmpty ? "—" : entry.expire)
-                    .font(.system(.body, design: .monospaced))
-                    .foregroundStyle(.secondary)
-            }
-            .width(60)
         }
     }
 
