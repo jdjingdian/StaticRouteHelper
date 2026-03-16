@@ -36,7 +36,7 @@
 	<key>SMPrivilegedExecutables</key>
 	<dict>
 		<key>cn.magicdian.staticrouter.helper</key>
-		<string>identifier "cn.magicdian.staticrouter.helper" and anchor apple generic and certificate leaf[subject.CN] = "Apple Development: DIAN JING (9X3RC5Q3Z4)" and certificate 1[field.1.2.840.113635.100.6.2.1] /* exists */</string>
+		<string>identifier &quot;cn.magicdian.staticrouter.helper&quot; and anchor apple generic and certificate leaf[subject.CN] = &quot;Apple Development: DIAN JING (9X3RC5Q3Z4)&quot; and certificate 1[field.1.2.840.113635.100.6.2.1] /* exists */</string>
 	</dict>
 </dict>
 </plist>
