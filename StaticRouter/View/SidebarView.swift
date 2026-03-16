@@ -72,11 +72,24 @@ struct SidebarView: View {
     }
 
     private func deleteGroup(_ group: RouteGroup) {
+        // 在删除前判断，避免删除后对象引用失效
+        let isCurrentlySelected: Bool
+        if case .group(let selected) = selection {
+            isCurrentlySelected = selected.id == group.id
+        } else {
+            isCurrentlySelected = false
+        }
+
         for route in group.routes {
             route.groups.removeAll { $0.id == group.id }
         }
         modelContext.delete(group)
         try? modelContext.save()
+
+        // 若删除的是当前选中分组，跳转至"所有路由"
+        if isCurrentlySelected {
+            selection = .allRoutes
+        }
     }
 
     // MARK: - Bottom Toolbar
