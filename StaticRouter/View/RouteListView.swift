@@ -38,7 +38,7 @@ struct RouteListView: View {
     private var activeCount: Int { routes.filter(\.isActive).count }
 
     private var title: String {
-        group?.name ?? "所有路由"
+        group?.name ?? String(localized: "route.list.all_routes.title")
     }
 
     // MARK: - Body
@@ -50,7 +50,7 @@ struct RouteListView: View {
                 Text(title)
                     .font(.headline)
                 Spacer()
-                Text("\(routes.count) 条路由 · \(activeCount) 条已激活")
+                Text(String(format: String(localized: "route.list.stats"), routes.count, activeCount))
                     .font(.caption)
                     .foregroundStyle(.secondary)
                 Button {
@@ -59,7 +59,7 @@ struct RouteListView: View {
                     Image(systemName: "plus")
                 }
                 .buttonStyle(.plain)
-                .help("添加路由")
+                .help(String(localized: "route.list.add.tooltip"))
             }
             .padding(.horizontal, 12)
             .padding(.vertical, 8)
@@ -82,31 +82,31 @@ struct RouteListView: View {
             AssignGroupsSheet(rule: rule)
         }
         .alert(
-            "删除路由？",
+            String(localized: "route.list.alert.delete.title"),
             isPresented: Binding(
                 get: { routeToDelete != nil },
                 set: { if !$0 { routeToDelete = nil } }
             )
         ) {
-            Button("删除", role: .destructive) {
+            Button(String(localized: "route.list.alert.delete.confirm"), role: .destructive) {
                 if let rule = routeToDelete { performDelete(rule) }
                 routeToDelete = nil
             }
-            Button("取消", role: .cancel) { routeToDelete = nil }
+            Button(String(localized: "Cancel"), role: .cancel) { routeToDelete = nil }
         } message: {
             if routeToDelete?.isActive == true {
-                Text("该路由当前处于激活状态，删除前将自动停用。")
+                Text(String(localized: "route.list.alert.delete.active_message"))
             } else {
-                Text("此操作无法撤销。")
+                Text(String(localized: "route.list.alert.delete.message"))
             }
         }
         .alert(
-            "激活失败",
+            String(localized: "route.list.alert.activation_error.title"),
             isPresented: $showActivationError
         ) {
-            Button("确定", role: .cancel) {}
+            Button(String(localized: "route.list.alert.activation_error.confirm"), role: .cancel) {}
         } message: {
-            Text(activationError?.localizedDescription ?? "未知错误")
+            Text(activationError?.localizedDescription ?? String(localized: "route.list.alert.activation_error.unknown"))
         }
     }
 
@@ -118,9 +118,9 @@ struct RouteListView: View {
             Image(systemName: "tray")
                 .font(.system(size: 40))
                 .foregroundStyle(.tertiary)
-            Text("暂无路由")
+            Text(String(localized: "route.list.empty.label"))
                 .foregroundStyle(.secondary)
-            Button("添加路由") { showAddSheet = true }
+            Button(String(localized: "route.list.empty.add_button")) { showAddSheet = true }
                 .buttonStyle(.borderedProminent)
             Spacer()
         }
@@ -130,11 +130,11 @@ struct RouteListView: View {
 
     private var routeTable: some View {
         Table(routes, selection: $tableSelection) {
-            TableColumn("目标网络 / CIDR") { rule in
+            TableColumn(String(localized: "route.list.column.destination")) { rule in
                 Text(rule.cidrNotation)
                     .font(.system(.body, design: .monospaced))
             }
-            TableColumn("网关 / 接口") { rule in
+            TableColumn(String(localized: "route.list.column.gateway")) { rule in
                 HStack(spacing: 4) {
                     Image(systemName: rule.gatewayType == .ipAddress ? "arrow.triangle.turn.up.right.circle" : "cable.connector")
                         .foregroundStyle(.secondary)
@@ -143,7 +143,7 @@ struct RouteListView: View {
                         .font(.system(.body, design: .monospaced))
                 }
             }
-            TableColumn("分组") { rule in
+            TableColumn(String(localized: "route.list.column.groups")) { rule in
                 if rule.groups.isEmpty {
                     Text("—").foregroundStyle(.tertiary)
                 } else {
@@ -152,7 +152,7 @@ struct RouteListView: View {
                         .lineLimit(1)
                 }
             }
-            TableColumn("激活") { rule in
+            TableColumn(String(localized: "route.list.column.active")) { rule in
                 RouteToggle(rule: rule, routerService: routerService) { error in
                     activationError = error
                     showActivationError = true
@@ -160,7 +160,7 @@ struct RouteListView: View {
                 .disabled(routerService.helperStatus != .installed)
             }
             .width(60)
-            TableColumn("操作") { rule in
+            TableColumn(String(localized: "route.list.column.actions")) { rule in
                 HStack(spacing: 6) {
                     Button {
                         routeToEdit = rule
@@ -171,7 +171,7 @@ struct RouteListView: View {
                     }
                     .buttonStyle(.borderedProminent)
                     .tint(.green)
-                    .help("编辑")
+                    .help(String(localized: "route.list.action.edit.tooltip"))
 
                     Button {
                         routeToAssignGroups = rule
@@ -182,7 +182,7 @@ struct RouteListView: View {
                     }
                     .buttonStyle(.borderedProminent)
                     .tint(.blue)
-                    .help("管理分组")
+                    .help(String(localized: "route.list.action.assign_groups.tooltip"))
 
                     Button {
                         routeToDelete = rule
@@ -193,21 +193,20 @@ struct RouteListView: View {
                     }
                     .buttonStyle(.borderedProminent)
                     .tint(.red)
-                    .help("删除")
+                    .help(String(localized: "route.list.action.delete.tooltip"))
                 }
             }
             .width(120)
         }
         .contextMenu(forSelectionType: UUID.self) { selectedIDs in
             if let id = selectedIDs.first, let rule = routes.first(where: { $0.id == id }) {
-                Button("编辑") { routeToEdit = rule }
-                Button("管理分组…") { routeToAssignGroups = rule }
-                Button("删除", role: .destructive) { routeToDelete = rule }
+                Button(String(localized: "route.list.context.edit")) { routeToEdit = rule }
+                Button(String(localized: "route.list.context.assign_groups")) { routeToAssignGroups = rule }
+                Button(String(localized: "route.list.context.delete"), role: .destructive) { routeToDelete = rule }
                 Divider()
-                Button("复制路由信息") { copyRouteInfo(rule) }
+                Button(String(localized: "route.list.context.copy")) { copyRouteInfo(rule) }
             }
         } primaryAction: { selectedIDs in
-            // Double-click = edit
             if let id = selectedIDs.first, let rule = routes.first(where: { $0.id == id }) {
                 routeToEdit = rule
             }
@@ -222,7 +221,6 @@ struct RouteListView: View {
                 try? await routerService.deactivateRoute(rule)
                 rule.isActive = false
             }
-            // Detach from all groups
             for group in rule.groups {
                 group.routes.removeAll { $0.id == rule.id }
             }
@@ -273,7 +271,6 @@ struct RouteToggle: View {
                 rule.isActive = false
             }
         } catch let error as RouterError {
-            // Rollback — isActive is not changed, so UI naturally reverts
             onError(error)
         } catch {
             onError(.xpcError(error.localizedDescription))

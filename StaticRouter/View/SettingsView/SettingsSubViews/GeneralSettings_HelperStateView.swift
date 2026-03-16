@@ -11,7 +11,7 @@ struct GeneralSettings_HelperStateView: View {
 
     var body: some View {
         HStack {
-            Text("Privileged Helper State: ")
+            Text(String(localized: "settings.helper.state.label"))
                 .font(.title3.bold())
             helperStateIcon
             Spacer()
@@ -36,23 +36,23 @@ struct GeneralSettings_HelperStateView: View {
 
     private var installButtonText: String {
         switch routerService.helperStatus {
-        case .installed: return "Already Installed"
-        case .needUpgrade: return "Upgrade"
-        case .notCompatible: return "Repair"
-        case .notInstalled: return "Install"
+        case .installed: return String(localized: "settings.helper.button.installed")
+        case .needUpgrade: return String(localized: "settings.helper.button.upgrade")
+        case .notCompatible: return String(localized: "settings.helper.button.repair")
+        case .notInstalled: return String(localized: "settings.helper.button.install")
         }
     }
 
     private var helperStateFooter: String {
         switch routerService.helperStatus {
         case .installed:
-            return "Helper already installed, now you can modify system routes at ease"
+            return String(localized: "settings.helper.footer.installed")
         case .needUpgrade:
-            return "Helper already installed but not the latest version, it is recommended to upgrade it"
+            return String(localized: "settings.helper.footer.needs_upgrade")
         case .notCompatible:
-            return "Helper already installed but version may not be compatible, it is recommended to reinstall it"
+            return String(localized: "settings.helper.footer.not_compatible")
         case .notInstalled:
-            return "Need to install Helper, route command needs privilege to process"
+            return String(localized: "settings.helper.footer.not_installed")
         }
     }
 

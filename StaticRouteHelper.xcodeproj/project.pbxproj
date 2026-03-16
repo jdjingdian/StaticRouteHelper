@@ -46,6 +46,8 @@
 		AA000001000000000000AA04 /* RouterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000000000000AA04 /* RouterService.swift */; };
 		AA000001000000000000AA05 /* CoreDataMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000000000000AA05 /* CoreDataMigrator.swift */; };
 		AA000001000000000000AA06 /* RouteStateCalibrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000000000000AA06 /* RouteStateCalibrator.swift */; };
+		AA000001000000000000AA20 /* RouteUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000000000000AA20 /* RouteUtils.swift */; };
+		AA000001000000000000AA21 /* SystemRouteReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000000000000AA21 /* SystemRouteReader.swift */; };
 		AA000001000000000000AA07 /* SidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000000000000AA07 /* SidebarView.swift */; };
 		AA000001000000000000AA08 /* GroupSheets.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000000000000AA08 /* GroupSheets.swift */; };
 		AA000001000000000000AA09 /* RouteListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000000000000AA09 /* RouteListView.swift */; };
@@ -113,6 +115,8 @@
 		AA000002000000000000AA04 /* RouterService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouterService.swift; sourceTree = "<group>"; };
 		AA000002000000000000AA05 /* CoreDataMigrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataMigrator.swift; sourceTree = "<group>"; };
 		AA000002000000000000AA06 /* RouteStateCalibrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteStateCalibrator.swift; sourceTree = "<group>"; };
+		AA000002000000000000AA20 /* RouteUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteUtils.swift; sourceTree = "<group>"; };
+		AA000002000000000000AA21 /* SystemRouteReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemRouteReader.swift; sourceTree = "<group>"; };
 		AA000002000000000000AA07 /* SidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarView.swift; sourceTree = "<group>"; };
 		AA000002000000000000AA08 /* GroupSheets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupSheets.swift; sourceTree = "<group>"; };
 		AA000002000000000000AA09 /* RouteListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteListView.swift; sourceTree = "<group>"; };
@@ -298,6 +302,8 @@
 				AA000002000000000000AA04 /* RouterService.swift */,
 				AA000002000000000000AA05 /* CoreDataMigrator.swift */,
 				AA000002000000000000AA06 /* RouteStateCalibrator.swift */,
+				AA000002000000000000AA20 /* RouteUtils.swift */,
+				AA000002000000000000AA21 /* SystemRouteReader.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -438,6 +444,8 @@
 				AA000001000000000000AA04 /* RouterService.swift in Sources */,
 				AA000001000000000000AA05 /* CoreDataMigrator.swift in Sources */,
 				AA000001000000000000AA06 /* RouteStateCalibrator.swift in Sources */,
+				AA000001000000000000AA20 /* RouteUtils.swift in Sources */,
+				AA000001000000000000AA21 /* SystemRouteReader.swift in Sources */,
 				39229F3129700FFF0013B40F /* MainWindow.swift in Sources */,
 				AA000001000000000000AA07 /* SidebarView.swift in Sources */,
 				AA000001000000000000AA08 /* GroupSheets.swift in Sources */,
@@ -675,7 +683,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 1.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = cn.magicdian.staticrouter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = ROUTER;
@@ -704,7 +712,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 1.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = cn.magicdian.staticrouter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = ROUTER;

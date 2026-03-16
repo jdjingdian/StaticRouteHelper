@@ -15,7 +15,7 @@ enum RouteStateCalibrator {
     static func calibrate(rules: [RouteRule], systemRoutes: [SystemRouteEntry]) {
         for rule in rules {
             let isActuallyActive = systemRoutes.contains { entry in
-                entry.destination == rule.network && entry.gateway == rule.gateway
+                normalizeIPv4Destination(entry.destination) == rule.network && entry.gateway == rule.gateway
             }
             if rule.isActive != isActuallyActive {
                 rule.isActive = isActuallyActive

@@ -32,7 +32,7 @@ struct RouteEditSheet: View {
     @State private var gatewayError: String? = nil
 
     private var prefixLengthError: String? {
-        RouteValidator.isValidPrefixLength(prefixLength) ? nil : "前缀长度必须在 0-32 之间"
+        RouteValidator.isValidPrefixLength(prefixLength) ? nil : String(localized: "route.edit.field.prefix_error")
     }
 
     private var isFormValid: Bool {
@@ -47,12 +47,12 @@ struct RouteEditSheet: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
-            Text(isEditing ? "编辑路由" : "添加路由")
+            Text(isEditing ? String(localized: "route.edit.title.edit") : String(localized: "route.edit.title.add"))
                 .font(.headline)
 
             // Network Address + Prefix Length
             VStack(alignment: .leading, spacing: 6) {
-                Text("目标网络")
+                Text(String(localized: "route.edit.field.destination.label"))
                     .font(.subheadline).foregroundStyle(.secondary)
                 HStack(spacing: 8) {
                     TextField("192.168.4.0", text: $network)
@@ -88,11 +88,11 @@ struct RouteEditSheet: View {
 
             // Gateway Type Picker + Gateway Input
             VStack(alignment: .leading, spacing: 6) {
-                Text("路由方式")
+                Text(String(localized: "route.edit.field.gateway.label"))
                     .font(.subheadline).foregroundStyle(.secondary)
-                Picker("路由方式", selection: $gatewayType) {
-                    Text("IP 网关").tag(GatewayType.ipAddress)
-                    Text("网络接口").tag(GatewayType.interface)
+                Picker(String(localized: "route.edit.field.gateway.label"), selection: $gatewayType) {
+                    Text(String(localized: "route.edit.gateway.ip_option")).tag(GatewayType.ipAddress)
+                    Text(String(localized: "route.edit.gateway.interface_option")).tag(GatewayType.interface)
                 }
                 .pickerStyle(.radioGroup)
                 .onChange(of: gatewayType) { _, _ in gateway = ""; validateGateway() }
@@ -113,7 +113,7 @@ struct RouteEditSheet: View {
             // Group Multi-Select
             if !allGroups.isEmpty {
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("所属分组")
+                    Text(String(localized: "route.edit.field.groups.label"))
                         .font(.subheadline).foregroundStyle(.secondary)
                     VStack(alignment: .leading, spacing: 4) {
                         ForEach(allGroups) { group in
@@ -134,9 +134,9 @@ struct RouteEditSheet: View {
             // Buttons
             HStack {
                 Spacer()
-                Button("取消") { dismiss() }
+                Button(String(localized: "route.edit.button.cancel")) { dismiss() }
                     .keyboardShortcut(.cancelAction)
-                Button(isEditing ? "保存" : "添加") { save() }
+                Button(isEditing ? String(localized: "route.edit.button.save") : String(localized: "route.edit.button.add")) { save() }
                     .keyboardShortcut(.defaultAction)
                     .disabled(!isFormValid)
             }
@@ -149,7 +149,7 @@ struct RouteEditSheet: View {
     // MARK: - Computed
 
     private var subnetMaskPreview: String {
-        guard prefixLength >= 0, prefixLength <= 32 else { return "无效" }
+        guard prefixLength >= 0, prefixLength <= 32 else { return String(localized: "route.edit.mask_preview.invalid") }
         let mask: UInt32 = prefixLength == 0 ? 0 : (~UInt32(0) << (32 - prefixLength))
         return "\((mask>>24)&0xFF).\((mask>>16)&0xFF).\((mask>>8)&0xFF).\(mask&0xFF)"
     }
@@ -159,16 +159,16 @@ struct RouteEditSheet: View {
     private func validateNetwork() {
         let trimmed = network.trimmingCharacters(in: .whitespaces)
         if trimmed.isEmpty { networkError = nil; return }
-        networkError = RouteValidator.isValidIPv4(trimmed) ? nil : "请输入有效的 IPv4 地址"
+        networkError = RouteValidator.isValidIPv4(trimmed) ? nil : String(localized: "route.edit.field.network_error")
     }
 
     private func validateGateway() {
         let trimmed = gateway.trimmingCharacters(in: .whitespaces)
         if trimmed.isEmpty { gatewayError = nil; return }
         if gatewayType == .ipAddress {
-            gatewayError = RouteValidator.isValidIPv4(trimmed) ? nil : "请输入有效的网关 IP 地址"
+            gatewayError = RouteValidator.isValidIPv4(trimmed) ? nil : String(localized: "route.edit.gateway.ip_error")
         } else {
-            gatewayError = RouteValidator.isValidGatewayOrInterface(trimmed) ? nil : "接口名称不能为空"
+            gatewayError = RouteValidator.isValidGatewayOrInterface(trimmed) ? nil : String(localized: "route.edit.gateway.interface_error")
         }
     }
 

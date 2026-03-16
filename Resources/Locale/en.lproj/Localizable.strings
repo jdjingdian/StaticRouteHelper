@@ -1,9 +1,8 @@
 /* 
   Localizable.strings
-  StaticRouteHelper
+  StaticRouteHelper (en)
 
-  Created by 经典 on 9/1/2023.
-  
+  Legacy entries (kept for backward compatibility)
 */
 
 "Privileged Helper Tool not installed!" = "Privileged Helper Tool not installed!";
@@ -11,3 +10,127 @@
 "Cancel" = "Cancel";
 "Install" = "Install";
 "Install Helper to modify system route" = "Install Helper to modify system route";
+
+/* ── MainWindow ── */
+"helper.banner.message" = "Helper tool not installed. Route operations are unavailable. Please go to Settings to install.";
+"helper.banner.goto_settings" = "Open Settings";
+
+/* ── RouteListView ── */
+"route.list.all_routes.title" = "All Routes";
+"route.list.stats" = "%lld routes · %lld active";
+"route.list.add.tooltip" = "Add Route";
+"route.list.empty.label" = "No Routes";
+"route.list.empty.add_button" = "Add Route";
+"route.list.column.destination" = "Destination / CIDR";
+"route.list.column.gateway" = "Gateway / Interface";
+"route.list.column.groups" = "Groups";
+"route.list.column.active" = "Active";
+"route.list.column.actions" = "Actions";
+"route.list.action.edit.tooltip" = "Edit";
+"route.list.action.assign_groups.tooltip" = "Manage Groups";
+"route.list.action.delete.tooltip" = "Delete";
+"route.list.context.edit" = "Edit";
+"route.list.context.assign_groups" = "Manage Groups…";
+"route.list.context.delete" = "Delete";
+"route.list.context.copy" = "Copy Route Info";
+"route.list.alert.delete.title" = "Delete Route?";
+"route.list.alert.delete.active_message" = "This route is currently active and will be deactivated before deletion.";
+"route.list.alert.delete.message" = "This action cannot be undone.";
+"route.list.alert.delete.confirm" = "Delete";
+"route.list.alert.activation_error.title" = "Activation Failed";
+"route.list.alert.activation_error.confirm" = "OK";
+"route.list.alert.activation_error.unknown" = "Unknown error";
+
+/* ── SidebarView ── */
+"sidebar.all_routes" = "All Routes";
+"sidebar.section.groups" = "Groups";
+"sidebar.section.system" = "System";
+"sidebar.system.route_table" = "Route Table";
+"sidebar.group.context.rename" = "Rename";
+"sidebar.group.context.delete" = "Delete";
+"sidebar.group.alert.delete.title" = "Delete group \"%@\"?";
+"sidebar.group.alert.delete.message" = "Routes in the group will not be deleted, only disassociated.";
+"sidebar.group.alert.delete.confirm" = "Delete";
+"sidebar.group.alert.delete.cancel" = "Cancel";
+"sidebar.toolbar.add_group.tooltip" = "Add Group";
+"sidebar.toolbar.settings.tooltip" = "Settings";
+
+/* ── RouteEditSheet ── */
+"route.edit.title.add" = "Add Route";
+"route.edit.title.edit" = "Edit Route";
+"route.edit.field.destination.label" = "Destination Network";
+"route.edit.field.prefix_error" = "Prefix length must be between 0 and 32";
+"route.edit.field.network_error" = "Please enter a valid IPv4 address";
+"route.edit.field.gateway.label" = "Routing Method";
+"route.edit.gateway.ip_option" = "IP Gateway";
+"route.edit.gateway.interface_option" = "Network Interface";
+"route.edit.gateway.ip_error" = "Please enter a valid gateway IP address";
+"route.edit.gateway.interface_error" = "Interface name cannot be empty";
+"route.edit.field.groups.label" = "Groups";
+"route.edit.mask_preview.invalid" = "Invalid";
+"route.edit.button.cancel" = "Cancel";
+"route.edit.button.add" = "Add";
+"route.edit.button.save" = "Save";
+
+/* ── GroupSheets ── */
+"group.add.title" = "Add Group";
+"group.add.name.label" = "Group Name";
+"group.add.icon.label" = "Icon";
+"group.add.button.cancel" = "Cancel";
+"group.add.button.add" = "Add";
+"group.assign.title" = "Manage Groups";
+"group.assign.empty" = "No groups yet. Create one in the sidebar first.";
+"group.assign.button.cancel" = "Cancel";
+"group.assign.button.save" = "Save";
+"group.rename.title" = "Rename Group";
+"group.rename.field.placeholder" = "Group Name";
+"group.rename.button.cancel" = "Cancel";
+"group.rename.button.save" = "Save";
+
+/* ── SystemRouteTableView ── */
+"system.route.title" = "System Route Table";
+"system.route.search.placeholder" = "Search";
+"system.route.filter.my_routes" = "My Routes Only";
+"system.route.filter.my_routes.tooltip" = "Show only routes added by this app";
+"system.route.refresh.tooltip" = "Refresh route table";
+"system.route.helper_required" = "Helper must be installed to view the system route table";
+"system.route.empty.label" = "Route table is empty";
+"system.route.empty.load_button" = "Load Route Table";
+"system.route.my_routes.empty.label" = "No routes added by this app";
+"system.route.search.no_results" = "No matching routes found";
+"system.route.column.destination" = "Destination";
+"system.route.column.gateway" = "Gateway";
+"system.route.column.flags" = "Flags";
+"system.route.column.interface" = "Interface";
+"system.route.column.expire" = "Expire";
+"system.route.status.my_routes_with_time" = "%lld my routes (%lld system routes) · Last refreshed: %@";
+"system.route.status.my_routes" = "%lld my routes (%lld system routes)";
+"system.route.status.all_with_time" = "%lld routes · Last refreshed: %@";
+"system.route.status.all" = "%lld routes";
+
+/* ── Settings / Helper State ── */
+"settings.helper.state.label" = "Privileged Helper State:";
+"settings.helper.button.installed" = "Already Installed";
+"settings.helper.button.upgrade" = "Upgrade";
+"settings.helper.button.repair" = "Repair";
+"settings.helper.button.install" = "Install";
+"settings.helper.footer.installed" = "Helper is installed. You can now manage system routes.";
+"settings.helper.footer.needs_upgrade" = "Helper is installed but not the latest version. Upgrade recommended.";
+"settings.helper.footer.not_compatible" = "Helper is installed but the version may be incompatible. Reinstall recommended.";
+"settings.helper.footer.not_installed" = "Helper not installed. Root privileges are required to manage routes.";
+"settings.helper.uninstall.button" = "Uninstall Helper";
+"settings.helper.uninstall.alert.title" = "Are you sure you want to uninstall the helper?";
+"settings.helper.uninstall.alert.message" = "After uninstallation, this app will no longer be able to modify system routes.";
+"settings.helper.uninstall.alert.confirm" = "Uninstall";
+"settings.helper.uninstall.alert.cancel" = "Cancel";
+
+/* ── SettingsView ── */
+"settings.tab.general" = "General";
+"settings.tab.about" = "About";
+
+/* ── About ── */
+"about.app.subtitle" = "Help you manage macOS network routes.";
+"about.version" = "Version: %@";
+"about.license" = "StaticRouteHelper is licensed under the GPLv3 license.";
+"about.copyright" = "Copyright © 2021, Derek Jing";
+"about.homepage.button" = "Project Home Page";

@@ -26,7 +26,7 @@ struct GeneralSettingsView: View {
         Button {
             showUninstallAlert = true
         } label: {
-            Text("Uninstall Helper")
+            Text(String(localized: "settings.helper.uninstall.button"))
         }
         .buttonStyle(DefaultButtonStyle(
             .buttonDestory(.small),
@@ -38,14 +38,14 @@ struct GeneralSettingsView: View {
         .disabled(routerService.helperStatus == .notInstalled)
         .alert(isPresented: $showUninstallAlert) {
             Alert(
-                title: Text("Are you sure to uninstall helper?"),
-                message: Text("After the uninstallation is complete, the system route cannot be modified by this tool."),
-                primaryButton: .default(Text("Uninstall")) {
+                title: Text(String(localized: "settings.helper.uninstall.alert.title")),
+                message: Text(String(localized: "settings.helper.uninstall.alert.message")),
+                primaryButton: .default(Text(String(localized: "settings.helper.uninstall.alert.confirm"))) {
                     Task {
                         try? await routerService.uninstallHelper()
                     }
                 },
-                secondaryButton: .default(Text("Cancel"))
+                secondaryButton: .default(Text(String(localized: "settings.helper.uninstall.alert.cancel")))
             )
         }
     }

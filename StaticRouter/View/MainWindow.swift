@@ -57,11 +57,11 @@ struct HelperNotInstalledBanner: View {
         HStack(spacing: 8) {
             Image(systemName: "exclamationmark.triangle.fill")
                 .foregroundStyle(.yellow)
-            Text("Helper 工具未安装，路由操作不可用。请前往设置安装。")
+            Text(String(localized: "helper.banner.message"))
                 .font(.callout)
             Spacer()
             SettingsLink {
-                Text("前往设置")
+                Text(String(localized: "helper.banner.goto_settings"))
                     .font(.callout)
             }
         }
