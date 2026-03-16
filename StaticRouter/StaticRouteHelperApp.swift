@@ -2,53 +2,57 @@
 //  StaticRouteHelperApp.swift
 //  StaticRouteHelper
 //
-//  Created by Derek Jing on 2021/3/24.
-//
 
 import SwiftUI
+import SwiftData
 
 @main
 struct StaticRouteHelperApp: App {
-    @AppStorage("password") var password = ""
-    @AppStorage("likeCount") var likeCount:Int = 0
-    @AppStorage("setCount") var setCount:Int = 0
-    let router = RouterCoreConnector()
-    let profileSwitcher = LocationProfileSwitcher()
-    let app_version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
+
+    // RouterService 作为全局单例，通过 Environment 注入
+    @State private var routerService = RouterService()
+
+    // ModelContainer 配置（包含 RouteRule 和 RouteGroup）
+    let modelContainer: ModelContainer = {
+        let schema = Schema([RouteRule.self, RouteGroup.self])
+        let config = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
+        do {
+            return try ModelContainer(for: schema, configurations: [config])
+        } catch {
+            fatalError("ModelContainer 初始化失败：\(error)")
+        }
+    }()
+
     var body: some Scene {
         WindowGroup {
-            MainWindow(profileSwitcher: profileSwitcher)
-                .navigationTitle("Static Route Helper")
-                .navigationSubtitle(app_version ?? "").onReceive(NotificationCenter.default.publisher(for: NSApplication.willUpdateNotification)) { _ in
-                    hideZoomButton()
+            MainWindow()
+                .environment(routerService)
+                .task {
+                    // 应用启动时执行 Core Data → SwiftData 数据迁移（若存在旧数据）
+                    CoreDataMigrator.migrateIfNeeded(into: modelContainer.mainContext)
+                    // 刷新系统路由表，然后校准 isActive 状态
+                    if routerService.helperStatus == .installed {
+                        try? await routerService.refreshSystemRoutes()
+                        // Fetch all rules and calibrate against the fresh system route table
+                        let descriptor = FetchDescriptor<RouteRule>()
+                        if let rules = try? modelContainer.mainContext.fetch(descriptor) {
+                            await RouteStateCalibrator.calibrate(
+                                rules: rules,
+                                systemRoutes: routerService.systemRoutes
+                            )
+                            try? modelContainer.mainContext.save()
+                        }
+                    }
                 }
-        }.commands {
+        }
+        .modelContainer(modelContainer)
+        .commands {
             MenuBarCommand()
         }
+
         Settings {
             SettingsView()
-        }
-    }
-    
-    func hideZoomButton() {
-
-        for window in NSApplication.shared.windows {
-
-            guard let button: NSButton = window.standardWindowButton(NSWindow.ButtonType.zoomButton) else {
-                continue
-            }
-
-            button.isEnabled = false
+                .environment(routerService)
         }
     }
 }
-
-
-
-//        .windowToolbarStyle(UnifiedWindowToolbarStyle())
-//        WindowGroup("Donate") {
-//            BuyCoffeeSubview(runCount: $setCount, likeCount: $likeCount)
-//        }.handlesExternalEvents(matching: Set(arrayLiteral: "like"))
-//        WindowGroup("Help") {
-//            HelpView()
-//        }.handlesExternalEvents(matching: Set(arrayLiteral: "help"))

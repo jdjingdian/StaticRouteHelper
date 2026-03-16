@@ -1,65 +1,73 @@
 //
 //  MainWindow.swift
-//  Static Router
-//
-//  Created by 经典 on 12/1/2023.
+//  StaticRouteHelper
 //
 
-import Foundation
 import SwiftUI
+import SwiftData
+
+// MARK: - Sidebar Selection
+
+enum SidebarItem: Hashable {
+    case allRoutes
+    case group(RouteGroup)
+    case systemRoutes
+}
+
+// MARK: - MainWindow
 
 struct MainWindow: View {
-    let height:CGFloat = 720
-    let width: CGFloat = 480
-    @ObservedObject var profileSwitcher: LocationProfileSwitcher
-    @State var selectedProfile = ""
-    @State private var showProfileManager: Bool = false
-    @State private var lastSelectedProfile = ""
-    @State private var headerSection: HeaderSectionType = .management
-    @State private var locationSelection: HeaderSectionType = .management
-    @State private var text_dev: String = ""
-    var body: some View {
-        VStack(){
-//            ButtonStyleDemoView()
-            HeaderView(sectionType: $headerSection)
-            Divider()
-            VStack(){
-                Picker(selection: self.$selectedProfile,label: Text("Location").font(.title3.bold())) {
-                    ForEach(self.profileSwitcher.location_profiles){ profile in
-                        if(profile.id != 1){Text(profile.configName).tag(profile.configName)}
-                    }
-                    Divider()
-                    Text(profileSwitcher.location_profiles[1].configName).tag("profile.configName")
+    @Environment(RouterService.self) private var routerService
+    @State private var selection: SidebarItem? = .allRoutes
 
-                    
-                }.pickerStyle(.menu)
-                    .frame(width: 200)
-                    .onChange(of: $selectedProfile.wrappedValue) { identify in
-                        if(identify == "profile.configName"){
-                            print("Setting")
-                            selectedProfile = lastSelectedProfile
-                            showProfileManager = true
-                        }
-                        ///END
-                        lastSelectedProfile = selectedProfile
-                    }
-            }.sheet(isPresented: $showProfileManager){
-                LocationProfileManageView(switcher: profileSwitcher)
+    var body: some View {
+        NavigationSplitView {
+            SidebarView(selection: $selection)
+                .navigationSplitViewColumnWidth(min: 180, ideal: 220, max: 280)
+        } detail: {
+            detail(for: selection)
+                .frame(minWidth: 400)
+        }
+        .frame(minWidth: 600, minHeight: 420)
+    }
+
+    @ViewBuilder
+    private func detail(for item: SidebarItem?) -> some View {
+        VStack(spacing: 0) {
+            // Helper 未安装时显示横幅
+            if routerService.helperStatus != .installed {
+                HelperNotInstalledBanner()
             }
-            List{
-                Text("DEBUG")
-                Label("Manage Routes",systemImage: "hand.tap")
-                Label("System Routes", systemImage: "network")
+            switch item {
+            case .allRoutes, .none:
+                RouteListView(group: nil)
+            case .group(let group):
+                RouteListView(group: group)
+            case .systemRoutes:
+                SystemRouteTableView()
             }
-            
-//            Spacer()
-            Divider()
-            
-        }.frame(width: width,height: height)
+        }
     }
 }
-struct MainWindow_Previews: PreviewProvider {
-    static var previews: some View{
-        MainWindow(profileSwitcher: LocationProfileSwitcher())
+
+// MARK: - HelperNotInstalledBanner
+
+struct HelperNotInstalledBanner: View {
+    var body: some View {
+        HStack(spacing: 8) {
+            Image(systemName: "exclamationmark.triangle.fill")
+                .foregroundStyle(.yellow)
+            Text("Helper 工具未安装，路由操作不可用。请前往设置安装。")
+                .font(.callout)
+            Spacer()
+            SettingsLink {
+                Text("前往设置")
+                    .font(.callout)
+            }
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 8)
+        .background(.yellow.opacity(0.12))
+        Divider()
     }
 }

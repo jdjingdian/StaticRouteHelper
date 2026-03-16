@@ -1,62 +1,52 @@
 //
 //  GeneralSettingsView.swift
-//  Static Router
-//
-//  Created by 经典 on 14/1/2023.
+//  StaticRouteHelper
 //
 
 import Foundation
 import SwiftUI
 
 struct GeneralSettingsView: View {
-    @ObservedObject var router: RouterCoreConnector
-    @State private var showUinstallAlert = false
-    
+    @Environment(RouterService.self) private var routerService
+    @State private var showUninstallAlert = false
+
     var body: some View {
         VStack(alignment: .leading) {
-            GeneralSettings_HelperStateView(router: router)
+            GeneralSettings_HelperStateView()
             PaddedDivider(padding: nil)
-            HStack(){
-                Text("Save Custom Route to iCloud")
-                    .font(.title3.bold())
-                Text("Not implement yet")
-                    .font(.footnote.italic())
-                    .foregroundColor(.secondary)
-            }
-            PaddedDivider(padding: nil)
-            HStack(){
+            HStack {
                 Spacer()
-                UninstallHelperButton()
+                uninstallButton
             }
-            
-        }.padding()
+        }
+        .padding()
     }
-}
 
-struct GeneralSettingsView_Previews: PreviewProvider {
-    static var previews: some View {
-        GeneralSettingsView(router: RouterCoreConnector())
-    }
-}
-
-extension GeneralSettingsView {
-    fileprivate func UninstallHelperButton() -> some View {
-        return Button {
-            showUinstallAlert = true
-        }label: {
+    private var uninstallButton: some View {
+        Button {
+            showUninstallAlert = true
+        } label: {
             Text("Uninstall Helper")
-        }.buttonStyle(DefaultButtonStyle(.buttonDestory(.small),disable: Binding<Bool>(
-            get: { return router.helperState == .notInstalled },
-            set: { _, _ in }))
-        )
-        .disabled(router.helperState == .notInstalled)
-        .alert(isPresented: $showUinstallAlert) {
-            return Alert(title: Text("Are you sure to uninstall helper?"),message: Text("After the uninstallation is complete, the system route cannot be modified by this tool."), primaryButton: .default(Text("Uninstall")){
-                print("user try uninstall helper")
-                router.SendUninstallCmd()
-            }, secondaryButton: .default(Text("Cancel")){
-                print("user cancel uninstall")
-            })
+        }
+        .buttonStyle(DefaultButtonStyle(
+            .buttonDestory(.small),
+            disable: Binding<Bool>(
+                get: { routerService.helperStatus == .notInstalled },
+                set: { _, _ in }
+            )
+        ))
+        .disabled(routerService.helperStatus == .notInstalled)
+        .alert(isPresented: $showUninstallAlert) {
+            Alert(
+                title: Text("Are you sure to uninstall helper?"),
+                message: Text("After the uninstallation is complete, the system route cannot be modified by this tool."),
+                primaryButton: .default(Text("Uninstall")) {
+                    Task {
+                        try? await routerService.uninstallHelper()
+                    }
+                },
+                secondaryButton: .default(Text("Cancel"))
+            )
         }
     }
 }

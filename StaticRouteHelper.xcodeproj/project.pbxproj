@@ -3,26 +3,17 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		39229F3129700FFF0013B40F /* MainWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39229F3029700FFF0013B40F /* MainWindow.swift */; };
-		39229F33297011740013B40F /* RouteManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39229F32297011740013B40F /* RouteManagementView.swift */; };
 		39229F35297013270013B40F /* MenuBarCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39229F34297013270013B40F /* MenuBarCommand.swift */; };
-		39229F37297017D50013B40F /* ShowRouteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39229F36297017D50013B40F /* ShowRouteView.swift */; };
-		39229F392971075F0013B40F /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39229F382971075F0013B40F /* HeaderView.swift */; };
-		39229F3E297109070013B40F /* HeaderSectionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39229F3D297109070013B40F /* HeaderSectionType.swift */; };
 		39229F4029725F200013B40F /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39229F3F29725F200013B40F /* SettingsView.swift */; };
 		39229F432972624A0013B40F /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39229F422972624A0013B40F /* AboutView.swift */; };
-		39229F4529726A380013B40F /* AppCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39229F4429726A380013B40F /* AppCore.swift */; };
-		39229F4729726B680013B40F /* AppCoreConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39229F4629726B680013B40F /* AppCoreConnector.swift */; };
 		39229F4A29726E060013B40F /* PaddedDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39229F4929726E060013B40F /* PaddedDivider.swift */; };
 		39229F4C297278C70013B40F /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39229F4B297278C70013B40F /* GeneralSettingsView.swift */; };
 		39229F4F29728AA20013B40F /* GeneralSettings_HelperStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39229F4E29728AA20013B40F /* GeneralSettings_HelperStateView.swift */; };
-		39229F512972FD540013B40F /* LocationProfiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39229F502972FD540013B40F /* LocationProfiles.swift */; };
-		39229F532973D0CF0013B40F /* LocationProfileManageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39229F522973D0CF0013B40F /* LocationProfileManageView.swift */; };
-		39229F552973DE030013B40F /* LocationProfileSwitcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39229F542973DE030013B40F /* LocationProfileSwitcher.swift */; };
 		39229F57297400C10013B40F /* ButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39229F56297400C10013B40F /* ButtonStyle.swift */; };
 		39229F592974EDBD0013B40F /* ButtonStyleDemoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39229F582974EDBD0013B40F /* ButtonStyleDemoView.swift */; };
 		396255E0296C075400DB6000 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 396255DF296C075400DB6000 /* main.swift */; };
@@ -33,14 +24,11 @@
 		396255F5296C0E8900DB6000 /* SharedConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 396255F4296C0E8900DB6000 /* SharedConstant.swift */; };
 		396255F6296C0E8900DB6000 /* SharedConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 396255F4296C0E8900DB6000 /* SharedConstant.swift */; };
 		396255FB296C124E00DB6000 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 396255FD296C124E00DB6000 /* Localizable.strings */; };
-		39625600296C15E900DB6000 /* RouterCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 396255FF296C15E900DB6000 /* RouterCore.swift */; };
-		39625602296C161000DB6000 /* RouterCoreConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39625601296C161000DB6000 /* RouterCoreConnector.swift */; };
 		39625604296C204200DB6000 /* HelperToolMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39625603296C204200DB6000 /* HelperToolMonitor.swift */; };
 		39625606296C442F00DB6000 /* HelperToolInfoPropertyList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39625605296C442F00DB6000 /* HelperToolInfoPropertyList.swift */; };
 		39625607296C442F00DB6000 /* HelperToolInfoPropertyList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39625605296C442F00DB6000 /* HelperToolInfoPropertyList.swift */; };
 		39625609296C54D400DB6000 /* HelperToolLaunchdPropertyList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39625608296C54D400DB6000 /* HelperToolLaunchdPropertyList.swift */; };
 		3962560A296C54D400DB6000 /* HelperToolLaunchdPropertyList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39625608296C54D400DB6000 /* HelperToolLaunchdPropertyList.swift */; };
-		3962560C296E4C8500DB6000 /* ContentViewDev.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3962560B296E4C8500DB6000 /* ContentViewDev.swift */; };
 		39625611296EB1E400DB6000 /* ProcessRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39625610296EB1E400DB6000 /* ProcessRunner.swift */; };
 		39625612296EB3FA00DB6000 /* cn.magicdian.staticrouter.helper in CopyFiles */ = {isa = PBXBuildFile; fileRef = 396255DD296C075400DB6000 /* cn.magicdian.staticrouter.helper */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		39625614296EBB1E00DB6000 /* SelfUninstaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39625613296EBB1E00DB6000 /* SelfUninstaller.swift */; };
@@ -48,19 +36,22 @@
 		39625617296EBDC900DB6000 /* CodeInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39625615296EBDC900DB6000 /* CodeInfo.swift */; };
 		3962561B296EE01B00DB6000 /* RouterCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3962561A296EE01B00DB6000 /* RouterCommand.swift */; };
 		3962561C296EE01B00DB6000 /* RouterCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3962561A296EE01B00DB6000 /* RouterCommand.swift */; };
-		397520C12728EBE900E2D96A /* ProcessHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397520C02728EBE900E2D96A /* ProcessHelper.swift */; };
-		397520C42729336C00E2D96A /* PassEnterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397520C32729336C00E2D96A /* PassEnterView.swift */; };
-		397520C62729381300E2D96A /* ContentScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397520C52729381300E2D96A /* ContentScrollView.swift */; };
 		397520C82729397A00E2D96A /* AppModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397520C72729397A00E2D96A /* AppModels.swift */; };
-		3982A19F272A72A7002BBF63 /* RouteEnterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3982A19E272A72A7002BBF63 /* RouteEnterView.swift */; };
-		3982A1A1272A9166002BBF63 /* BuyCoffeeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3982A1A0272A9166002BBF63 /* BuyCoffeeView.swift */; };
-		3982A1A3272A947A002BBF63 /* HelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3982A1A2272A947A002BBF63 /* HelpView.swift */; };
-		3982A1A6272AAF24002BBF63 /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3982A1A4272AAF24002BBF63 /* DataModel.xcdatamodeld */; };
-		3982A1A8272AB19D002BBF63 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3982A1A7272AB19D002BBF63 /* CoreDataManager.swift */; };
-		399201C42729962700654ADE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 399201C32729962700654ADE /* ContentView.swift */; };
 		39E84C67260B32BD00776AE7 /* StaticRouteHelperApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39E84C66260B32BD00776AE7 /* StaticRouteHelperApp.swift */; };
 		39E84C6B260B32BF00776AE7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 39E84C6A260B32BF00776AE7 /* Assets.xcassets */; };
 		39E84C6E260B32BF00776AE7 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 39E84C6D260B32BF00776AE7 /* Preview Assets.xcassets */; };
+		AA000001000000000000AA01 /* RouteRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000000000000AA01 /* RouteRule.swift */; };
+		AA000001000000000000AA02 /* RouteGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000000000000AA02 /* RouteGroup.swift */; };
+		AA000001000000000000AA03 /* RouteValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000000000000AA03 /* RouteValidator.swift */; };
+		AA000001000000000000AA04 /* RouterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000000000000AA04 /* RouterService.swift */; };
+		AA000001000000000000AA05 /* CoreDataMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000000000000AA05 /* CoreDataMigrator.swift */; };
+		AA000001000000000000AA06 /* RouteStateCalibrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000000000000AA06 /* RouteStateCalibrator.swift */; };
+		AA000001000000000000AA07 /* SidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000000000000AA07 /* SidebarView.swift */; };
+		AA000001000000000000AA08 /* GroupSheets.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000000000000AA08 /* GroupSheets.swift */; };
+		AA000001000000000000AA09 /* RouteListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000000000000AA09 /* RouteListView.swift */; };
+		AA000001000000000000AA10 /* RouteEditSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000000000000AA10 /* RouteEditSheet.swift */; };
+		AA000001000000000000AA11 /* SystemRouteTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000000000000AA11 /* SystemRouteTableView.swift */; };
+		AA000001000000000000AA12 /* LegacyTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000000000000AA12 /* LegacyTextField.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -87,21 +78,12 @@
 
 /* Begin PBXFileReference section */
 		39229F3029700FFF0013B40F /* MainWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindow.swift; sourceTree = "<group>"; };
-		39229F32297011740013B40F /* RouteManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteManagementView.swift; sourceTree = "<group>"; };
 		39229F34297013270013B40F /* MenuBarCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarCommand.swift; sourceTree = "<group>"; };
-		39229F36297017D50013B40F /* ShowRouteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowRouteView.swift; sourceTree = "<group>"; };
-		39229F382971075F0013B40F /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
-		39229F3D297109070013B40F /* HeaderSectionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderSectionType.swift; sourceTree = "<group>"; };
 		39229F3F29725F200013B40F /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		39229F422972624A0013B40F /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
-		39229F4429726A380013B40F /* AppCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCore.swift; sourceTree = "<group>"; };
-		39229F4629726B680013B40F /* AppCoreConnector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoreConnector.swift; sourceTree = "<group>"; };
 		39229F4929726E060013B40F /* PaddedDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddedDivider.swift; sourceTree = "<group>"; };
 		39229F4B297278C70013B40F /* GeneralSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsView.swift; sourceTree = "<group>"; };
 		39229F4E29728AA20013B40F /* GeneralSettings_HelperStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettings_HelperStateView.swift; sourceTree = "<group>"; };
-		39229F502972FD540013B40F /* LocationProfiles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationProfiles.swift; sourceTree = "<group>"; };
-		39229F522973D0CF0013B40F /* LocationProfileManageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationProfileManageView.swift; sourceTree = "<group>"; };
-		39229F542973DE030013B40F /* LocationProfileSwitcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationProfileSwitcher.swift; sourceTree = "<group>"; };
 		39229F56297400C10013B40F /* ButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonStyle.swift; sourceTree = "<group>"; };
 		39229F582974EDBD0013B40F /* ButtonStyleDemoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonStyleDemoView.swift; sourceTree = "<group>"; };
 		396255DD296C075400DB6000 /* cn.magicdian.staticrouter.helper */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = cn.magicdian.staticrouter.helper; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -111,32 +93,32 @@
 		396255F4296C0E8900DB6000 /* SharedConstant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedConstant.swift; sourceTree = "<group>"; };
 		396255FC296C124E00DB6000 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		396255FE296C12B700DB6000 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
-		396255FF296C15E900DB6000 /* RouterCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouterCore.swift; sourceTree = "<group>"; };
-		39625601296C161000DB6000 /* RouterCoreConnector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouterCoreConnector.swift; sourceTree = "<group>"; };
 		39625603296C204200DB6000 /* HelperToolMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelperToolMonitor.swift; sourceTree = "<group>"; };
 		39625605296C442F00DB6000 /* HelperToolInfoPropertyList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelperToolInfoPropertyList.swift; sourceTree = "<group>"; };
 		39625608296C54D400DB6000 /* HelperToolLaunchdPropertyList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelperToolLaunchdPropertyList.swift; sourceTree = "<group>"; };
-		3962560B296E4C8500DB6000 /* ContentViewDev.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewDev.swift; sourceTree = "<group>"; };
 		39625610296EB1E400DB6000 /* ProcessRunner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessRunner.swift; sourceTree = "<group>"; };
 		39625613296EBB1E00DB6000 /* SelfUninstaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfUninstaller.swift; sourceTree = "<group>"; };
 		39625615296EBDC900DB6000 /* CodeInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeInfo.swift; sourceTree = "<group>"; };
 		3962561A296EE01B00DB6000 /* RouterCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouterCommand.swift; sourceTree = "<group>"; };
-		397520C02728EBE900E2D96A /* ProcessHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessHelper.swift; sourceTree = "<group>"; };
-		397520C32729336C00E2D96A /* PassEnterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassEnterView.swift; sourceTree = "<group>"; };
-		397520C52729381300E2D96A /* ContentScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentScrollView.swift; sourceTree = "<group>"; };
 		397520C72729397A00E2D96A /* AppModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModels.swift; sourceTree = "<group>"; };
-		3982A19E272A72A7002BBF63 /* RouteEnterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteEnterView.swift; sourceTree = "<group>"; };
-		3982A1A0272A9166002BBF63 /* BuyCoffeeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuyCoffeeView.swift; sourceTree = "<group>"; };
-		3982A1A2272A947A002BBF63 /* HelpView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelpView.swift; sourceTree = "<group>"; };
-		3982A1A5272AAF24002BBF63 /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
-		3982A1A7272AB19D002BBF63 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
-		399201C32729962700654ADE /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		39E84C63260B32BD00776AE7 /* Static Router.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Static Router.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		39E84C66260B32BD00776AE7 /* StaticRouteHelperApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticRouteHelperApp.swift; sourceTree = "<group>"; };
 		39E84C6A260B32BF00776AE7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		39E84C6D260B32BF00776AE7 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		39E84C6F260B32BF00776AE7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		39E84C70260B32BF00776AE7 /* StaticRouteHelper.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = StaticRouteHelper.entitlements; sourceTree = "<group>"; };
+		AA000002000000000000AA01 /* RouteRule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteRule.swift; sourceTree = "<group>"; };
+		AA000002000000000000AA02 /* RouteGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteGroup.swift; sourceTree = "<group>"; };
+		AA000002000000000000AA03 /* RouteValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteValidator.swift; sourceTree = "<group>"; };
+		AA000002000000000000AA04 /* RouterService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouterService.swift; sourceTree = "<group>"; };
+		AA000002000000000000AA05 /* CoreDataMigrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataMigrator.swift; sourceTree = "<group>"; };
+		AA000002000000000000AA06 /* RouteStateCalibrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteStateCalibrator.swift; sourceTree = "<group>"; };
+		AA000002000000000000AA07 /* SidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarView.swift; sourceTree = "<group>"; };
+		AA000002000000000000AA08 /* GroupSheets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupSheets.swift; sourceTree = "<group>"; };
+		AA000002000000000000AA09 /* RouteListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteListView.swift; sourceTree = "<group>"; };
+		AA000002000000000000AA10 /* RouteEditSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteEditSheet.swift; sourceTree = "<group>"; };
+		AA000002000000000000AA11 /* SystemRouteTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemRouteTableView.swift; sourceTree = "<group>"; };
+		AA000002000000000000AA12 /* LegacyTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyTextField.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -165,10 +147,9 @@
 			isa = PBXGroup;
 			children = (
 				397520C72729397A00E2D96A /* AppModels.swift */,
-				396255FF296C15E900DB6000 /* RouterCore.swift */,
-				39229F3D297109070013B40F /* HeaderSectionType.swift */,
-				39229F4429726A380013B40F /* AppCore.swift */,
-				39229F502972FD540013B40F /* LocationProfiles.swift */,
+				AA000002000000000000AA01 /* RouteRule.swift */,
+				AA000002000000000000AA02 /* RouteGroup.swift */,
+				AA000002000000000000AA03 /* RouteValidator.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -176,12 +157,7 @@
 		39229F3B2971085B0013B40F /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				397520C02728EBE900E2D96A /* ProcessHelper.swift */,
-				39625601296C161000DB6000 /* RouterCoreConnector.swift */,
 				39625603296C204200DB6000 /* HelperToolMonitor.swift */,
-				3982A1A7272AB19D002BBF63 /* CoreDataManager.swift */,
-				39229F4629726B680013B40F /* AppCoreConnector.swift */,
-				39229F542973DE030013B40F /* LocationProfileSwitcher.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -189,14 +165,14 @@
 		39229F3C297108970013B40F /* View */ = {
 			isa = PBXGroup;
 			children = (
-				39229F5A29753BFB0013B40F /* DEV_DEBUG */,
 				39229F4829726DCD0013B40F /* Customized */,
 				39229F41297262290013B40F /* SettingsView */,
 				39229F3029700FFF0013B40F /* MainWindow.swift */,
-				39229F382971075F0013B40F /* HeaderView.swift */,
-				39229F36297017D50013B40F /* ShowRouteView.swift */,
-				39229F32297011740013B40F /* RouteManagementView.swift */,
-				39229F522973D0CF0013B40F /* LocationProfileManageView.swift */,
+				AA000002000000000000AA07 /* SidebarView.swift */,
+				AA000002000000000000AA08 /* GroupSheets.swift */,
+				AA000002000000000000AA09 /* RouteListView.swift */,
+				AA000002000000000000AA10 /* RouteEditSheet.swift */,
+				AA000002000000000000AA11 /* SystemRouteTableView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -217,6 +193,7 @@
 				39229F4929726E060013B40F /* PaddedDivider.swift */,
 				39229F56297400C10013B40F /* ButtonStyle.swift */,
 				39229F582974EDBD0013B40F /* ButtonStyleDemoView.swift */,
+				AA000002000000000000AA12 /* LegacyTextField.swift */,
 			);
 			path = Customized;
 			sourceTree = "<group>";
@@ -229,16 +206,6 @@
 				39229F422972624A0013B40F /* AboutView.swift */,
 			);
 			path = SettingsSubViews;
-			sourceTree = "<group>";
-		};
-		39229F5A29753BFB0013B40F /* DEV_DEBUG */ = {
-			isa = PBXGroup;
-			children = (
-				397520C22729335700E2D96A /* ChildViews */,
-				399201C32729962700654ADE /* ContentView.swift */,
-				3962560B296E4C8500DB6000 /* ContentViewDev.swift */,
-			);
-			path = DEV_DEBUG;
 			sourceTree = "<group>";
 		};
 		396255DE296C075400DB6000 /* RouteHelper */ = {
@@ -288,18 +255,6 @@
 			path = Locale;
 			sourceTree = "<group>";
 		};
-		397520C22729335700E2D96A /* ChildViews */ = {
-			isa = PBXGroup;
-			children = (
-				397520C32729336C00E2D96A /* PassEnterView.swift */,
-				3982A1A2272A947A002BBF63 /* HelpView.swift */,
-				3982A1A0272A9166002BBF63 /* BuyCoffeeView.swift */,
-				3982A19E272A72A7002BBF63 /* RouteEnterView.swift */,
-				397520C52729381300E2D96A /* ContentScrollView.swift */,
-			);
-			path = ChildViews;
-			sourceTree = "<group>";
-		};
 		39E84C5A260B32BD00776AE7 = {
 			isa = PBXGroup;
 			children = (
@@ -328,13 +283,23 @@
 				39229F3C297108970013B40F /* View */,
 				39229F3B2971085B0013B40F /* Components */,
 				39229F3A297107FF0013B40F /* Model */,
+				AA000003000000000000AA01 /* Services */,
 				39E84C6A260B32BF00776AE7 /* Assets.xcassets */,
-				3982A1A4272AAF24002BBF63 /* DataModel.xcdatamodeld */,
 				39E84C6F260B32BF00776AE7 /* Info.plist */,
 				39E84C70260B32BF00776AE7 /* StaticRouteHelper.entitlements */,
 				39E84C6C260B32BF00776AE7 /* Preview Content */,
 			);
 			path = StaticRouter;
+			sourceTree = "<group>";
+		};
+		AA000003000000000000AA01 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				AA000002000000000000AA04 /* RouterService.swift */,
+				AA000002000000000000AA05 /* CoreDataMigrator.swift */,
+				AA000002000000000000AA06 /* RouteStateCalibrator.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 		39E84C6C260B32BF00776AE7 /* Preview Content */ = {
@@ -465,44 +430,35 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				397520C82729397A00E2D96A /* AppModels.swift in Sources */,
-				3982A1A8272AB19D002BBF63 /* CoreDataManager.swift in Sources */,
-				3982A1A6272AAF24002BBF63 /* DataModel.xcdatamodeld in Sources */,
-				39229F33297011740013B40F /* RouteManagementView.swift in Sources */,
-				3982A1A1272A9166002BBF63 /* BuyCoffeeView.swift in Sources */,
-				397520C12728EBE900E2D96A /* ProcessHelper.swift in Sources */,
-				399201C42729962700654ADE /* ContentView.swift in Sources */,
-				39625600296C15E900DB6000 /* RouterCore.swift in Sources */,
-				39229F532973D0CF0013B40F /* LocationProfileManageView.swift in Sources */,
-				39229F432972624A0013B40F /* AboutView.swift in Sources */,
-				39229F3E297109070013B40F /* HeaderSectionType.swift in Sources */,
-				39229F35297013270013B40F /* MenuBarCommand.swift in Sources */,
-				39625602296C161000DB6000 /* RouterCoreConnector.swift in Sources */,
-				3962560C296E4C8500DB6000 /* ContentViewDev.swift in Sources */,
-				3982A1A3272A947A002BBF63 /* HelpView.swift in Sources */,
-				39625616296EBDC900DB6000 /* CodeInfo.swift in Sources */,
-				3982A19F272A72A7002BBF63 /* RouteEnterView.swift in Sources */,
-				396255F5296C0E8900DB6000 /* SharedConstant.swift in Sources */,
-				39229F392971075F0013B40F /* HeaderView.swift in Sources */,
-				39229F3129700FFF0013B40F /* MainWindow.swift in Sources */,
-				39625604296C204200DB6000 /* HelperToolMonitor.swift in Sources */,
-				39229F592974EDBD0013B40F /* ButtonStyleDemoView.swift in Sources */,
-				39229F37297017D50013B40F /* ShowRouteView.swift in Sources */,
-				39229F4A29726E060013B40F /* PaddedDivider.swift in Sources */,
-				39625606296C442F00DB6000 /* HelperToolInfoPropertyList.swift in Sources */,
-				39229F4029725F200013B40F /* SettingsView.swift in Sources */,
-				39229F512972FD540013B40F /* LocationProfiles.swift in Sources */,
-				397520C42729336C00E2D96A /* PassEnterView.swift in Sources */,
-				39229F4729726B680013B40F /* AppCoreConnector.swift in Sources */,
-				397520C62729381300E2D96A /* ContentScrollView.swift in Sources */,
-				39625609296C54D400DB6000 /* HelperToolLaunchdPropertyList.swift in Sources */,
-				3962561B296EE01B00DB6000 /* RouterCommand.swift in Sources */,
-				39229F57297400C10013B40F /* ButtonStyle.swift in Sources */,
 				39E84C67260B32BD00776AE7 /* StaticRouteHelperApp.swift in Sources */,
+				397520C82729397A00E2D96A /* AppModels.swift in Sources */,
+				AA000001000000000000AA01 /* RouteRule.swift in Sources */,
+				AA000001000000000000AA02 /* RouteGroup.swift in Sources */,
+				AA000001000000000000AA03 /* RouteValidator.swift in Sources */,
+				AA000001000000000000AA04 /* RouterService.swift in Sources */,
+				AA000001000000000000AA05 /* CoreDataMigrator.swift in Sources */,
+				AA000001000000000000AA06 /* RouteStateCalibrator.swift in Sources */,
+				39229F3129700FFF0013B40F /* MainWindow.swift in Sources */,
+				AA000001000000000000AA07 /* SidebarView.swift in Sources */,
+				AA000001000000000000AA08 /* GroupSheets.swift in Sources */,
+				AA000001000000000000AA09 /* RouteListView.swift in Sources */,
+				AA000001000000000000AA10 /* RouteEditSheet.swift in Sources */,
+				AA000001000000000000AA11 /* SystemRouteTableView.swift in Sources */,
+				39229F4029725F200013B40F /* SettingsView.swift in Sources */,
 				39229F4C297278C70013B40F /* GeneralSettingsView.swift in Sources */,
 				39229F4F29728AA20013B40F /* GeneralSettings_HelperStateView.swift in Sources */,
-				39229F4529726A380013B40F /* AppCore.swift in Sources */,
-				39229F552973DE030013B40F /* LocationProfileSwitcher.swift in Sources */,
+				39229F432972624A0013B40F /* AboutView.swift in Sources */,
+				39229F35297013270013B40F /* MenuBarCommand.swift in Sources */,
+				39229F4A29726E060013B40F /* PaddedDivider.swift in Sources */,
+				39229F57297400C10013B40F /* ButtonStyle.swift in Sources */,
+				39229F592974EDBD0013B40F /* ButtonStyleDemoView.swift in Sources */,
+				AA000001000000000000AA12 /* LegacyTextField.swift in Sources */,
+				39625604296C204200DB6000 /* HelperToolMonitor.swift in Sources */,
+				396255F5296C0E8900DB6000 /* SharedConstant.swift in Sources */,
+				39625606296C442F00DB6000 /* HelperToolInfoPropertyList.swift in Sources */,
+				39625609296C54D400DB6000 /* HelperToolLaunchdPropertyList.swift in Sources */,
+				39625616296EBDC900DB6000 /* CodeInfo.swift in Sources */,
+				3962561B296EE01B00DB6000 /* RouterCommand.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -532,7 +488,7 @@
 				DEVELOPMENT_TEAM = BR63YT2EJJ;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/RouteHelper/Info.plist";
-				MACOSX_DEPLOYMENT_TARGET = 12.6;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				OTHER_LDFLAGS = (
 					"-sectcreate",
 					__TEXT,
@@ -561,7 +517,7 @@
 				DEVELOPMENT_TEAM = BR63YT2EJJ;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/RouteHelper/Info.plist";
-				MACOSX_DEPLOYMENT_TARGET = 12.6;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				OTHER_LDFLAGS = (
 					"-sectcreate",
 					__TEXT,
@@ -632,8 +588,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+			MACOSX_DEPLOYMENT_TARGET = 15.0;
+			MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -689,8 +645,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MTL_ENABLE_DEBUG_INFO = NO;
+			MACOSX_DEPLOYMENT_TARGET = 15.0;
+			MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -718,7 +674,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = cn.magicdian.staticrouter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -747,7 +703,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = cn.magicdian.staticrouter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -830,18 +786,6 @@
 		};
 /* End XCSwiftPackageProductDependency section */
 
-/* Begin XCVersionGroup section */
-		3982A1A4272AAF24002BBF63 /* DataModel.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				3982A1A5272AAF24002BBF63 /* DataModel.xcdatamodel */,
-			);
-			currentVersion = 3982A1A5272AAF24002BBF63 /* DataModel.xcdatamodel */;
-			path = DataModel.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
 	rootObject = 39E84C5B260B32BD00776AE7 /* Project object */;
 }
