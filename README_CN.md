@@ -1,5 +1,17 @@
 # 典の静态路由小助手
 
+## 下载与安装
+
+编译好的二进制文件可以在 [GitHub Releases](../../releases) 页面下载。
+
+由于本项目未申请付费的 Apple 开发者证书，发布的应用采用 **Ad-hoc 方式签名**，**未经 Apple 公证**。在 macOS 上首次打开时，Gatekeeper 会阻止其运行。解压后，请在终端执行以下命令移除系统的隔离限制：
+
+```bash
+xattr -cr /path/to/Static\ Router.app
+```
+
+将 `/path/to/Static\ Router.app` 替换为应用的实际路径（例如 `~/Applications/Static\ Router.app`）。该命令会移除 macOS 在下载文件时自动添加的 `com.apple.quarantine` 隔离属性，之后即可正常启动应用。
+
 ## 应用说明
 
 这是一个用Swift和SwiftUI写的macOS下的静态路由管理助手，可以方便地添加自己需要的路由，因为route命令需要超级用户权限，所以应用第一次运行的时候会需要输入密码。程序使用CoreData保存了用户添加的静态路由信息，再此后启动的时候就可以自动加载，避免重复输入。点击退出按钮可以安全退出应用，退出的时候会清空手动添加过的路由表，如果是意外退出，电脑重启后也会清空手动添加的路由表。
