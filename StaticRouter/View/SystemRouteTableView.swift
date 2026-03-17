@@ -7,7 +7,22 @@ import SwiftUI
 import SwiftData
 
 struct SystemRouteTableView: View {
-    @Environment(RouterService.self) private var routerService
+    @EnvironmentObject private var routerService: RouterService
+
+    var body: some View {
+        if #available(macOS 14, *) {
+            SystemRouteTableView14()
+        } else {
+            LegacySystemRouteTableView()
+        }
+    }
+}
+
+// MARK: - macOS 14+ System Route Table
+
+@available(macOS 14, *)
+private struct SystemRouteTableView14: View {
+    @EnvironmentObject private var routerService: RouterService
     @Query private var userRoutes: [RouteRule]
 
     @State private var searchText = ""
@@ -15,8 +30,6 @@ struct SystemRouteTableView: View {
     @State private var lastRefreshTime: Date? = nil
     @State private var isRefreshing = false
     @State private var errorMessage: String? = nil
-
-    // MARK: - Computed
 
     private var filteredRoutes: [SystemRouteEntry] {
         let routes = routerService.systemRoutes
@@ -32,24 +45,93 @@ struct SystemRouteTableView: View {
     private func isUserRoute(_ entry: SystemRouteEntry) -> Bool {
         let normalizedDest = normalizeIPv4Destination(entry.destination)
         return userRoutes.contains { rule in
-            rule.network == normalizedDest
-            && rule.gateway == entry.gateway
+            rule.network == normalizedDest && rule.gateway == entry.gateway
         }
     }
 
-    private var myRoutes: [SystemRouteEntry] {
-        filteredRoutes.filter { isUserRoute($0) }
+    private var myRoutes: [SystemRouteEntry] { filteredRoutes.filter { isUserRoute($0) } }
+    private var displayedRoutes: [SystemRouteEntry] { showOnlyMyRoutes ? myRoutes : filteredRoutes }
+
+    var body: some View {
+        SystemRouteTableContent(
+            routerService: routerService,
+            searchText: $searchText,
+            showOnlyMyRoutes: $showOnlyMyRoutes,
+            lastRefreshTime: $lastRefreshTime,
+            isRefreshing: $isRefreshing,
+            errorMessage: $errorMessage,
+            filteredRoutes: filteredRoutes,
+            displayedRoutes: displayedRoutes,
+            myRoutes: myRoutes,
+            isUserRoute: isUserRoute
+        )
+    }
+}
+
+// MARK: - Legacy System Route Table (macOS 12–13)
+
+private struct LegacySystemRouteTableView: View {
+    @EnvironmentObject private var routerService: RouterService
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \RouteRuleMO.createdAt, ascending: true)]
+    ) private var userRoutesMO: FetchedResults<RouteRuleMO>
+
+    @State private var searchText = ""
+    @AppStorage("systemRouteTable.showOnlyMyRoutes") private var showOnlyMyRoutes: Bool = false
+    @State private var lastRefreshTime: Date? = nil
+    @State private var isRefreshing = false
+    @State private var errorMessage: String? = nil
+
+    private var filteredRoutes: [SystemRouteEntry] {
+        let routes = routerService.systemRoutes
+        if searchText.isEmpty { return routes }
+        let lower = searchText.lowercased()
+        return routes.filter {
+            $0.destination.lowercased().contains(lower)
+            || $0.gateway.lowercased().contains(lower)
+            || $0.networkInterface.lowercased().contains(lower)
+        }
     }
 
-    private var systemOnlyRoutes: [SystemRouteEntry] {
-        filteredRoutes.filter { !isUserRoute($0) }
+    private func isUserRoute(_ entry: SystemRouteEntry) -> Bool {
+        let normalizedDest = normalizeIPv4Destination(entry.destination)
+        return userRoutesMO.contains { mo in
+            mo.network == normalizedDest && mo.gateway == entry.gateway
+        }
     }
 
-    private var displayedRoutes: [SystemRouteEntry] {
-        showOnlyMyRoutes ? myRoutes : filteredRoutes
-    }
+    private var myRoutes: [SystemRouteEntry] { filteredRoutes.filter { isUserRoute($0) } }
+    private var displayedRoutes: [SystemRouteEntry] { showOnlyMyRoutes ? myRoutes : filteredRoutes }
 
-    // MARK: - Body
+    var body: some View {
+        SystemRouteTableContent(
+            routerService: routerService,
+            searchText: $searchText,
+            showOnlyMyRoutes: $showOnlyMyRoutes,
+            lastRefreshTime: $lastRefreshTime,
+            isRefreshing: $isRefreshing,
+            errorMessage: $errorMessage,
+            filteredRoutes: filteredRoutes,
+            displayedRoutes: displayedRoutes,
+            myRoutes: myRoutes,
+            isUserRoute: isUserRoute
+        )
+    }
+}
+
+// MARK: - Shared Content View
+
+private struct SystemRouteTableContent: View {
+    let routerService: RouterService
+    @Binding var searchText: String
+    @Binding var showOnlyMyRoutes: Bool
+    @Binding var lastRefreshTime: Date?
+    @Binding var isRefreshing: Bool
+    @Binding var errorMessage: String?
+    let filteredRoutes: [SystemRouteEntry]
+    let displayedRoutes: [SystemRouteEntry]
+    let myRoutes: [SystemRouteEntry]
+    let isUserRoute: (SystemRouteEntry) -> Bool
 
     var body: some View {
         VStack(spacing: 0) {
@@ -145,7 +227,6 @@ struct SystemRouteTableView: View {
             .padding(.vertical, 6)
         }
         .task {
-            // Auto-load on first appear if empty
             if routerService.systemRoutes.isEmpty && routerService.helperStatus == .installed {
                 await performRefresh()
             }

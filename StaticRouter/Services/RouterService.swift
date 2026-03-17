@@ -4,11 +4,10 @@
 //
 
 import Foundation
-import Observation
 import SecureXPC
 import Blessed
 import Authorized
-import SwiftData
+import CoreData
 import Darwin
 
 // MARK: - Notification Names
@@ -57,17 +56,17 @@ enum RouterError: LocalizedError {
 // MARK: - RouterService
 
 /// 统一路由操作服务，封装 XPC 通信和 Helper 状态监控
-@Observable
-final class RouterService {
+/// Uses ObservableObject so it works as @EnvironmentObject on macOS 12+.
+final class RouterService: ObservableObject {
 
     // MARK: Public State
 
     /// Helper 安装状态
-    private(set) var helperStatus: HelperToolInstallationState = .notInstalled
+    @Published private(set) var helperStatus: HelperToolInstallationState = .notInstalled
     /// 系统路由表缓存（来自 netstat -nr -f inet）
-    private(set) var systemRoutes: [SystemRouteEntry] = []
+    @Published private(set) var systemRoutes: [SystemRouteEntry] = []
     /// 最近一次操作错误
-    var lastError: RouterError?
+    @Published var lastError: RouterError?
 
     // MARK: Private
 
@@ -110,9 +109,10 @@ final class RouterService {
         monitoringTask?.cancel()
     }
 
-    // MARK: - Route Operations
+    // MARK: - Route Operations (SwiftData path – macOS 14+)
 
     /// 激活路由（向系统路由表添加一条静态路由）
+    @available(macOS 14, *)
     func activateRoute(_ rule: RouteRule) async throws {
         guard helperStatus == .installed else {
             throw RouterError.helperNotAvailable
@@ -128,6 +128,7 @@ final class RouterService {
     }
 
     /// 停用路由（从系统路由表删除一条静态路由）
+    @available(macOS 14, *)
     func deactivateRoute(_ rule: RouteRule) async throws {
         guard helperStatus == .installed else {
             throw RouterError.helperNotAvailable
@@ -140,6 +141,46 @@ final class RouterService {
             add: false
         )
         try await sendCommand(request)
+    }
+
+    // MARK: - Route Operations (Core Data path – macOS 12–13)
+
+    /// 激活路由（向系统路由表添加一条静态路由）—— Core Data 路径
+    func activateRouteMO(_ mo: RouteRuleMO, context: NSManagedObjectContext) async throws {
+        guard helperStatus == .installed else {
+            throw RouterError.helperNotAvailable
+        }
+        let request = RouteWriteRequest(
+            network: mo.network,
+            mask: mo.subnetMask,
+            gateway: mo.gateway,
+            gatewayType: mo.gatewayType == "ipAddress" ? .ipAddress : .interface,
+            add: true
+        )
+        try await sendCommand(request)
+        await MainActor.run {
+            mo.isActive = true
+            try? context.save()
+        }
+    }
+
+    /// 停用路由（从系统路由表删除一条静态路由）—— Core Data 路径
+    func deactivateRouteMO(_ mo: RouteRuleMO, context: NSManagedObjectContext) async throws {
+        guard helperStatus == .installed else {
+            throw RouterError.helperNotAvailable
+        }
+        let request = RouteWriteRequest(
+            network: mo.network,
+            mask: mo.subnetMask,
+            gateway: mo.gateway,
+            gatewayType: mo.gatewayType == "ipAddress" ? .ipAddress : .interface,
+            add: false
+        )
+        try await sendCommand(request)
+        await MainActor.run {
+            mo.isActive = false
+            try? context.save()
+        }
     }
 
     // MARK: - System Routes
@@ -266,8 +307,6 @@ final class RouterService {
         // 此处直接使用传入的 destination（来自内核消息，已规范化）与 rule.network 比较
         let normalizedDest = normalizeIPv4Destination(destination)
 
-        // 通过 @Observable 机制触发 UI 更新；SwiftData 写入通过已有的 RouteRule @Model 引用完成
-        // 注意：此处无法直接访问 ModelContext，需通过已有的 RouteRule 引用修改（引用由调用方持有）
         // 使用全局通知将路由事件传递给持有 ModelContext 的视图层
         NotificationCenter.default.post(
             name: .routeDidChange,

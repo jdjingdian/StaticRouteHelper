@@ -7,6 +7,7 @@ import Foundation
 import SwiftData
 
 /// 表示一条用户定义的静态路由规则
+@available(macOS 14, *)
 @Model
 final class RouteRule {
     var id: UUID

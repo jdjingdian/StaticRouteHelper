@@ -55,6 +55,10 @@
 		AA000001000000000000AA12 /* LegacyTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000000000000AA12 /* LegacyTextField.swift */; };
 		AA000001000000000000AA20 /* RouteUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000000000000AA20 /* RouteUtils.swift */; };
 		AA000001000000000000AA21 /* SystemRouteReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000000000000AA21 /* SystemRouteReader.swift */; };
+		AA000001000000000000AA30 /* RouteRuleMO.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000000000000AA30 /* RouteRuleMO.swift */; };
+		AA000001000000000000AA31 /* LegacyPersistenceStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000000000000AA31 /* LegacyPersistenceStack.swift */; };
+		AA000001000000000000AA32 /* LegacyRouteListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000000000000AA32 /* LegacyRouteListView.swift */; };
+		AA000001000000000000AA33 /* StaticRouteLegacy.xcdatamodeld in Resources */ = {isa = PBXBuildFile; fileRef = AA000002000000000000AA33 /* StaticRouteLegacy.xcdatamodeld */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXShellScriptBuildPhase section */
@@ -148,6 +152,10 @@
 		AA000002000000000000AA12 /* LegacyTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyTextField.swift; sourceTree = "<group>"; };
 		AA000002000000000000AA20 /* RouteUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteUtils.swift; sourceTree = "<group>"; };
 		AA000002000000000000AA21 /* SystemRouteReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemRouteReader.swift; sourceTree = "<group>"; };
+		AA000002000000000000AA30 /* RouteRuleMO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteRuleMO.swift; sourceTree = "<group>"; };
+		AA000002000000000000AA31 /* LegacyPersistenceStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyPersistenceStack.swift; sourceTree = "<group>"; };
+		AA000002000000000000AA32 /* LegacyRouteListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyRouteListView.swift; sourceTree = "<group>"; };
+		AA000002000000000000AA33 /* StaticRouteLegacy.xcdatamodeld */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodeld; path = StaticRouteLegacy.xcdatamodeld; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -179,6 +187,8 @@
 				AA000002000000000000AA01 /* RouteRule.swift */,
 				AA000002000000000000AA02 /* RouteGroup.swift */,
 				AA000002000000000000AA03 /* RouteValidator.swift */,
+				AA000002000000000000AA30 /* RouteRuleMO.swift */,
+				AA000002000000000000AA33 /* StaticRouteLegacy.xcdatamodeld */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -202,6 +212,7 @@
 				AA000002000000000000AA09 /* RouteListView.swift */,
 				AA000002000000000000AA10 /* RouteEditSheet.swift */,
 				AA000002000000000000AA11 /* SystemRouteTableView.swift */,
+				AA000002000000000000AA32 /* LegacyRouteListView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -336,6 +347,7 @@
 				AA000002000000000000AA04 /* RouterService.swift */,
 				AA000002000000000000AA05 /* CoreDataMigrator.swift */,
 				AA000002000000000000AA06 /* RouteStateCalibrator.swift */,
+				AA000002000000000000AA31 /* LegacyPersistenceStack.swift */,
 				AA000002000000000000AA20 /* RouteUtils.swift */,
 				AA000002000000000000AA21 /* SystemRouteReader.swift */,
 			);
@@ -438,6 +450,7 @@
 				39E84C6E260B32BF00776AE7 /* Preview Assets.xcassets in Resources */,
 				396255FB296C124E00DB6000 /* Localizable.strings in Resources */,
 				39E84C6B260B32BF00776AE7 /* Assets.xcassets in Resources */,
+				AA000001000000000000AA33 /* StaticRouteLegacy.xcdatamodeld in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -474,12 +487,15 @@
 				AA000001000000000000AA06 /* RouteStateCalibrator.swift in Sources */,
 				AA000001000000000000AA20 /* RouteUtils.swift in Sources */,
 				AA000001000000000000AA21 /* SystemRouteReader.swift in Sources */,
+				AA000001000000000000AA30 /* RouteRuleMO.swift in Sources */,
+				AA000001000000000000AA31 /* LegacyPersistenceStack.swift in Sources */,
 				39229F3129700FFF0013B40F /* MainWindow.swift in Sources */,
 				AA000001000000000000AA07 /* SidebarView.swift in Sources */,
 				AA000001000000000000AA08 /* GroupSheets.swift in Sources */,
 				AA000001000000000000AA09 /* RouteListView.swift in Sources */,
 				AA000001000000000000AA10 /* RouteEditSheet.swift in Sources */,
 				AA000001000000000000AA11 /* SystemRouteTableView.swift in Sources */,
+				AA000001000000000000AA32 /* LegacyRouteListView.swift in Sources */,
 				39229F4029725F200013B40F /* SettingsView.swift in Sources */,
 				39229F4C297278C70013B40F /* GeneralSettingsView.swift in Sources */,
 				39229F4F29728AA20013B40F /* GeneralSettings_HelperStateView.swift in Sources */,
@@ -520,12 +536,12 @@
 				CODE_SIGN_IDENTITY = "-";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1.3.2;
+				CURRENT_PROJECT_VERSION = 14;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/RouteHelper/Info.plist";
-				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				OTHER_LDFLAGS = (
 					"-sectcreate",
 					__TEXT,
@@ -550,12 +566,12 @@
 				CODE_SIGN_IDENTITY = "-";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1.3.2;
+				CURRENT_PROJECT_VERSION = 14;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/RouteHelper/Info.plist";
-				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				OTHER_LDFLAGS = (
 					"-sectcreate",
 					__TEXT,
@@ -626,7 +642,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -683,7 +699,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
@@ -712,9 +728,9 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				CURRENT_PROJECT_VERSION = 1.3.2;
-				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				MARKETING_VERSION = 1.3.2;
+				CURRENT_PROJECT_VERSION = 14;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MARKETING_VERSION = 1.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = cn.magicdian.staticrouter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = ROUTER;
@@ -742,9 +758,9 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				CURRENT_PROJECT_VERSION = 1.3.2;
-				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				MARKETING_VERSION = 1.3.2;
+				CURRENT_PROJECT_VERSION = 14;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MARKETING_VERSION = 1.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = cn.magicdian.staticrouter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = ROUTER;

@@ -8,11 +8,12 @@ import SwiftData
 
 // MARK: - RouteListView
 
+@available(macOS 14, *)
 struct RouteListView: View {
     /// nil = All Routes mode; non-nil = filtered by group
     let group: RouteGroup?
 
-    @Environment(RouterService.self) private var routerService
+    @EnvironmentObject private var routerService: RouterService
     @Environment(\.modelContext) private var modelContext
 
     // Fetch all routes; filtering by group happens in-view
@@ -239,6 +240,7 @@ struct RouteListView: View {
 // MARK: - RouteToggle
 
 /// A toggle that activates/deactivates a route, with error rollback support.
+@available(macOS 14, *)
 struct RouteToggle: View {
     let rule: RouteRule
     let routerService: RouterService

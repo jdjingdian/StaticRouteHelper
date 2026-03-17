@@ -8,6 +8,7 @@ import SwiftData
 
 /// 表示一个路由分组（如 "Office VPN"、"Home VPN"）
 /// 与 RouteRule 构成多对多关系：一条路由可属于多个分组，一个分组可包含多条路由
+@available(macOS 14, *)
 @Model
 final class RouteGroup {
     var id: UUID

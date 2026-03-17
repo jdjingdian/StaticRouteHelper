@@ -7,7 +7,7 @@ import Foundation
 import SwiftUI
 
 struct GeneralSettingsView: View {
-    @Environment(RouterService.self) private var routerService
+    @EnvironmentObject private var routerService: RouterService
     @State private var showUninstallAlert = false
 
     var body: some View {

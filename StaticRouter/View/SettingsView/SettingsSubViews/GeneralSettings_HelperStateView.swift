@@ -7,7 +7,7 @@ import Foundation
 import SwiftUI
 
 struct GeneralSettings_HelperStateView: View {
-    @Environment(RouterService.self) private var routerService
+    @EnvironmentObject private var routerService: RouterService
 
     var body: some View {
         HStack {
