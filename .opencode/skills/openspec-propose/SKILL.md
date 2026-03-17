@@ -84,6 +84,22 @@ When ready to implement, run /opsx-apply
    openspec status --change "<name>"
    ```
 
+6. **Output a Conventional Commits-compliant commit message suggestion**
+
+   After all artifacts are created and the final status is shown, always output a suggested commit message for the user to use when committing the propose artifacts to git.
+
+   Format the suggestion as a fenced code block:
+   ```
+   docs(openspec): propose <change-name>
+   ```
+
+   Where `<change-name>` is the kebab-case name of the change just created.
+
+   This follows the Conventional Commits specification:
+   - **type**: `docs` — the propose artifacts are documentation/design docs
+   - **scope**: `openspec` — the change lives in the openspec directory
+   - **subject**: `propose <change-name>` — describes the action taken
+
 **Output**
 
 After completing all artifacts, summarize:

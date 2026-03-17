@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<plist version="1.0">
+<dict>
+	<key>NSManagedObjectModel_CurrentVersionName</key>
+	<string>StaticRouteLegacy</string>
+	<key>NSManagedObjectModel_VersionHashes</key>
+	<dict>
+		<key>StaticRouteLegacy</key>
+		<data>
+		</data>
+	</dict>
+</dict>
+</plist>

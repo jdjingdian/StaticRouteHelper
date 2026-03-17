@@ -6,6 +6,9 @@
 import SwiftUI
 import SwiftData
 
+// MARK: - SidebarView (macOS 14+)
+
+@available(macOS 14, *)
 struct SidebarView: View {
     @Binding var selection: SidebarItem?
     @Query(sort: \RouteGroup.sortOrder) private var groups: [RouteGroup]
@@ -132,6 +135,7 @@ struct SidebarView: View {
 // MARK: - Group Context Menu
 
 /// Context menu buttons for a sidebar group row.
+@available(macOS 14, *)
 struct GroupContextMenu: View {
     let group: RouteGroup
     @Binding var showRenameSheet: Bool

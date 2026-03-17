@@ -22,12 +22,19 @@ The workflow SHALL build the macOS application using `xcodebuild` on a GitHub-ho
 - **THEN** the workflow SHALL fail and SHALL NOT proceed to signing or packaging
 
 ### Requirement: Ad-hoc code sign the app bundle
-The workflow SHALL sign the built `.app` bundle using ad-hoc signing (`codesign --force --deep --sign -`) so that the binary satisfies macOS execution requirements without a paid certificate.
+The workflow SHALL sign the built `.app` bundle using ad-hoc signing so that the binary satisfies macOS execution requirements without a paid certificate. The signing SHALL be performed in two explicit steps: first signing the privileged helper binary directly, then signing the app bundle itself (without `--deep`). This ensures the helper receives a proper ad-hoc signature with a bound Info.plist rather than the `linker-signed` stub left by the Xcode linker.
 
-#### Scenario: Ad-hoc signing applied
+#### Scenario: Helper is signed before app bundle
 - **WHEN** the `.app` bundle is built successfully
-- **THEN** `codesign --force --deep --sign -` SHALL be run on the `.app` bundle
-- **THEN** `codesign --verify` SHALL succeed on the signed bundle
+- **THEN** `codesign --force --sign -` SHALL be run on the helper binary at `Contents/Library/LaunchServices/cn.magicdian.staticrouter.helper` first
+- **THEN** `codesign --force --sign -` SHALL be run on the `.app` bundle (without `--deep`)
+- **THEN** `codesign --verify --deep` SHALL succeed on the signed bundle
+
+#### Scenario: Helper signature is valid for SMJobBless
+- **WHEN** signing completes
+- **THEN** `codesign -dvvv` on the helper SHALL NOT show `linker-signed` in its flags
+- **THEN** `codesign -dvvv` on the helper SHALL show `Info.plist entries=N` (Info.plist is bound)
+- **THEN** SMJobBless SHALL be able to install the helper without `errSecInvalidSignature` (-67062)
 
 ### Requirement: Package app as zip archive using ditto
 The workflow SHALL package the ad-hoc signed `.app` bundle into a `.zip` archive using `ditto -c -k --keepParent` to preserve macOS metadata.

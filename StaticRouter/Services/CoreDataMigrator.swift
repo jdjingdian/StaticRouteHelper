@@ -18,6 +18,7 @@ private struct LegacyRouteData: Codable {
 }
 
 /// Core Data → SwiftData 数据迁移工具
+@available(macOS 14, *)
 enum CoreDataMigrator {
 
     /// 执行迁移：若旧 Core Data 存储存在，则读取并导入，然后删除旧存储。

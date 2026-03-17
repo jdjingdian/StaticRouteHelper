@@ -6,6 +6,7 @@
 import SwiftUI
 import SwiftData
 
+@available(macOS 14, *)
 struct RouteEditSheet: View {
     /// nil = adding new route; non-nil = editing existing route
     let existingRule: RouteRule?
@@ -14,7 +15,7 @@ struct RouteEditSheet: View {
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
-    @Environment(RouterService.self) private var routerService
+    @EnvironmentObject private var routerService: RouterService
 
     @Query(sort: \RouteGroup.sortOrder) private var allGroups: [RouteGroup]
 

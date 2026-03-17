@@ -8,6 +8,7 @@ import SwiftData
 
 // MARK: - AddGroupSheet
 
+@available(macOS 14, *)
 struct AddGroupSheet: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
@@ -90,6 +91,7 @@ struct AddGroupSheet: View {
 
 // MARK: - AssignGroupsSheet
 
+@available(macOS 14, *)
 struct AssignGroupsSheet: View {
     let rule: RouteRule
     @Environment(\.dismiss) private var dismiss
@@ -176,6 +178,7 @@ struct AssignGroupsSheet: View {
 
 // MARK: - RenameGroupSheet
 
+@available(macOS 14, *)
 struct RenameGroupSheet: View {
     let group: RouteGroup
     @Environment(\.dismiss) private var dismiss

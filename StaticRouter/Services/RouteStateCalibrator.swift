@@ -7,6 +7,7 @@
 import Foundation
 import SwiftData
 
+@available(macOS 14, *)
 enum RouteStateCalibrator {
 
     /// 对比系统路由表与 SwiftData 中的 RouteRule，更新 isActive 字段使其与实际状态一致。

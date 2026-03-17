@@ -1,0 +1,30 @@
+<type>(<scope>): <subject>
+
+# Body (optional): explain WHAT changed and WHY, not how.
+# Wrap at 72 characters per line.
+
+# Footer (optional):
+#   BREAKING CHANGE: <description>
+#   Closes #<issue-number>
+
+# ---------------------------------------------------------------------------
+# Conventional Commits — Type Reference
+# ---------------------------------------------------------------------------
+# feat:     A new feature (triggers MINOR version bump)
+# fix:      A bug fix (triggers PATCH version bump)
+# docs:     Documentation only changes
+# style:    Formatting, whitespace, semicolons (no logic change)
+# refactor: Code change that is neither a fix nor a feature
+# test:     Adding or updating tests
+# chore:    Build process, tooling, package updates
+# ci:       CI/CD pipeline configuration changes
+# perf:     Performance improvements
+# ---------------------------------------------------------------------------
+# Scope examples for this project:
+#   routes, ui, pf, openspec, persistence, monitor, auth, ci
+# ---------------------------------------------------------------------------
+# Format: <type>(<scope>): <subject>
+#   - Use imperative mood: "add feature" not "added feature"
+#   - No capital first letter, no period at end of subject
+#   - Subject line max 72 characters
+# ---------------------------------------------------------------------------
