@@ -57,11 +57,25 @@ struct SharedConstant {
                                    relativeTo: Bundle.main.bundleURL).absoluteURL
         let launchdPropertyList = try HelperToolLaunchdPropertyList(from: self.bundledLocation)
         let infoPropertyList = try HelperToolInfoPropertyList(from: self.bundledLocation)
+        self.helperToolVersion = infoPropertyList.version
+        self.blessedPropertyListLocation = URL(fileURLWithPath: "/Library/LaunchDaemons/\(helperToolLabel).plist")
+        self.blessedLocation = URL(fileURLWithPath: "/Library/PrivilegedHelperTools/\(helperToolLabel)")
+        guard let machServiceName = launchdPropertyList.machServices.first?.key else {
+            throw SharedConstantsError.missingMachServiceName
+        }
+        self.machServiceName = machServiceName
     #else
     #if HELPER
         let launchdPropertyList = try HelperToolLaunchdPropertyList.main
         let infoPropertyList = try HelperToolInfoPropertyList.main
         self.helperToolLabel = launchdPropertyList.label
+        self.helperToolVersion = infoPropertyList.version
+        self.blessedPropertyListLocation = URL(fileURLWithPath: "/Library/LaunchDaemons/\(self.helperToolLabel).plist")
+        self.blessedLocation = URL(fileURLWithPath: "/Library/PrivilegedHelperTools/\(self.helperToolLabel)")
+        guard let machServiceName = launchdPropertyList.machServices.first?.key else {
+            throw SharedConstantsError.missingMachServiceName
+        }
+        self.machServiceName = machServiceName
     #else
         fatalError("""
         No Swift compiler directive was set for this executable. In this sample this is set in the AppConfig.xcconfig \
@@ -69,17 +83,6 @@ struct SharedConstant {
         """)
     #endif
     #endif
-        
-        self.helperToolVersion = infoPropertyList.version
-        self.blessedPropertyListLocation = URL(fileURLWithPath: "/Library/LaunchDaemons/\(helperToolLabel).plist")
-        self.blessedLocation = URL(fileURLWithPath: "/Library/PrivilegedHelperTools/\(helperToolLabel)")
-        
-        // Important: If the Mach service name has been changed, for the app until that new version of the helper tool
-        // is installed via SMJobBless this will not result in the correct name being found.
-        guard let machServiceName = launchdPropertyList.machServices.first?.key else {
-            throw SharedConstantsError.missingMachServiceName
-        }
-        self.machServiceName = machServiceName
     }
 }
 

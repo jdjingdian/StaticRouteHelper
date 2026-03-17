@@ -118,6 +118,23 @@
 "settings.helper.footer.needs_upgrade" = "Helper is installed but not the latest version. Upgrade recommended.";
 "settings.helper.footer.not_compatible" = "Helper is installed but the version may be incompatible. Reinstall recommended.";
 "settings.helper.footer.not_installed" = "Helper not installed. Root privileges are required to manage routes.";
+/* ── Settings / Helper — SMAppService Fallback Alert (task 9) ── */
+"settings.helper.fallback.alert.title" = "Unable to Use New Installation Method";
+"settings.helper.fallback.alert.message" = "SMAppService registration failed. Would you like to install using the legacy method (SMJobBless)?";
+"settings.helper.fallback.alert.confirm" = "Use Legacy Method";
+"settings.helper.fallback.alert.cancel" = "Cancel";
+
+/* ── Settings / Helper — Upgrade Alert (task 10) ── */
+"settings.helper.upgrade.alert.title" = "Better Installation Method Available";
+"settings.helper.upgrade.alert.message" = "Your helper is installed via SMJobBless. Apple recommends SMAppService for macOS 14 and later. Would you like to upgrade now?";
+"settings.helper.upgrade.alert.confirm" = "Upgrade";
+"settings.helper.upgrade.alert.cancel" = "Later";
+
+/* ── Settings / Helper — Active Method Footer (task 11) ── */
+"settings.helper.footer.installed.method.smappservice" = "Managed by SMAppService (macOS 14+)";
+"settings.helper.footer.installed.method.smjobbless" = "Managed by SMJobBless (macOS 12–13)";
+"settings.helper.footer.installed.method.pending_approval" = "Waiting for user approval in System Settings > Login Items & Extensions.";
+
 "settings.helper.uninstall.button" = "Uninstall Helper";
 "settings.helper.uninstall.alert.title" = "Are you sure you want to uninstall the helper?";
 "settings.helper.uninstall.alert.message" = "After uninstallation, this app will no longer be able to modify system routes.";

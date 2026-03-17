@@ -119,6 +119,23 @@
 "settings.helper.footer.needs_upgrade" = "帮助程序已安装但不是最新版本，建议升级";
 "settings.helper.footer.not_compatible" = "帮助程序已安装但版本可能不兼容，建议重新安装";
 "settings.helper.footer.not_installed" = "需要安装帮助程序，路由命令需要特权才能执行";
+/* ── Settings / Helper — SMAppService 回退提示（任务 9）── */
+"settings.helper.fallback.alert.title" = "无法使用新安装方式";
+"settings.helper.fallback.alert.message" = "SMAppService 注册失败。是否使用旧版方式（SMJobBless）安装？";
+"settings.helper.fallback.alert.confirm" = "使用旧版方式";
+"settings.helper.fallback.alert.cancel" = "取消";
+
+/* ── Settings / Helper — 升级提示（任务 10）── */
+"settings.helper.upgrade.alert.title" = "有更好的安装方式可用";
+"settings.helper.upgrade.alert.message" = "帮助程序当前通过 SMJobBless 安装。苹果推荐在 macOS 14 及更高版本上使用 SMAppService。是否立即升级？";
+"settings.helper.upgrade.alert.confirm" = "立即升级";
+"settings.helper.upgrade.alert.cancel" = "稍后";
+
+/* ── Settings / Helper — 安装方式说明（任务 11）── */
+"settings.helper.footer.installed.method.smappservice" = "由 SMAppService 管理（macOS 14+）";
+"settings.helper.footer.installed.method.smjobbless" = "由 SMJobBless 管理（macOS 12–13）";
+"settings.helper.footer.installed.method.pending_approval" = "等待用户在「系统设置 > 登录项与扩展」中批准。";
+
 "settings.helper.uninstall.button" = "卸载帮助程序";
 "settings.helper.uninstall.alert.title" = "确定要卸载帮助程序吗？";
 "settings.helper.uninstall.alert.message" = "卸载完成后，此工具将无法修改系统路由。";

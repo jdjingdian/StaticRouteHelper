@@ -9,5 +9,7 @@
 		<key>cn.magicdian.staticrouter.helper</key>
 		<true/>
 	</dict>
+	<key>BundleProgram</key>
+	<string>Contents/Library/LaunchServices/cn.magicdian.staticrouter.helper</string>
 </dict>
 </plist>

@@ -68,6 +68,11 @@ final class RouterService: ObservableObject {
     /// 最近一次操作错误
     @Published var lastError: RouterError?
 
+    // MARK: Internal
+
+    /// The privilege manager — exposed for UI access to activeMethod, isOptimizedMode, etc.
+    let helperManager: PrivilegedHelperManager
+
     // MARK: Private
 
     private var xpcClient: XPCClient
@@ -87,15 +92,22 @@ final class RouterService: ObservableObject {
         }
         xpcClient = XPCClient.forMachService(named: sharedConstants.machServiceName)
         helperMonitor = HelperToolMonitor(constants: sharedConstants)
+        helperManager = PrivilegedHelperManager(constants: sharedConstants)
 
-        // 初始化时检查 Helper 状态
-        let status = helperMonitor.determineStatus()
-        helperStatus = Self.resolveInstallationState(status, constants: sharedConstants)
+        // Derive initial helperStatus from manager state
+        helperStatus = Self.resolveInstallationState(
+            activeMethod: helperManager.activeMethod,
+            constants: sharedConstants
+        )
 
-        // 监听 Helper 安装目录变化，实时更新状态
-        helperMonitor.start { [weak self] newStatus in
+        // Watch helper directories; on change, refresh manager state and re-derive helperStatus
+        helperMonitor.start { [weak self] _ in
             guard let self else { return }
-            let state = Self.resolveInstallationState(newStatus, constants: self.sharedConstants)
+            self.helperManager.refreshState()
+            let state = Self.resolveInstallationState(
+                activeMethod: self.helperManager.activeMethod,
+                constants: self.sharedConstants
+            )
             DispatchQueue.main.async {
                 self.helperStatus = state
             }
@@ -193,28 +205,28 @@ final class RouterService: ObservableObject {
 
     // MARK: - Helper Management
 
-    /// 安装 Helper 工具（弹出授权对话框）
-    func installHelper() throws {
-        do {
-            try PrivilegedHelperManager.shared.authorizeAndBless(
-                message: "安装 Helper 以管理系统路由",
-                icon: nil
-            )
-        } catch AuthorizationError.canceled {
-            // 用户取消，无需反馈
-        } catch {
-            throw RouterError.xpcError(error.localizedDescription)
-        }
+    /// 安装 Helper 工具 — delegates entirely to PrivilegedHelperManager.
+    /// Returns an InstallResult; caller is responsible for presenting fallback dialog
+    /// if result is .smAppServiceFailedFallbackAvailable.
+    @MainActor
+    func installHelper() async throws -> InstallResult {
+        let result = try await helperManager.install()
+        // Refresh published helperStatus after install attempt
+        helperStatus = Self.resolveInstallationState(
+            activeMethod: helperManager.activeMethod,
+            constants: sharedConstants
+        )
+        return result
     }
 
-    /// 卸载 Helper 工具
+    /// 卸载 Helper 工具 — delegates entirely to PrivilegedHelperManager.
+    @MainActor
     func uninstallHelper() async throws {
-        guard helperStatus == .installed else { return }
-        do {
-            try await xpcClient.send(to: SharedConstant.uninstallRoute)
-        } catch {
-            throw RouterError.xpcError(error.localizedDescription)
-        }
+        try await helperManager.uninstall()
+        helperStatus = Self.resolveInstallationState(
+            activeMethod: helperManager.activeMethod,
+            constants: sharedConstants
+        )
     }
 
     // MARK: - Private Helpers
@@ -296,7 +308,7 @@ final class RouterService: ObservableObject {
 
     /// 在 MainActor 上处理路由变更事件：
     /// - 若 destination+gateway 匹配某条 RouteRule，更新其 isActive
-    /// - 否则仅刷新 systemRoutes 快照（不触发 SwiftData 写入）
+    /// - 否则仅刷新 systemRoutes 快照（不触发 XPC 重新激活）
     @MainActor
     private func handleRouteEvent(destination: String, gateway: String, isAdd: Bool) {
         // 先刷新快照（非阻塞，读内存）
@@ -375,19 +387,33 @@ final class RouterService: ObservableObject {
 
     // MARK: - Status Resolution
 
+    /// Derives HelperToolInstallationState from PrivilegedHelperManager.activeMethod.
+    /// - For SMAppService: helper IS the bundled binary, so version always matches → .installed.
+    /// - For SMJobBless: read version from the blessed binary and compare.
     private static func resolveInstallationState(
-        _ status: HelperToolMonitor.InstallationStatus,
+        activeMethod: InstallMethod?,
         constants: SharedConstant
     ) -> HelperToolInstallationState {
-        guard status.registeredWithLaunchd else { return .notInstalled }
-        guard status.registrationPropertyListExists else { return .notInstalled }
-        guard case .exists(let version) = status.helperToolExecutable else { return .notInstalled }
-        if version < constants.helperToolVersion {
-            return .needUpgrade
-        } else if version == constants.helperToolVersion {
+        switch activeMethod {
+        case nil:
+            return .notInstalled
+        case .smAppService:
+            // SMAppService always runs the bundled binary — version always matches.
             return .installed
-        } else {
-            return .notCompatible
+        case .smJobBless:
+            do {
+                let infoPropertyList = try HelperToolInfoPropertyList(from: constants.blessedLocation)
+                let version = infoPropertyList.version
+                if version < constants.helperToolVersion {
+                    return .needUpgrade
+                } else if version == constants.helperToolVersion {
+                    return .installed
+                } else {
+                    return .notCompatible
+                }
+            } catch {
+                return .notInstalled
+            }
         }
     }
 }
