@@ -26,8 +26,14 @@ jobs:
       - name: Ad-hoc sign the app bundle
         run: |
           APP_PATH="build/DerivedData/Build/Products/Release/Static Router.app"
-          codesign --force --deep --sign - "$APP_PATH"
-          codesign --verify "$APP_PATH"
+          HELPER_PATH="$APP_PATH/Contents/Library/LaunchServices/cn.magicdian.staticrouter.helper"
+          # Sign the helper explicitly first — --deep skips linker-signed binaries,
+          # leaving the helper without a bound Info.plist, which causes SMJobBless
+          # to fail with errSecInvalidSignature (-67062).
+          codesign --force --sign - "$HELPER_PATH"
+          # Now sign the app bundle (without --deep, since nested binaries are already signed)
+          codesign --force --sign - "$APP_PATH"
+          codesign --verify --deep "$APP_PATH"
 
       - name: Package as zip with ditto
         run: |
