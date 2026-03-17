@@ -1,0 +1,42 @@
+name: Release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build-and-upload:
+    name: Build, Sign & Upload
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build (Release configuration)
+        run: |
+          xcodebuild \
+            -scheme "Static Router" \
+            -configuration Release \
+            -derivedDataPath build/DerivedData \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Ad-hoc sign the app bundle
+        run: |
+          APP_PATH="build/DerivedData/Build/Products/Release/Static Router.app"
+          codesign --force --deep --sign - "$APP_PATH"
+          codesign --verify "$APP_PATH"
+
+      - name: Package as zip with ditto
+        run: |
+          APP_PATH="build/DerivedData/Build/Products/Release/Static Router.app"
+          ZIP_NAME="StaticRouteHelper-${{ github.event.release.tag_name }}.zip"
+          ditto -c -k --keepParent "$APP_PATH" "$ZIP_NAME"
+          echo "ZIP_NAME=$ZIP_NAME" >> "$GITHUB_ENV"
+
+      - name: Upload zip to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ env.ZIP_NAME }}
