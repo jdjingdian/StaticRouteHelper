@@ -62,6 +62,7 @@
 		AA000001000000000000AA32 /* LegacyRouteListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000000000000AA32 /* LegacyRouteListView.swift */; };
 		AA000001000000000000AA33 /* StaticRouteLegacy.xcdatamodeld in Resources */ = {isa = PBXBuildFile; fileRef = AA000002000000000000AA33 /* StaticRouteLegacy.xcdatamodeld */; };
 		AA000001000000000000BB01 /* cn.magicdian.staticrouter.helper.plist in CopyFiles */ = {isa = PBXBuildFile; fileRef = 396255E5296C082900DB6000 /* cn.magicdian.staticrouter.helper.plist */; };
+		AA000004000000000000BB01 /* cn.magicdian.staticrouter.service.plist in CopyFiles */ = {isa = PBXBuildFile; fileRef = AA000004000000000000BB02 /* cn.magicdian.staticrouter.service.plist */; };
 		AA000001000000000000BB02 /* InstallMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000000000000BB02 /* InstallMethod.swift */; };
 		AA000001000000000000BB03 /* PrivilegedHelperManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000000000000BB03 /* PrivilegedHelperManager.swift */; };
 /* End PBXBuildFile section */
@@ -115,7 +116,7 @@
 			dstPath = Contents/Library/LaunchDaemons;
 			dstSubfolderSpec = 1;
 			files = (
-				AA000001000000000000BB01 /* cn.magicdian.staticrouter.helper.plist in CopyFiles */,
+				AA000004000000000000BB01 /* cn.magicdian.staticrouter.service.plist in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -137,6 +138,7 @@
 		396255DF296C075400DB6000 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		396255E4296C07FB00DB6000 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		396255E5296C082900DB6000 /* cn.magicdian.staticrouter.helper.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "cn.magicdian.staticrouter.helper.plist"; sourceTree = "<group>"; };
+		AA000004000000000000BB02 /* cn.magicdian.staticrouter.service.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "cn.magicdian.staticrouter.service.plist"; sourceTree = "<group>"; };
 		396255F4296C0E8900DB6000 /* SharedConstant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedConstant.swift; sourceTree = "<group>"; };
 		396255FC296C124E00DB6000 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		396255FE296C12B700DB6000 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
@@ -275,6 +277,7 @@
 				396255DF296C075400DB6000 /* main.swift */,
 				396255E4296C07FB00DB6000 /* Info.plist */,
 				396255E5296C082900DB6000 /* cn.magicdian.staticrouter.helper.plist */,
+				AA000004000000000000BB02 /* cn.magicdian.staticrouter.service.plist */,
 				39625610296EB1E400DB6000 /* ProcessRunner.swift */,
 				3962561E296EE01C00DB6000 /* PFRouteWriter.swift */,
 				39625613296EBB1E00DB6000 /* SelfUninstaller.swift */,
@@ -564,7 +567,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 51;
+				CURRENT_PROJECT_VERSION = 55;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -582,6 +585,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = cn.magicdian.staticrouter.helper;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = HELPER;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 			};
@@ -594,7 +598,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 51;
+				CURRENT_PROJECT_VERSION = 55;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -756,9 +760,9 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				CURRENT_PROJECT_VERSION = 51;
+				CURRENT_PROJECT_VERSION = 55;
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 2.1.0;
+				MARKETING_VERSION = 2.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = cn.magicdian.staticrouter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = ROUTER;
@@ -786,9 +790,9 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				CURRENT_PROJECT_VERSION = 51;
+				CURRENT_PROJECT_VERSION = 55;
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 2.1.0;
+				MARKETING_VERSION = 2.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = cn.magicdian.staticrouter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = ROUTER;

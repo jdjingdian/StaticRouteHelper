@@ -144,6 +144,7 @@
 "settings.helper.background_switch.alert.message" = "此应用需要后台运行权限才能执行该操作。请在「系统设置 > 登录项与扩展」中开启，然后重试。";
 "settings.helper.background_switch.alert.open_settings" = "打开系统设置";
 "settings.helper.background_switch.alert.cancel" = "取消";
+"settings.helper.pending_activation.open_settings" = "打开登录项设置";
 
 /* ── 安装方式选择器 ── */
 "chooser.title" = "选择安装方式";

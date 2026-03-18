@@ -58,6 +58,19 @@ struct GeneralSettings_HelperStateView: View {
                     .font(.footnote.italic())
                     .foregroundStyle(.secondary)
             }
+
+            if shouldShowOpenSystemSettingsButton {
+                Button {
+                    openSystemSettingsForLoginItems()
+                } label: {
+                    Label(
+                        String(localized: "settings.helper.pending_activation.open_settings"),
+                        systemImage: "arrow.up.right.square"
+                    )
+                    .font(.footnote)
+                }
+                .buttonStyle(DefaultButtonStyle(type: .buttonNeutral(.thin)))
+            }
         }
         // Install method chooser sheet (macOS 14+ only; noop on 12–13 since showChooser stays false).
         .background(
@@ -171,6 +184,11 @@ struct GeneralSettings_HelperStateView: View {
         }
     }
 
+    private var shouldShowOpenSystemSettingsButton: Bool {
+        guard #available(macOS 13, *) else { return false }
+        return routerService.helperStatus == .pendingActivation || routerService.helperManager.isPendingApproval
+    }
+
     // MARK: - Actions
 
     /// Entry point for install button tap.
@@ -204,5 +222,10 @@ struct GeneralSettings_HelperStateView: View {
                 // Errors surface via helperStatus; no-op here
             }
         }
+    }
+
+    private func openSystemSettingsForLoginItems() {
+        guard #available(macOS 13, *) else { return }
+        SMAppService.openSystemSettingsLoginItems()
     }
 }

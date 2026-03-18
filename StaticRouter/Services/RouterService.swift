@@ -76,7 +76,8 @@ final class RouterService: ObservableObject {
 
     // MARK: Private
 
-    private var xpcClient: XPCClient
+    private let jobBlessXPCClient: XPCClient
+    private let appServiceXPCClient: XPCClient
     private let helperMonitor: HelperToolMonitor
     private let sharedConstants: SharedConstant
 
@@ -94,7 +95,8 @@ final class RouterService: ObservableObject {
         } catch {
             fatalError("SharedConstant 初始化失败，请检查 PropertyListModifier.swift 脚本：\(error)")
         }
-        xpcClient = XPCClient.forMachService(named: sharedConstants.machServiceName)
+        jobBlessXPCClient = XPCClient.forMachService(named: sharedConstants.jobBlessMachServiceName)
+        appServiceXPCClient = XPCClient.forMachService(named: sharedConstants.appServiceMachServiceName)
         helperMonitor = HelperToolMonitor(constants: sharedConstants)
         helperManager = PrivilegedHelperManager(constants: sharedConstants)
 
@@ -256,8 +258,18 @@ final class RouterService: ObservableObject {
     /// 发送 RouteWriteRequest 并等待回复
     private func sendCommandWithReply(_ request: RouteWriteRequest) async throws -> RouteWriteReply {
         do {
+            let selectedClient: XPCClient
+            switch helperManager.activeMethod {
+            case .smJobBless:
+                selectedClient = jobBlessXPCClient
+            case .smAppService:
+                selectedClient = appServiceXPCClient
+            case nil:
+                throw RouterError.helperNotAvailable
+            }
+
             return try await withCheckedThrowingContinuation { continuation in
-                xpcClient.sendMessage(request, to: SharedConstant.commandRoute) { result in
+                selectedClient.sendMessage(request, to: SharedConstant.commandRoute) { result in
                     switch result {
                     case .success(let reply):
                         continuation.resume(returning: reply)
