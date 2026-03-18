@@ -331,6 +331,16 @@ final class PrivilegedHelperManager: ObservableObject {
 
     // MARK: - uninstall()
 
+    /// Recovery-only path: force uninstall helper via AppleScript, regardless of current method details.
+    /// Used when SMAppService is installed but XPC becomes unreachable after updates.
+    @MainActor
+    func forceUninstallWithAppleScriptForRecovery() async throws {
+        logger.info("Force-uninstalling helper via osascript for recovery")
+        try await uninstallForciblyWithAppleScript()
+        refreshState()
+        startStateBurstPollingWindow()
+    }
+
     /// Uninstalls the helper using the path matching `activeMethod`.
     @MainActor
     func uninstall() async throws {

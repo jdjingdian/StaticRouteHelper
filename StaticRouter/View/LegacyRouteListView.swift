@@ -89,6 +89,25 @@ struct LegacyRouteListView: View {
         } message: {
             Text(activationError?.localizedDescription ?? String(localized: "route.list.alert.activation_error.unknown"))
         }
+        .alert(
+            String(localized: "route.list.recovery.alert.title"),
+            isPresented: Binding(
+                get: { routerService.smAppServiceRecoveryState != nil },
+                set: { if !$0 { routerService.clearSMAppServiceRecoveryState() } }
+            )
+        ) {
+            if routerService.smAppServiceRecoveryState?.canAutoReinstall == true {
+                Button(String(localized: "route.list.recovery.alert.auto_reinstall")) {
+                    performAutoReinstall()
+                }
+            }
+            Button(String(localized: "route.list.recovery.alert.cancel"), role: .cancel) {
+                routerService.clearSMAppServiceRecoveryState()
+            }
+        } message: {
+            let fallback = String(localized: "route.list.recovery.alert.message")
+            Text(routerService.smAppServiceRecoveryState?.errorMessage ?? fallback)
+        }
     }
 
     // MARK: - Empty State
@@ -126,10 +145,12 @@ struct LegacyRouteListView: View {
             }
             TableColumn(String(localized: "route.list.column.active")) { mo in
                 LegacyRouteToggle(mo: mo, routerService: routerService, context: viewContext) { error in
-                    activationError = error
-                    showActivationError = true
+                    if routerService.smAppServiceRecoveryState == nil {
+                        activationError = error
+                        showActivationError = true
+                    }
                 }
-                .disabled(routerService.helperStatus != .installed)
+                .disabled(routerService.helperStatus != .installed || routerService.isAutoReinstallInProgress)
             }
             .width(60)
             TableColumn(String(localized: "route.list.column.actions")) { mo in
@@ -171,6 +192,22 @@ struct LegacyRouteListView: View {
             await MainActor.run {
                 viewContext.delete(mo)
                 try? viewContext.save()
+            }
+        }
+    }
+
+    private func performAutoReinstall() {
+        Task {
+            do {
+                try await routerService.autoReinstallSMAppServiceHelper()
+                routerService.clearSMAppServiceRecoveryState()
+            } catch let error as RouterError {
+                activationError = error
+                showActivationError = true
+            } catch {
+                let failurePrefix = String(localized: "route.list.recovery.alert.failure")
+                activationError = .helperRecoveryFailed("\(failurePrefix) \(error.localizedDescription)")
+                showActivationError = true
             }
         }
     }
