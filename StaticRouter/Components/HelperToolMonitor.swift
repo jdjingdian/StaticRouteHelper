@@ -90,6 +90,7 @@ class HelperToolMonitor {
 
 enum HelperToolInstallationState {
     case installed
+    case pendingActivation
     case needUpgrade
     case notCompatible
     case notInstalled

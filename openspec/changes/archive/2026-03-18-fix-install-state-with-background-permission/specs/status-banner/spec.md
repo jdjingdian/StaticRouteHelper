@@ -1,21 +1,4 @@
-## ADDED Requirements
-
-### Requirement: 通用 StatusBanner 组件
-系统 SHALL 提供一个通用的 `StatusBanner` View 组件，替代现有的 `HelperNotInstalledBanner`。组件 SHALL 接受以下参数：
-- `style: BannerStyle` — 决定背景色和图标颜色
-- `message: LocalizedStringKey` — 横幅消息文本
-- `actionLabel: LocalizedStringKey` — 操作按钮文本
-- `action: () -> Void` — 操作按钮回调
-
-布局 SHALL 为：图标 + 消息文本 + Spacer + 操作按钮，底部带 Divider，与现有 `HelperNotInstalledBanner` 布局一致。
-
-#### Scenario: warning 样式渲染
-- **WHEN** `StatusBanner` 以 `.warning` 样式显示
-- **THEN** 背景色为 `.yellow.opacity(0.12)`，图标为 `exclamationmark.triangle.fill`（黄色），与现有 HelperNotInstalledBanner 视觉一致
-
-#### Scenario: info 样式渲染
-- **WHEN** `StatusBanner` 以 `.info` 样式显示
-- **THEN** 背景色为 `.blue.opacity(0.12)`，图标为 `info.circle.fill`（蓝色）
+## MODIFIED Requirements
 
 ### Requirement: 主窗口横幅显示逻辑
 主窗口详情区域顶部 SHALL 根据以下条件按优先级显示一个横幅（互斥，只显示最高优先级）：
