@@ -4,6 +4,7 @@
 //
 
 import Foundation
+import Combine
 import SecureXPC
 import Blessed
 import Authorized
@@ -82,6 +83,9 @@ final class RouterService: ObservableObject {
     /// 后台 PF_ROUTE 监听任务
     private var monitoringTask: Task<Void, Never>?
 
+    /// Combine subscriptions for helperManager state propagation.
+    private var helperManagerCancellables = Set<AnyCancellable>()
+
     // MARK: Init
 
     init() {
@@ -112,6 +116,20 @@ final class RouterService: ObservableObject {
                 self.helperStatus = state
             }
         }
+
+        // Propagate helperManager state changes (from didBecomeActive / Timer monitoring)
+        // to helperStatus so the UI reflects switch state changes in real time.
+        helperManager.$activeMethod
+            .combineLatest(helperManager.$isPendingApproval)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] (activeMethod, _) in
+                guard let self else { return }
+                self.helperStatus = Self.resolveInstallationState(
+                    activeMethod: activeMethod,
+                    constants: self.sharedConstants
+                )
+            }
+            .store(in: &helperManagerCancellables)
 
         // 启动 PF_ROUTE 实时监听
         startRouteMonitor()
@@ -206,11 +224,10 @@ final class RouterService: ObservableObject {
     // MARK: - Helper Management
 
     /// 安装 Helper 工具 — delegates entirely to PrivilegedHelperManager.
-    /// Returns an InstallResult; caller is responsible for presenting fallback dialog
-    /// if result is .smAppServiceFailedFallbackAvailable.
+    /// The caller specifies which install method the user selected.
     @MainActor
-    func installHelper() async throws -> InstallResult {
-        let result = try await helperManager.install()
+    func installHelper(method: InstallMethod) async throws -> InstallResult {
+        let result = try await helperManager.install(method: method)
         // Refresh published helperStatus after install attempt
         helperStatus = Self.resolveInstallationState(
             activeMethod: helperManager.activeMethod,

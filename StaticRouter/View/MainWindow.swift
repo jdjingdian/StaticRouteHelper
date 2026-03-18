@@ -56,9 +56,7 @@ struct MainWindow14: View {
     @ViewBuilder
     private func detail(for item: SidebarItem?) -> some View {
         VStack(spacing: 0) {
-            if routerService.helperStatus != .installed {
-                HelperNotInstalledBanner()
-            }
+            helperBanner
             switch item {
             case .allRoutes, .none:
                 RouteListView(group: nil)
@@ -66,6 +64,33 @@ struct MainWindow14: View {
                 RouteListView(group: group)
             case .systemRoutes:
                 SystemRouteTableView()
+            }
+        }
+    }
+
+    /// Priority-ordered banner: warning (not installed) takes precedence over info (bless upgrade).
+    @ViewBuilder
+    private var helperBanner: some View {
+        if routerService.helperStatus != .installed {
+            // Priority 1: helper not installed / needs upgrade / not compatible
+            StatusBanner(style: .warning, message: "helper.banner.message") {
+                SettingsLink {
+                    Text(String(localized: "helper.banner.goto_settings"))
+                }
+            }
+        } else if routerService.helperManager.isPendingApproval {
+            // Priority 2: installed but background switch is off — needs user approval
+            StatusBanner(style: .warning, message: "helper.banner.pending_approval.message") {
+                SettingsLink {
+                    Text(String(localized: "helper.banner.goto_settings"))
+                }
+            }
+        } else if routerService.helperManager.activeMethod == .smJobBless {
+            // Priority 3 (macOS 14+ only): installed via bless, modern method available
+            StatusBanner(style: .info, message: "helper.banner.bless_upgrade.message") {
+                SettingsLink {
+                    Text(String(localized: "helper.banner.goto_settings"))
+                }
             }
         }
     }
@@ -90,8 +115,13 @@ struct LegacyMainWindow: View {
     @ViewBuilder
     private func legacyDetail(for item: LegacySidebarItem?) -> some View {
         VStack(spacing: 0) {
+            // macOS 12–13: only show warning banner (no SMAppService upgrade suggestion)
             if routerService.helperStatus != .installed {
-                HelperNotInstalledBanner()
+                StatusBanner(style: .warning, message: "helper.banner.message") {
+                    Button(String(localized: "helper.banner.goto_settings")) {
+                        NSApp.sendAction(Selector(("showPreferencesWindow:")), to: nil, from: nil)
+                    }
+                }
             }
             switch item {
             case .allRoutes, .none:
@@ -134,34 +164,5 @@ struct LegacySidebarView: View {
             .padding(.vertical, 8)
             .background(.bar)
         }
-    }
-}
-
-// MARK: - HelperNotInstalledBanner
-
-struct HelperNotInstalledBanner: View {
-    var body: some View {
-        HStack(spacing: 8) {
-            Image(systemName: "exclamationmark.triangle.fill")
-                .foregroundStyle(.yellow)
-            Text(String(localized: "helper.banner.message"))
-                .font(.callout)
-            Spacer()
-            if #available(macOS 14, *) {
-                SettingsLink {
-                    Text(String(localized: "helper.banner.goto_settings"))
-                        .font(.callout)
-                }
-            } else {
-                Button(String(localized: "helper.banner.goto_settings")) {
-                    NSApp.sendAction(Selector(("showPreferencesWindow:")), to: nil, from: nil)
-                }
-                .font(.callout)
-            }
-        }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 8)
-        .background(.yellow.opacity(0.12))
-        Divider()
     }
 }
