@@ -42,6 +42,11 @@
 "route.list.alert.activation_error.title" = "Activation Failed";
 "route.list.alert.activation_error.confirm" = "OK";
 "route.list.alert.activation_error.unknown" = "Unknown error";
+"route.list.recovery.alert.title" = "Helper Communication Error";
+"route.list.recovery.alert.message" = "SMAppService XPC communication failed. Auto-reinstalling the helper is recommended to recover.";
+"route.list.recovery.alert.cancel" = "Cancel";
+"route.list.recovery.alert.auto_reinstall" = "Auto Reinstall (Recommended)";
+"route.list.recovery.alert.failure" = "Auto reinstall did not complete. Check permissions and try again.";
 
 /* ── SidebarView ── */
 "sidebar.all_routes" = "All Routes";

@@ -41,6 +41,10 @@ enum RouterError: LocalizedError {
     case routeWriteFailed(String)
     /// XPC 通信错误
     case xpcError(String)
+    /// 自动重装流程正在进行
+    case helperRecoveryInProgress
+    /// 自动重装流程失败
+    case helperRecoveryFailed(String)
 
     var errorDescription: String? {
         switch self {
@@ -50,8 +54,18 @@ enum RouterError: LocalizedError {
             return "路由操作失败：\(message)"
         case .xpcError(let msg):
             return "XPC 通信错误：\(msg)"
+        case .helperRecoveryInProgress:
+            return "自动重装进行中，请稍候。"
+        case .helperRecoveryFailed(let msg):
+            return "自动重装失败：\(msg)"
         }
     }
+}
+
+struct SMAppServiceRecoveryState: Identifiable {
+    let id = UUID()
+    let errorMessage: String
+    let canAutoReinstall: Bool
 }
 
 // MARK: - RouterService
@@ -68,6 +82,10 @@ final class RouterService: ObservableObject {
     @Published private(set) var systemRoutes: [SystemRouteEntry] = []
     /// 最近一次操作错误
     @Published var lastError: RouterError?
+    /// SMAppService 发生 XPC 通信失败时的可恢复提示状态
+    @Published var smAppServiceRecoveryState: SMAppServiceRecoveryState?
+    /// 自动重装是否正在进行（用于并发保护和 UI 禁用）
+    @Published private(set) var isAutoReinstallInProgress: Bool = false
 
     // MARK: Internal
 
@@ -253,6 +271,63 @@ final class RouterService: ObservableObject {
         )
     }
 
+    /// 清理恢复弹窗状态。
+    @MainActor
+    func clearSMAppServiceRecoveryState() {
+        smAppServiceRecoveryState = nil
+    }
+
+    /// 自动重装 SMAppService helper（先卸载后安装）。
+    /// 仅用于 SMAppService XPC 异常的恢复路径。
+    @MainActor
+    func autoReinstallSMAppServiceHelper() async throws {
+        guard !isAutoReinstallInProgress else {
+            throw RouterError.helperRecoveryInProgress
+        }
+
+        guard helperManager.activeMethod == .smAppService else {
+            throw RouterError.helperRecoveryFailed("当前 helper 并非由 SMAppService 管理")
+        }
+
+        isAutoReinstallInProgress = true
+        smAppServiceRecoveryState = nil
+        defer { isAutoReinstallInProgress = false }
+
+        do {
+            try await helperManager.forceUninstallWithAppleScriptForRecovery()
+            helperStatus = Self.resolveInstallationState(
+                activeMethod: helperManager.activeMethod,
+                isPendingApproval: helperManager.isPendingApproval,
+                constants: sharedConstants
+            )
+        } catch {
+            throw RouterError.helperRecoveryFailed("强制卸载失败：\(error.localizedDescription)")
+        }
+
+        // osascript 强制卸载后等待系统状态传播，再进行安装。
+        try? await Task.sleep(nanoseconds: 800_000_000)
+
+        let firstInstallResult = try await installHelper(method: .smAppService)
+        switch firstInstallResult {
+        case .success:
+            return
+        case .failed(let error):
+            // 对常见瞬态失败（Operation not permitted）进行一次延迟重试。
+            if shouldRetrySMAppServiceInstall(after: error) {
+                try? await Task.sleep(nanoseconds: 800_000_000)
+                let secondInstallResult = try await installHelper(method: .smAppService)
+                switch secondInstallResult {
+                case .success:
+                    return
+                case .failed(let secondError):
+                    throw RouterError.helperRecoveryFailed(recoveryInstallFailureMessage(from: secondError))
+                }
+            }
+
+            throw RouterError.helperRecoveryFailed(recoveryInstallFailureMessage(from: error))
+        }
+    }
+
     // MARK: - Private Helpers
 
     /// 发送 RouteWriteRequest 并等待回复
@@ -274,15 +349,52 @@ final class RouterService: ObservableObject {
                     case .success(let reply):
                         continuation.resume(returning: reply)
                     case .failure(let error):
-                        continuation.resume(throwing: RouterError.xpcError(error.localizedDescription))
+                        let routerError = RouterError.xpcError(error.localizedDescription)
+                        self.maybePublishSMAppServiceRecovery(for: routerError)
+                        continuation.resume(throwing: routerError)
                     }
                 }
             }
         } catch let routerErr as RouterError {
+            maybePublishSMAppServiceRecovery(for: routerErr)
             throw routerErr
         } catch {
-            throw RouterError.xpcError(error.localizedDescription)
+            let routerError = RouterError.xpcError(error.localizedDescription)
+            maybePublishSMAppServiceRecovery(for: routerError)
+            throw routerError
         }
+    }
+
+    private func maybePublishSMAppServiceRecovery(for error: RouterError) {
+        guard case .xpcError(let message) = error else { return }
+        guard helperStatus == .installed else { return }
+        guard helperManager.activeMethod == .smAppService else { return }
+        guard !helperManager.isPendingApproval else { return }
+        guard !isAutoReinstallInProgress else { return }
+
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            guard self.helperStatus == .installed else { return }
+            guard self.helperManager.activeMethod == .smAppService else { return }
+            guard !self.helperManager.isPendingApproval else { return }
+
+            self.smAppServiceRecoveryState = SMAppServiceRecoveryState(
+                errorMessage: message,
+                canAutoReinstall: true
+            )
+        }
+    }
+
+    private func shouldRetrySMAppServiceInstall(after error: Error) -> Bool {
+        let message = error.localizedDescription.lowercased()
+        return message.contains("operation not permitted") || message.contains("not permitted")
+    }
+
+    private func recoveryInstallFailureMessage(from error: Error) -> String {
+        if shouldRetrySMAppServiceInstall(after: error) {
+            return "安装失败：\(error.localizedDescription)。请确认应用位于 /Applications 且签名可用，然后重试。"
+        }
+        return "安装失败：\(error.localizedDescription)"
     }
 
     /// 发送 RouteWriteRequest 并将失败回复映射为 routeWriteFailed 错误

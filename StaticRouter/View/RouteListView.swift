@@ -109,6 +109,25 @@ struct RouteListView: View {
         } message: {
             Text(activationError?.localizedDescription ?? String(localized: "route.list.alert.activation_error.unknown"))
         }
+        .alert(
+            String(localized: "route.list.recovery.alert.title"),
+            isPresented: Binding(
+                get: { routerService.smAppServiceRecoveryState != nil },
+                set: { if !$0 { routerService.clearSMAppServiceRecoveryState() } }
+            )
+        ) {
+            if routerService.smAppServiceRecoveryState?.canAutoReinstall == true {
+                Button(String(localized: "route.list.recovery.alert.auto_reinstall")) {
+                    performAutoReinstall()
+                }
+            }
+            Button(String(localized: "route.list.recovery.alert.cancel"), role: .cancel) {
+                routerService.clearSMAppServiceRecoveryState()
+            }
+        } message: {
+            let fallback = String(localized: "route.list.recovery.alert.message")
+            Text(routerService.smAppServiceRecoveryState?.errorMessage ?? fallback)
+        }
     }
 
     // MARK: - Empty State
@@ -155,10 +174,12 @@ struct RouteListView: View {
             }
             TableColumn(String(localized: "route.list.column.active")) { rule in
                 RouteToggle(rule: rule, routerService: routerService) { error in
-                    activationError = error
-                    showActivationError = true
+                    if routerService.smAppServiceRecoveryState == nil {
+                        activationError = error
+                        showActivationError = true
+                    }
                 }
-                .disabled(routerService.helperStatus != .installed)
+                .disabled(routerService.helperStatus != .installed || routerService.isAutoReinstallInProgress)
             }
             .width(60)
             TableColumn(String(localized: "route.list.column.actions")) { rule in
@@ -234,6 +255,22 @@ struct RouteListView: View {
         let info = "\(rule.cidrNotation) via \(rule.gateway)"
         NSPasteboard.general.clearContents()
         NSPasteboard.general.setString(info, forType: .string)
+    }
+
+    private func performAutoReinstall() {
+        Task {
+            do {
+                try await routerService.autoReinstallSMAppServiceHelper()
+                routerService.clearSMAppServiceRecoveryState()
+            } catch let error as RouterError {
+                activationError = error
+                showActivationError = true
+            } catch {
+                let failurePrefix = String(localized: "route.list.recovery.alert.failure")
+                activationError = .helperRecoveryFailed("\(failurePrefix) \(error.localizedDescription)")
+                showActivationError = true
+            }
+        }
     }
 }
 

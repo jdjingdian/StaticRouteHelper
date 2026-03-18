@@ -43,6 +43,11 @@
 "route.list.alert.activation_error.title" = "激活失败";
 "route.list.alert.activation_error.confirm" = "确定";
 "route.list.alert.activation_error.unknown" = "未知错误";
+"route.list.recovery.alert.title" = "帮助程序通信异常";
+"route.list.recovery.alert.message" = "检测到 SMAppService 的 XPC 通信失败。建议自动重装帮助程序以恢复连接。";
+"route.list.recovery.alert.cancel" = "取消";
+"route.list.recovery.alert.auto_reinstall" = "自动重装（推荐）";
+"route.list.recovery.alert.failure" = "自动重装未完成，请检查权限设置后重试。";
 
 /* ── SidebarView ── */
 "sidebar.all_routes" = "所有路由";
