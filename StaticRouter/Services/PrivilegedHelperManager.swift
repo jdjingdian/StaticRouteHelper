@@ -111,7 +111,11 @@ final class PrivilegedHelperManager: ObservableObject {
             logger.info("Helper state changed: \(prev, privacy: .public) → \(curr, privacy: .public)")
         }
         if isPendingApproval != previousPending {
-            logger.info("Background switch state changed: isPendingApproval = \(self.isPendingApproval, privacy: .public)")
+            if isPendingApproval {
+                logger.info("Background switch state changed: pending approval detected")
+            } else {
+                logger.info("Background switch state changed: pending approval cleared")
+            }
         }
     }
 
@@ -133,7 +137,7 @@ final class PrivilegedHelperManager: ObservableObject {
             activeMethod = .smAppService
             isPendingApproval = false
         case .requiresApproval:
-            activeMethod = nil
+            activeMethod = .smAppService
             isPendingApproval = true
         default:
             activeMethod = nil
@@ -246,9 +250,14 @@ final class PrivilegedHelperManager: ObservableObject {
         switch activeMethod {
         case .smAppService:
             if #available(macOS 14, *) {
-                let service = SMAppService.daemon(plistName: "\(constants.helperToolLabel).plist")
-                try await service.unregister()
-                logger.info("Helper unregistered via SMAppService")
+                if isPendingApproval, isBackgroundSwitchOff() {
+                    logger.info("Uninstalling pending-approval helper via osascript path")
+                    try await uninstallForciblyWithAppleScript()
+                } else {
+                    let service = SMAppService.daemon(plistName: "\(constants.helperToolLabel).plist")
+                    try await service.unregister()
+                    logger.info("Helper unregistered via SMAppService")
+                }
             }
 
         case .smJobBless:
@@ -258,7 +267,7 @@ final class PrivilegedHelperManager: ObservableObject {
                 logger.info("Helper XPC uninstall request sent successfully")
             } catch {
                 logger.warning("XPC uninstall failed (\(error.localizedDescription, privacy: .public)); trying forced removal via osascript")
-                try await uninstallJobBlessForcibly()
+                try await uninstallForciblyWithAppleScript()
             }
 
         case nil:
@@ -266,10 +275,10 @@ final class PrivilegedHelperManager: ObservableObject {
         }
     }
 
-    /// Fallback SMJobBless uninstall when XPC is unavailable (e.g. debug build, crashed helper).
+    /// Fallback uninstall path using AppleScript when normal uninstall is unavailable.
     /// Uses `osascript` to run launchctl + rm with administrator privileges.
     @MainActor
-    private func uninstallJobBlessForcibly() async throws {
+    private func uninstallForciblyWithAppleScript() async throws {
         let plist = constants.blessedPropertyListLocation.path
         let binary = constants.blessedLocation.path
         let label = constants.helperToolLabel

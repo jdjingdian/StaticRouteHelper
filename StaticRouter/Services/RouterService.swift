@@ -101,6 +101,7 @@ final class RouterService: ObservableObject {
         // Derive initial helperStatus from manager state
         helperStatus = Self.resolveInstallationState(
             activeMethod: helperManager.activeMethod,
+            isPendingApproval: helperManager.isPendingApproval,
             constants: sharedConstants
         )
 
@@ -110,6 +111,7 @@ final class RouterService: ObservableObject {
             self.helperManager.refreshState()
             let state = Self.resolveInstallationState(
                 activeMethod: self.helperManager.activeMethod,
+                isPendingApproval: self.helperManager.isPendingApproval,
                 constants: self.sharedConstants
             )
             DispatchQueue.main.async {
@@ -122,10 +124,11 @@ final class RouterService: ObservableObject {
         helperManager.$activeMethod
             .combineLatest(helperManager.$isPendingApproval)
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] (activeMethod, _) in
+            .sink { [weak self] (activeMethod, isPendingApproval) in
                 guard let self else { return }
                 self.helperStatus = Self.resolveInstallationState(
                     activeMethod: activeMethod,
+                    isPendingApproval: isPendingApproval,
                     constants: self.sharedConstants
                 )
             }
@@ -231,6 +234,7 @@ final class RouterService: ObservableObject {
         // Refresh published helperStatus after install attempt
         helperStatus = Self.resolveInstallationState(
             activeMethod: helperManager.activeMethod,
+            isPendingApproval: helperManager.isPendingApproval,
             constants: sharedConstants
         )
         return result
@@ -242,6 +246,7 @@ final class RouterService: ObservableObject {
         try await helperManager.uninstall()
         helperStatus = Self.resolveInstallationState(
             activeMethod: helperManager.activeMethod,
+            isPendingApproval: helperManager.isPendingApproval,
             constants: sharedConstants
         )
     }
@@ -404,19 +409,24 @@ final class RouterService: ObservableObject {
 
     // MARK: - Status Resolution
 
-    /// Derives HelperToolInstallationState from PrivilegedHelperManager.activeMethod.
+    /// Derives HelperToolInstallationState from PrivilegedHelperManager state.
     /// - For SMAppService: helper IS the bundled binary, so version always matches → .installed.
     /// - For SMJobBless: read version from the blessed binary and compare.
     private static func resolveInstallationState(
         activeMethod: InstallMethod?,
+        isPendingApproval: Bool,
         constants: SharedConstant
     ) -> HelperToolInstallationState {
         switch activeMethod {
         case nil:
+            if isPendingApproval {
+                return .pendingActivation
+            }
             return .notInstalled
         case .smAppService:
-            // SMAppService always runs the bundled binary — version always matches.
-            return .installed
+            // SMAppService uses the bundled binary. If approval is still pending,
+            // expose explicit pendingActivation state instead of notInstalled.
+            return isPendingApproval ? .pendingActivation : .installed
         case .smJobBless:
             do {
                 let infoPropertyList = try HelperToolInfoPropertyList(from: constants.blessedLocation)

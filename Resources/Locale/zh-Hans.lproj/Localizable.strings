@@ -114,10 +114,12 @@
 /* ── Settings / Helper State ── */
 "settings.helper.state.label" = "帮助程序状态：";
 "settings.helper.button.installed" = "已安装";
+"settings.helper.button.pending_activation" = "待生效";
 "settings.helper.button.upgrade" = "升级";
 "settings.helper.button.repair" = "修复";
 "settings.helper.button.install" = "安装";
 "settings.helper.footer.installed" = "帮助程序已安装，现在可以轻松管理系统路由";
+"settings.helper.footer.pending_activation" = "帮助程序已安装但处于待生效状态，请开启后台运行权限或先卸载后重装";
 "settings.helper.footer.needs_upgrade" = "帮助程序已安装但不是最新版本，建议升级";
 "settings.helper.footer.not_compatible" = "帮助程序已安装但版本可能不兼容，建议重新安装";
 "settings.helper.footer.not_installed" = "需要安装帮助程序，路由命令需要特权才能执行";

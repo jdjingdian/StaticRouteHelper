@@ -39,11 +39,11 @@ struct GeneralSettings_HelperStateView: View {
                 } label: {
                     Text(installButtonText)
                 }
-                .disabled(routerService.helperStatus == .installed)
+                .disabled(isInstallButtonDisabled)
                 .buttonStyle(DefaultButtonStyle(
                     .buttonNeutral(.thin),
                     disable: Binding<Bool>(
-                        get: { routerService.helperStatus == .installed },
+                        get: { isInstallButtonDisabled },
                         set: { _ in }
                     )
                 ))
@@ -103,9 +103,19 @@ struct GeneralSettings_HelperStateView: View {
     private var installButtonText: String {
         switch routerService.helperStatus {
         case .installed: return String(localized: "settings.helper.button.installed")
+        case .pendingActivation: return String(localized: "settings.helper.button.pending_activation")
         case .needUpgrade: return String(localized: "settings.helper.button.upgrade")
         case .notCompatible: return String(localized: "settings.helper.button.repair")
         case .notInstalled: return String(localized: "settings.helper.button.install")
+        }
+    }
+
+    private var isInstallButtonDisabled: Bool {
+        switch routerService.helperStatus {
+        case .installed, .pendingActivation:
+            return true
+        case .needUpgrade, .notCompatible, .notInstalled:
+            return false
         }
     }
 
@@ -113,6 +123,8 @@ struct GeneralSettings_HelperStateView: View {
         switch routerService.helperStatus {
         case .installed:
             return String(localized: "settings.helper.footer.installed")
+        case .pendingActivation:
+            return String(localized: "settings.helper.footer.pending_activation")
         case .needUpgrade:
             return String(localized: "settings.helper.footer.needs_upgrade")
         case .notCompatible:
@@ -126,6 +138,8 @@ struct GeneralSettings_HelperStateView: View {
         switch routerService.helperStatus {
         case .installed:
             return Image(systemName: "checkmark.circle.fill").foregroundColor(.green)
+        case .pendingActivation:
+            return Image(systemName: "exclamationmark.triangle.fill").foregroundColor(.yellow)
         case .needUpgrade, .notCompatible:
             return Image(systemName: "exclamationmark.circle.fill").foregroundColor(.yellow)
         case .notInstalled:
@@ -134,9 +148,14 @@ struct GeneralSettings_HelperStateView: View {
     }
 
     /// Returns a localized string describing the active installation method.
-    /// Only non-nil when `helperStatus == .installed`.
+    /// Only non-nil when helper is installed or pending activation.
     private var activationMethodText: String? {
-        guard routerService.helperStatus == .installed else { return nil }
+        switch routerService.helperStatus {
+        case .installed, .pendingActivation:
+            break
+        case .needUpgrade, .notCompatible, .notInstalled:
+            return nil
+        }
 
         if routerService.helperManager.isPendingApproval {
             return String(localized: "settings.helper.footer.installed.method.pending_approval")

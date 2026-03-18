@@ -113,10 +113,12 @@
 /* ── Settings / Helper State ── */
 "settings.helper.state.label" = "Privileged Helper State:";
 "settings.helper.button.installed" = "Already Installed";
+"settings.helper.button.pending_activation" = "Pending Activation";
 "settings.helper.button.upgrade" = "Upgrade";
 "settings.helper.button.repair" = "Repair";
 "settings.helper.button.install" = "Install";
 "settings.helper.footer.installed" = "Helper is installed. You can now manage system routes.";
+"settings.helper.footer.pending_activation" = "Helper is installed but pending activation. Enable background permission or uninstall to retry.";
 "settings.helper.footer.needs_upgrade" = "Helper is installed but not the latest version. Upgrade recommended.";
 "settings.helper.footer.not_compatible" = "Helper is installed but the version may be incompatible. Reinstall recommended.";
 "settings.helper.footer.not_installed" = "Helper not installed. Root privileges are required to manage routes.";

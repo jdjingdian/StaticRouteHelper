@@ -68,19 +68,20 @@ struct MainWindow14: View {
         }
     }
 
-    /// Priority-ordered banner: warning (not installed) takes precedence over info (bless upgrade).
+    /// Priority-ordered banner:
+    /// 1) pending activation, 2) not installed-like states, 3) bless upgrade info.
     @ViewBuilder
     private var helperBanner: some View {
-        if routerService.helperStatus != .installed {
-            // Priority 1: helper not installed / needs upgrade / not compatible
-            StatusBanner(style: .warning, message: "helper.banner.message") {
+        if routerService.helperStatus == .pendingActivation {
+            // Priority 1: installed but background switch is off — needs user approval
+            StatusBanner(style: .warning, message: "helper.banner.pending_approval.message") {
                 SettingsLink {
                     Text(String(localized: "helper.banner.goto_settings"))
                 }
             }
-        } else if routerService.helperManager.isPendingApproval {
-            // Priority 2: installed but background switch is off — needs user approval
-            StatusBanner(style: .warning, message: "helper.banner.pending_approval.message") {
+        } else if routerService.helperStatus != .installed {
+            // Priority 2: helper not installed / needs upgrade / not compatible
+            StatusBanner(style: .warning, message: "helper.banner.message") {
                 SettingsLink {
                     Text(String(localized: "helper.banner.goto_settings"))
                 }

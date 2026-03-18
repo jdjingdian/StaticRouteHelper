@@ -76,10 +76,12 @@ struct GeneralSettingsView: View {
     }
 
     private func performUninstall() {
-        // For SMAppService uninstall on macOS 14+, check background switch state first.
+        // For SMAppService uninstall on macOS 14+, block only when switch is off AND
+        // state is not pending-activation. Pending state is allowed to uninstall.
         if #available(macOS 14, *),
            routerService.helperManager.activeMethod == .smAppService,
-           routerService.helperManager.isBackgroundSwitchOff() {
+           routerService.helperManager.isBackgroundSwitchOff(),
+           !routerService.helperManager.isPendingApproval {
             showBackgroundSwitchAlert = true
             return
         }
