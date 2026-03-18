@@ -14,6 +14,8 @@
 /* ── MainWindow ── */
 "helper.banner.message" = "Helper tool not installed. Route operations are unavailable. Please go to Settings to install.";
 "helper.banner.goto_settings" = "Open Settings";
+"helper.banner.bless_upgrade.message" = "A modern deployment method is available. Consider switching to SMAppService in Settings.";
+"helper.banner.pending_approval.message" = "Helper installed, but the background switch is off. Enable it in System Settings > Login Items & Extensions.";
 
 /* ── RouteListView ── */
 "route.list.all_routes.title" = "All Routes";
@@ -118,21 +120,10 @@
 "settings.helper.footer.needs_upgrade" = "Helper is installed but not the latest version. Upgrade recommended.";
 "settings.helper.footer.not_compatible" = "Helper is installed but the version may be incompatible. Reinstall recommended.";
 "settings.helper.footer.not_installed" = "Helper not installed. Root privileges are required to manage routes.";
-/* ── Settings / Helper — SMAppService Fallback Alert (task 9) ── */
-"settings.helper.fallback.alert.title" = "Unable to Use New Installation Method";
-"settings.helper.fallback.alert.message" = "SMAppService registration failed. Would you like to install using the legacy method (SMJobBless)?";
-"settings.helper.fallback.alert.confirm" = "Use Legacy Method";
-"settings.helper.fallback.alert.cancel" = "Cancel";
 
-/* ── Settings / Helper — Upgrade Alert (task 10) ── */
-"settings.helper.upgrade.alert.title" = "Better Installation Method Available";
-"settings.helper.upgrade.alert.message" = "Your helper is installed via SMJobBless. Apple recommends SMAppService for macOS 14 and later. Would you like to upgrade now?";
-"settings.helper.upgrade.alert.confirm" = "Upgrade";
-"settings.helper.upgrade.alert.cancel" = "Later";
-
-/* ── Settings / Helper — Active Method Footer (task 11) ── */
+/* ── Settings / Helper — Active Method Footer ── */
 "settings.helper.footer.installed.method.smappservice" = "Managed by SMAppService (macOS 14+)";
-"settings.helper.footer.installed.method.smjobbless" = "Managed by SMJobBless (macOS 12–13)";
+"settings.helper.footer.installed.method.smjobbless" = "Managed by SMJobBless";
 "settings.helper.footer.installed.method.pending_approval" = "Waiting for user approval in System Settings > Login Items & Extensions.";
 
 "settings.helper.uninstall.button" = "Uninstall Helper";
@@ -140,6 +131,27 @@
 "settings.helper.uninstall.alert.message" = "After uninstallation, this app will no longer be able to modify system routes.";
 "settings.helper.uninstall.alert.confirm" = "Uninstall";
 "settings.helper.uninstall.alert.cancel" = "Cancel";
+
+/* ── Uninstall error alert ── */
+"settings.helper.uninstall.error.title" = "Uninstall Failed";
+"settings.helper.uninstall.error.ok" = "OK";
+
+/* ── Settings / Helper — Background Switch Alert ── */
+"settings.helper.background_switch.alert.title" = "Background Permission Required";
+"settings.helper.background_switch.alert.message" = "This app needs permission to run in the background. Please enable it in System Settings > Login Items & Extensions, then try again.";
+"settings.helper.background_switch.alert.open_settings" = "Open System Settings";
+"settings.helper.background_switch.alert.cancel" = "Cancel";
+
+/* ── Install Method Chooser ── */
+"chooser.title" = "Choose Installation Method";
+"chooser.subtitle" = "Select how the privileged helper should be deployed.";
+"chooser.method.smappservice.title" = "SMAppService";
+"chooser.method.smappservice.description" = "Modern Apple method. Managed via System Settings > Login Items. Automatically updated with the app.";
+"chooser.method.smjobbless.title" = "SMJobBless";
+"chooser.method.smjobbless.description" = "Traditional method. Runs as a visible independent process (visible in Activity Monitor and ps). Requires manual reinstall to update.";
+"chooser.recommended_badge" = "Recommended";
+"chooser.button.cancel" = "Cancel";
+"chooser.button.install" = "Install";
 
 /* ── SettingsView ── */
 "settings.tab.general" = "General";

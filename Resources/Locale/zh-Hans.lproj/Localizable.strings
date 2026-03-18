@@ -15,6 +15,8 @@
 /* ── MainWindow ── */
 "helper.banner.message" = "帮助程序未安装，路由操作不可用。请前往设置安装。";
 "helper.banner.goto_settings" = "前往设置";
+"helper.banner.bless_upgrade.message" = "有更现代的部署方式可用。建议在设置中切换到 SMAppService。";
+"helper.banner.pending_approval.message" = "帮助程序已安装，但后台运行开关已关闭。请在「系统设置 > 登录项与扩展」中开启。";
 
 /* ── RouteListView ── */
 "route.list.all_routes.title" = "所有路由";
@@ -119,21 +121,10 @@
 "settings.helper.footer.needs_upgrade" = "帮助程序已安装但不是最新版本，建议升级";
 "settings.helper.footer.not_compatible" = "帮助程序已安装但版本可能不兼容，建议重新安装";
 "settings.helper.footer.not_installed" = "需要安装帮助程序，路由命令需要特权才能执行";
-/* ── Settings / Helper — SMAppService 回退提示（任务 9）── */
-"settings.helper.fallback.alert.title" = "无法使用新安装方式";
-"settings.helper.fallback.alert.message" = "SMAppService 注册失败。是否使用旧版方式（SMJobBless）安装？";
-"settings.helper.fallback.alert.confirm" = "使用旧版方式";
-"settings.helper.fallback.alert.cancel" = "取消";
 
-/* ── Settings / Helper — 升级提示（任务 10）── */
-"settings.helper.upgrade.alert.title" = "有更好的安装方式可用";
-"settings.helper.upgrade.alert.message" = "帮助程序当前通过 SMJobBless 安装。苹果推荐在 macOS 14 及更高版本上使用 SMAppService。是否立即升级？";
-"settings.helper.upgrade.alert.confirm" = "立即升级";
-"settings.helper.upgrade.alert.cancel" = "稍后";
-
-/* ── Settings / Helper — 安装方式说明（任务 11）── */
+/* ── Settings / Helper — 安装方式说明 ── */
 "settings.helper.footer.installed.method.smappservice" = "由 SMAppService 管理（macOS 14+）";
-"settings.helper.footer.installed.method.smjobbless" = "由 SMJobBless 管理（macOS 12–13）";
+"settings.helper.footer.installed.method.smjobbless" = "由 SMJobBless 管理";
 "settings.helper.footer.installed.method.pending_approval" = "等待用户在「系统设置 > 登录项与扩展」中批准。";
 
 "settings.helper.uninstall.button" = "卸载帮助程序";
@@ -141,6 +132,27 @@
 "settings.helper.uninstall.alert.message" = "卸载完成后，此工具将无法修改系统路由。";
 "settings.helper.uninstall.alert.confirm" = "卸载";
 "settings.helper.uninstall.alert.cancel" = "取消";
+
+/* ── 卸载失败提示 ── */
+"settings.helper.uninstall.error.title" = "卸载失败";
+"settings.helper.uninstall.error.ok" = "好";
+
+/* ── Settings / Helper — 后台运行开关引导 ── */
+"settings.helper.background_switch.alert.title" = "需要后台运行权限";
+"settings.helper.background_switch.alert.message" = "此应用需要后台运行权限才能执行该操作。请在「系统设置 > 登录项与扩展」中开启，然后重试。";
+"settings.helper.background_switch.alert.open_settings" = "打开系统设置";
+"settings.helper.background_switch.alert.cancel" = "取消";
+
+/* ── 安装方式选择器 ── */
+"chooser.title" = "选择安装方式";
+"chooser.subtitle" = "请选择帮助程序的部署方式。";
+"chooser.method.smappservice.title" = "SMAppService";
+"chooser.method.smappservice.description" = "Apple 推荐的现代方式。通过「系统设置 > 登录项」管理，随应用自动更新。";
+"chooser.method.smjobbless.title" = "SMJobBless";
+"chooser.method.smjobbless.description" = "传统方式。以独立进程运行，可在活动监视器和 ps 命令中看到。升级时需重新安装。";
+"chooser.recommended_badge" = "推荐";
+"chooser.button.cancel" = "取消";
+"chooser.button.install" = "安装";
 
 /* ── SettingsView ── */
 "settings.tab.general" = "通用";

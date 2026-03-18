@@ -16,9 +16,6 @@ struct StaticRouteHelperApp: App {
     // Legacy Core Data stack (macOS 12–13). Always initialized, only used on older OS.
     @StateObject private var legacyStack = LegacyPersistenceStack()
 
-    // True when the upgrade-to-SMAppService prompt should be shown (macOS 14+).
-    @State private var showUpgradePrompt = false
-
     var body: some Scene {
         WindowGroup {
             AppRootView()
@@ -28,21 +25,6 @@ struct StaticRouteHelperApp: App {
                 .task { await onStartup() }
                 .onReceive(NotificationCenter.default.publisher(for: .routeDidChange)) { note in
                     handleRouteChange(note)
-                }
-                .alert(
-                    String(localized: "settings.helper.upgrade.alert.title"),
-                    isPresented: $showUpgradePrompt
-                ) {
-                    Button(String(localized: "settings.helper.upgrade.alert.confirm")) {
-                        if #available(macOS 14, *) {
-                            Task {
-                                try? await routerService.helperManager.upgrade()
-                            }
-                        }
-                    }
-                    Button(String(localized: "settings.helper.upgrade.alert.cancel"), role: .cancel) {}
-                } message: {
-                    Text(String(localized: "settings.helper.upgrade.alert.message"))
                 }
         }
         .commands { MenuBarCommand() }
@@ -81,15 +63,6 @@ struct StaticRouteHelperApp: App {
         if let rules = try? context.fetch(descriptor) {
             RouteStateCalibrator.calibrate(rules: rules, systemRoutes: routerService.systemRoutes)
             try? context.save()
-        }
-
-        // Show upgrade prompt if helper is active via SMJobBless on macOS 14+.
-        // Shown every launch until the user upgrades (no "don't ask again" option).
-        let manager = routerService.helperManager
-        if manager.activeMethod != nil && !manager.isOptimizedMode {
-            await MainActor.run {
-                showUpgradePrompt = true
-            }
         }
     }
 

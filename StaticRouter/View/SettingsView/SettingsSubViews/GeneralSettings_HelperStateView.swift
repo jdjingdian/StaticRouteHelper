@@ -5,14 +5,25 @@
 
 import Foundation
 import SwiftUI
+import ServiceManagement
 
 struct GeneralSettings_HelperStateView: View {
     @EnvironmentObject private var routerService: RouterService
 
-    // MARK: - Alert State
+    // MARK: - State
 
-    /// Pending fallback error — set when SMAppService install fails and fallback is available.
-    @State private var fallbackError: Error?
+    /// Controls the install method chooser sheet (macOS 14+ only).
+    @State private var showChooser = false
+
+    /// Controls the system settings guidance alert.
+    @State private var showBackgroundSwitchAlert = false
+
+    /// True immediately after an install completes, cleared once the pending-approval
+    /// alert has been shown (or if approval is no longer needed).
+    @State private var pendingApprovalAlertArmed = false
+
+    /// Persisted user preference for install method (macOS 14+ only).
+    @AppStorage("preferredInstallMethod") private var preferredInstallMethodRaw: String = "smAppService"
 
     // MARK: - Body
 
@@ -48,25 +59,42 @@ struct GeneralSettings_HelperStateView: View {
                     .foregroundStyle(.secondary)
             }
         }
-        // SMAppService fallback confirmation alert.
-        .alert(
-            String(localized: "settings.helper.fallback.alert.title"),
-            isPresented: Binding<Bool>(
-                get: { fallbackError != nil },
-                set: { if !$0 { fallbackError = nil } }
+        // Install method chooser sheet (macOS 14+ only; noop on 12–13 since showChooser stays false).
+        .background(
+            ChooserSheetPresenter(
+                isPresented: $showChooser,
+                preferredMethodRaw: $preferredInstallMethodRaw,
+                onInstall: { method in
+                    preferredInstallMethodRaw = method.rawStorageValue
+                    showChooser = false
+                    performInstall(method: method)
+                },
+                onCancel: { showChooser = false }
             )
+        )
+        // Background switch guidance alert.
+        .alert(
+            String(localized: "settings.helper.background_switch.alert.title"),
+            isPresented: $showBackgroundSwitchAlert
         ) {
-            Button(String(localized: "settings.helper.fallback.alert.confirm")) {
-                fallbackError = nil
-                Task {
-                    try? await routerService.helperManager.installFallback()
+            Button(String(localized: "settings.helper.background_switch.alert.open_settings")) {
+                if #available(macOS 13, *) {
+                    SMAppService.openSystemSettingsLoginItems()
                 }
             }
-            Button(String(localized: "settings.helper.fallback.alert.cancel"), role: .cancel) {
-                fallbackError = nil
-            }
+            Button(String(localized: "settings.helper.background_switch.alert.cancel"), role: .cancel) {}
         } message: {
-            Text(String(localized: "settings.helper.fallback.alert.message"))
+            Text(String(localized: "settings.helper.background_switch.alert.message"))
+        }
+        // Post-install: show background switch alert if isPendingApproval becomes true
+        // while the armed flag is set (i.e. we just performed an install).
+        .onChange(of: routerService.helperManager.isPendingApproval) { newValue in
+            if newValue && pendingApprovalAlertArmed {
+                pendingApprovalAlertArmed = false
+                showBackgroundSwitchAlert = true
+            } else if !newValue {
+                pendingApprovalAlertArmed = false
+            }
         }
     }
 
@@ -105,13 +133,11 @@ struct GeneralSettings_HelperStateView: View {
         }
     }
 
-    /// Returns a localized string describing the active installation method,
-    /// derived from `helperManager.activeMethod` (not OS version).
+    /// Returns a localized string describing the active installation method.
     /// Only non-nil when `helperStatus == .installed`.
     private var activationMethodText: String? {
         guard routerService.helperStatus == .installed else { return nil }
 
-        // isPendingApproval: show distinct approval prompt instead of method name.
         if routerService.helperManager.isPendingApproval {
             return String(localized: "settings.helper.footer.installed.method.pending_approval")
         }
@@ -128,20 +154,35 @@ struct GeneralSettings_HelperStateView: View {
 
     // MARK: - Actions
 
+    /// Entry point for install button tap.
     private func installOrUpgradeHelper() {
+        if #available(macOS 14, *) {
+            // macOS 14+: show method chooser sheet
+            showChooser = true
+        } else {
+            // macOS 12–13: directly install via SMJobBless
+            performInstall(method: .smJobBless)
+        }
+    }
+
+    /// Execute the actual install for the given method, with background switch pre-check.
+    private func performInstall(method: InstallMethod) {
+        if #available(macOS 14, *), method == .smAppService {
+            // Pre-check: if background switch is definitely off, guide user first
+            if routerService.helperManager.isBackgroundSwitchOff() {
+                showBackgroundSwitchAlert = true
+                return
+            }
+        }
+        // Arm the pending-approval watch so we can show the alert if the background
+        // switch turns out to be off after the install completes (detected via polling).
+        pendingApprovalAlertArmed = true
         Task {
             do {
-                let result = try await routerService.installHelper()
-                switch result {
-                case .success:
-                    break // helperStatus updated inside installHelper()
-                case .smAppServiceFailedFallbackAvailable(let error):
-                    await MainActor.run { fallbackError = error }
-                case .failed:
-                    break // no fallback available; helperStatus stays unchanged
-                }
+                _ = try await routerService.installHelper(method: method)
             } catch {
-                // Unexpected throw — ignore silently (errors visible via helperStatus).
+                pendingApprovalAlertArmed = false
+                // Errors surface via helperStatus; no-op here
             }
         }
     }

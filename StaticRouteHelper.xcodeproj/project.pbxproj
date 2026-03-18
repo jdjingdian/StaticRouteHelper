@@ -13,9 +13,11 @@
 		39229F432972624A0013B40F /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39229F422972624A0013B40F /* AboutView.swift */; };
 		39229F4A29726E060013B40F /* PaddedDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39229F4929726E060013B40F /* PaddedDivider.swift */; };
 		39229F4C297278C70013B40F /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39229F4B297278C70013B40F /* GeneralSettingsView.swift */; };
+		AA100004000000000000BB04 /* InstallMethodChooserSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100003000000000000BB03 /* InstallMethodChooserSheet.swift */; };
 		39229F4F29728AA20013B40F /* GeneralSettings_HelperStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39229F4E29728AA20013B40F /* GeneralSettings_HelperStateView.swift */; };
 		39229F57297400C10013B40F /* ButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39229F56297400C10013B40F /* ButtonStyle.swift */; };
 		39229F592974EDBD0013B40F /* ButtonStyleDemoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39229F582974EDBD0013B40F /* ButtonStyleDemoView.swift */; };
+		AA100002000000000000BB01 /* StatusBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100001000000000000BB01 /* StatusBanner.swift */; };
 		396255E0296C075400DB6000 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 396255DF296C075400DB6000 /* main.swift */; };
 		396255EA296C0D7E00DB6000 /* Blessed in Frameworks */ = {isa = PBXBuildFile; productRef = 396255E9296C0D7E00DB6000 /* Blessed */; };
 		396255ED296C0D9300DB6000 /* SecureXPC in Frameworks */ = {isa = PBXBuildFile; productRef = 396255EC296C0D9300DB6000 /* SecureXPC */; };
@@ -126,9 +128,11 @@
 		39229F422972624A0013B40F /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		39229F4929726E060013B40F /* PaddedDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddedDivider.swift; sourceTree = "<group>"; };
 		39229F4B297278C70013B40F /* GeneralSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsView.swift; sourceTree = "<group>"; };
+		AA100003000000000000BB03 /* InstallMethodChooserSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallMethodChooserSheet.swift; sourceTree = "<group>"; };
 		39229F4E29728AA20013B40F /* GeneralSettings_HelperStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettings_HelperStateView.swift; sourceTree = "<group>"; };
 		39229F56297400C10013B40F /* ButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonStyle.swift; sourceTree = "<group>"; };
 		39229F582974EDBD0013B40F /* ButtonStyleDemoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonStyleDemoView.swift; sourceTree = "<group>"; };
+		AA100001000000000000BB01 /* StatusBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBanner.swift; sourceTree = "<group>"; };
 		396255DD296C075400DB6000 /* cn.magicdian.staticrouter.helper */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = cn.magicdian.staticrouter.helper; sourceTree = BUILT_PRODUCTS_DIR; };
 		396255DF296C075400DB6000 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		396255E4296C07FB00DB6000 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -248,6 +252,7 @@
 				39229F4929726E060013B40F /* PaddedDivider.swift */,
 				39229F56297400C10013B40F /* ButtonStyle.swift */,
 				39229F582974EDBD0013B40F /* ButtonStyleDemoView.swift */,
+				AA100001000000000000BB01 /* StatusBanner.swift */,
 				AA000002000000000000AA12 /* LegacyTextField.swift */,
 			);
 			path = Customized;
@@ -258,6 +263,7 @@
 			children = (
 				39229F4B297278C70013B40F /* GeneralSettingsView.swift */,
 				39229F4E29728AA20013B40F /* GeneralSettings_HelperStateView.swift */,
+				AA100003000000000000BB03 /* InstallMethodChooserSheet.swift */,
 				39229F422972624A0013B40F /* AboutView.swift */,
 			);
 			path = SettingsSubViews;
@@ -517,11 +523,13 @@
 				39229F4029725F200013B40F /* SettingsView.swift in Sources */,
 				39229F4C297278C70013B40F /* GeneralSettingsView.swift in Sources */,
 				39229F4F29728AA20013B40F /* GeneralSettings_HelperStateView.swift in Sources */,
+				AA100004000000000000BB04 /* InstallMethodChooserSheet.swift in Sources */,
 				39229F432972624A0013B40F /* AboutView.swift in Sources */,
 				39229F35297013270013B40F /* MenuBarCommand.swift in Sources */,
 				39229F4A29726E060013B40F /* PaddedDivider.swift in Sources */,
 				39229F57297400C10013B40F /* ButtonStyle.swift in Sources */,
 				39229F592974EDBD0013B40F /* ButtonStyleDemoView.swift in Sources */,
+				AA100002000000000000BB01 /* StatusBanner.swift in Sources */,
 				AA000001000000000000AA12 /* LegacyTextField.swift in Sources */,
 				39625604296C204200DB6000 /* HelperToolMonitor.swift in Sources */,
 				396255F5296C0E8900DB6000 /* SharedConstant.swift in Sources */,
@@ -556,7 +564,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 48;
+				CURRENT_PROJECT_VERSION = 51;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -586,7 +594,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 48;
+				CURRENT_PROJECT_VERSION = 51;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -748,9 +756,9 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				CURRENT_PROJECT_VERSION = 48;
+				CURRENT_PROJECT_VERSION = 51;
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 2.0.0;
+				MARKETING_VERSION = 2.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = cn.magicdian.staticrouter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = ROUTER;
@@ -778,9 +786,9 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				CURRENT_PROJECT_VERSION = 48;
+				CURRENT_PROJECT_VERSION = 51;
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 2.0.0;
+				MARKETING_VERSION = 2.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = cn.magicdian.staticrouter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = ROUTER;

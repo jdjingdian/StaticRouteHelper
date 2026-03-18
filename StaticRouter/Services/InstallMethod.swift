@@ -17,12 +17,10 @@ enum InstallMethod: Equatable {
 
 // MARK: - InstallResult
 
-/// The outcome of a `PrivilegedHelperManager.install()` call.
+/// The outcome of a `PrivilegedHelperManager.install(method:)` call.
 enum InstallResult {
     /// Installation succeeded via the specified method.
     case success(method: InstallMethod)
-    /// SMAppService registration failed; the user may fall back to SMJobBless.
-    case smAppServiceFailedFallbackAvailable(error: Error)
-    /// Installation failed with no available fallback.
+    /// Installation failed (user cancelled or system error).
     case failed(error: Error)
 }
