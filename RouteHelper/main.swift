@@ -7,40 +7,47 @@
 
 import Foundation
 import SecureXPC
+import OSLog
 
+let helperLogger = Logger(subsystem: "cn.magicdian.staticrouter", category: "helper-main")
 
 let ppid = getppid()
-NSLog("StaticRouterHelper Started By: \(ppid)")
+helperLogger.info("Helper process started (pid: \(getpid(), privacy: .public), ppid: \(ppid, privacy: .public))")
 
 if CommandLine.arguments.count > 1 {
     // Remove the first argument, which represents the name (typically the full path) of this helper tool
     var arguments = CommandLine.arguments
     _ = arguments.removeFirst()
-    NSLog("StaticRouterHelper run with arguments: \(arguments)")
+    helperLogger.info("Helper launched with command arguments (count: \(arguments.count, privacy: .public))")
 
     if let firstArgument = arguments.first {
         if firstArgument == SelfUninstaller.commandLineArgument {
-            try SelfUninstaller.uninstallFromCommandLine(withArguments: arguments)
+            do {
+                try SelfUninstaller.uninstallFromCommandLine(withArguments: arguments)
+            } catch {
+                helperLogger.error("Uninstall command failed: \(error.localizedDescription, privacy: .public)")
+                exit(1)
+            }
         } else {
-            NSLog("StaticRouterHelper argument not recognized: \(firstArgument)")
+            helperLogger.warning("Unknown helper argument: \(firstArgument, privacy: .public)")
         }
     }
 }else if(ppid == 1){
-    NSLog("StaticRouterHelper Started By Launchd, Starting Server")
+    helperLogger.info("Helper started by launchd, starting XPC server")
     let server = try XPCServer.forMachService()
     server.registerRoute(SharedConstant.debugRoute, handler: ProcessRunner.run_whoami)
-    NSLog("StaticRouterHelper set debugRoute Complete")
+    helperLogger.info("Registered helper debug route")
 //    server.registerRoute(SharedConstant.uninstallRoute, handler: SelfUninstaller.uninstall)
     server.registerRoute(SharedConstant.uninstallRoute, handler: SelfUninstaller.uninstall)
     server.registerRoute(SharedConstant.commandRoute, handler: PFRouteWriter.write(request:))
-    
-    NSLog("StaticRouterHelper set uninstallRoute Complete")
+
+    helperLogger.info("Registered helper uninstall and command routes")
     ///
     server.setErrorHandler { error in
         if case .connectionInvalid = error {
             // Ignore invalidated connections as this happens whenever the client disconnects which is not a problem
         } else {
-            NSLog("StaticRouterHelper error: \(error)")
+            helperLogger.error("Helper XPC server error: \(error.localizedDescription, privacy: .public)")
         }
     }
     //MARK: Start server and not quit

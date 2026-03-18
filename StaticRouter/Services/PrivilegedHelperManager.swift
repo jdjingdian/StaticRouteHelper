@@ -55,11 +55,29 @@ final class PrivilegedHelperManager: ObservableObject {
     /// Combine subscriptions for state monitoring (macOS 14+ only).
     private var cancellables = Set<AnyCancellable>()
 
+    /// Baseline low-frequency polling subscription (macOS 14+).
+    private var baselinePollingCancellable: AnyCancellable?
+
+    /// Short-lived high-frequency polling subscription after install success.
+    private var installBurstPollingCancellable: AnyCancellable?
+
+    /// Cancel token for ending the install burst polling window.
+    private var installBurstStopWorkItem: DispatchWorkItem?
+
+    private let baselinePollingInterval: TimeInterval = 10
+    private let installBurstPollingInterval: TimeInterval = 0.5
+    private let installBurstDuration: TimeInterval = 3
+    private let uninstallXPCTimeout: TimeInterval = 3
+    private let installSettleTimeout: TimeInterval = 8
+    private let installSettlePollInterval: TimeInterval = 0.25
+    private let uninstallSettleTimeout: TimeInterval = 5
+    private let uninstallSettlePollInterval: TimeInterval = 0.25
+
     // MARK: - Init
 
     init(constants: SharedConstant) {
         self.constants = constants
-        self.xpcClient = XPCClient.forMachService(named: constants.machServiceName)
+        self.xpcClient = XPCClient.forMachService(named: constants.jobBlessMachServiceName)
         refreshState()
         startStateMonitoring()
     }
@@ -69,7 +87,7 @@ final class PrivilegedHelperManager: ObservableObject {
     /// Starts background switch state monitoring (macOS 14+ only).
     /// Uses two mechanisms:
     ///   1. didBecomeActiveNotification — catches "user went to System Settings and came back"
-    ///   2. Timer every 10s — catches changes while app stays in foreground (split-screen etc.)
+    ///   2. Baseline timer every 10s — catches changes while app stays in foreground (split-screen etc.)
     private func startStateMonitoring() {
         guard #available(macOS 14, *) else { return }
 
@@ -81,13 +99,50 @@ final class PrivilegedHelperManager: ObservableObject {
             }
             .store(in: &cancellables)
 
-        // 2. Low-frequency timer poll (10s) while app is running
-        Timer.publish(every: 10, on: .main, in: .common)
+        // 2. Baseline low-frequency timer poll (10s) while app is running
+        startBaselinePolling()
+    }
+
+    private func startBaselinePolling() {
+        baselinePollingCancellable?.cancel()
+        baselinePollingCancellable = makePollingCancellable(every: baselinePollingInterval)
+    }
+
+    private func makePollingCancellable(every interval: TimeInterval) -> AnyCancellable {
+        Timer.publish(every: interval, on: .main, in: .common)
             .autoconnect()
             .sink { [weak self] _ in
                 self?.refreshState()
             }
-            .store(in: &cancellables)
+    }
+
+    /// Starts a short high-frequency polling window after install/uninstall succeeds.
+    /// This bridges delays in observable system-state updates.
+    private func startStateBurstPollingWindow() {
+        guard #available(macOS 14, *) else { return }
+
+        installBurstPollingCancellable?.cancel()
+        installBurstStopWorkItem?.cancel()
+
+        logger.info("Starting helper-state burst polling (interval: \(self.installBurstPollingInterval, privacy: .public)s, duration: \(self.installBurstDuration, privacy: .public)s)")
+
+        // Immediate refresh first, then continue with short-interval polling.
+        refreshState()
+        installBurstPollingCancellable = makePollingCancellable(every: installBurstPollingInterval)
+
+        let stopWorkItem = DispatchWorkItem { [weak self] in
+            self?.stopInstallBurstPollingWindow()
+        }
+        installBurstStopWorkItem = stopWorkItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + installBurstDuration, execute: stopWorkItem)
+    }
+
+    private func stopInstallBurstPollingWindow() {
+        installBurstPollingCancellable?.cancel()
+        installBurstPollingCancellable = nil
+        installBurstStopWorkItem?.cancel()
+        installBurstStopWorkItem = nil
+        logger.info("Helper-state burst polling ended; baseline polling remains active")
     }
 
     // MARK: - State Refresh
@@ -131,7 +186,7 @@ final class PrivilegedHelperManager: ObservableObject {
         }
 
         // No SMJobBless process — check SMAppService.
-        let service = SMAppService.daemon(plistName: "\(constants.helperToolLabel).plist")
+        let service = SMAppService.daemon(plistName: "\(constants.appServiceLabel).plist")
         switch service.status {
         case .enabled:
             activeMethod = .smAppService
@@ -157,17 +212,12 @@ final class PrivilegedHelperManager: ObservableObject {
     /// Returns true if the helper binary is present at its blessed location
     /// AND is registered with launchd (guarding against leftover binaries).
     private func isInstalledViaJobBless() -> Bool {
-        guard FileManager.default.fileExists(atPath: constants.blessedLocation.path) else {
-            return false
-        }
-        let process = Process()
-        process.launchPath = "/bin/launchctl"
-        process.arguments = ["print", "system/\(constants.helperToolLabel)"]
-        process.standardOutput = FileHandle.nullDevice
-        process.standardError = FileHandle.nullDevice
-        process.launch()
-        process.waitUntilExit()
-        return process.terminationStatus == 0
+        // In practice `launchctl print system/<label>` can return "not found"
+        // for on-demand jobs even when SMJobBless artifacts are present and callable.
+        // Use the blessed artifacts as the source of truth after separating labels.
+        let binaryExists = FileManager.default.fileExists(atPath: constants.blessedLocation.path)
+        let plistExists = FileManager.default.fileExists(atPath: constants.blessedPropertyListLocation.path)
+        return binaryExists && plistExists
     }
 
     // MARK: - Background Switch Check (macOS 14+)
@@ -176,7 +226,8 @@ final class PrivilegedHelperManager: ObservableObject {
     /// Returns false for all other states (enabled, not registered, or unknown).
     @available(macOS 14, *)
     func isBackgroundSwitchOff() -> Bool {
-        let service = SMAppService.daemon(plistName: "\(constants.helperToolLabel).plist")
+        let service = SMAppService.daemon(plistName: "\(constants.appServiceLabel).plist")
+        
         return service.status == .requiresApproval
     }
 
@@ -199,6 +250,7 @@ final class PrivilegedHelperManager: ObservableObject {
         switch result {
         case .success(let m):
             logger.info("Helper installed successfully via \(m == .smAppService ? "SMAppService" : "SMJobBless", privacy: .public)")
+            startStateBurstPollingWindow()
         case .failed(let error):
             logger.error("Helper installation failed: \(error.localizedDescription, privacy: .public)")
         }
@@ -209,7 +261,7 @@ final class PrivilegedHelperManager: ObservableObject {
     @available(macOS 14, *)
     @MainActor
     private func installViaAppService() async throws -> InstallResult {
-        let service = SMAppService.daemon(plistName: "\(constants.helperToolLabel).plist")
+        let service = SMAppService.daemon(plistName: "\(constants.appServiceLabel).plist")
         do {
             try service.register()
             refreshState()
@@ -223,18 +275,58 @@ final class PrivilegedHelperManager: ObservableObject {
     /// SMJobBless installation (macOS 12–13 primary path, and macOS 14+ user choice).
     @MainActor
     private func installViaJobBless() async throws -> InstallResult {
+        await cleanupSMAppServiceRegistrationIfAny(reason: "before SMJobBless install")
+
         do {
             try await PrivilegedHelperManager._blessedShared.authorizeAndBless(
                 message: "Install Helper to modify system route",
                 icon: nil
             )
-            refreshState()
-            return .success(method: .smJobBless)
+
+            await cleanupSMAppServiceRegistrationIfAny(reason: "after SMJobBless install")
+
+            let verification = await waitForJobBlessInstallToSettle()
+            switch verification {
+            case .succeeded:
+                return .success(method: .smJobBless)
+            case .conflictingSMAppService:
+                logger.error("SMJobBless install conflict: system job became SMAppService-submitted")
+                return .failed(error: PrivilegedHelperError.conflictingServiceRegistration)
+            case .timedOut:
+                logger.error("SMJobBless install verification failed: state did not settle within timeout")
+                return .failed(error: PrivilegedHelperError.smJobBlessVerificationFailed)
+            }
         } catch AuthorizationError.canceled {
             return .failed(error: AuthorizationError.canceled)
         } catch {
             return .failed(error: error)
         }
+    }
+
+    @MainActor
+    private func waitForJobBlessInstallToSettle() async -> JobBlessInstallVerification {
+        let deadline = Date().addingTimeInterval(installSettleTimeout)
+
+        while Date() < deadline {
+            refreshState()
+
+            if activeMethod == .smJobBless {
+                return .succeeded
+            }
+
+            if isSMAppServiceSubmittedSystemJobPresent() || activeMethod == .smAppService {
+                return .conflictingSMAppService
+            }
+
+            let sleepNs = UInt64(installSettlePollInterval * 1_000_000_000)
+            try? await Task.sleep(nanoseconds: sleepNs)
+        }
+
+        refreshState()
+        if activeMethod == .smAppService || isSMAppServiceSubmittedSystemJobPresent() {
+            return .conflictingSMAppService
+        }
+        return .timedOut
     }
 
     // MARK: - uninstall()
@@ -254,7 +346,7 @@ final class PrivilegedHelperManager: ObservableObject {
                     logger.info("Uninstalling pending-approval helper via osascript path")
                     try await uninstallForciblyWithAppleScript()
                 } else {
-                    let service = SMAppService.daemon(plistName: "\(constants.helperToolLabel).plist")
+                    let service = SMAppService.daemon(plistName: "\(constants.appServiceLabel).plist")
                     try await service.unregister()
                     logger.info("Helper unregistered via SMAppService")
                 }
@@ -263,16 +355,85 @@ final class PrivilegedHelperManager: ObservableObject {
         case .smJobBless:
             logger.info("Uninstalling helper (SMJobBless) via XPC")
             do {
-                try await xpcClient.send(to: SharedConstant.uninstallRoute)
-                logger.info("Helper XPC uninstall request sent successfully")
+                try await sendUninstallRequestWithTimeout()
+                logger.info("Helper XPC uninstall request completed successfully")
             } catch {
                 logger.warning("XPC uninstall failed (\(error.localizedDescription, privacy: .public)); trying forced removal via osascript")
+                try await uninstallForciblyWithAppleScript()
+                startStateBurstPollingWindow()
+                return
+            }
+
+            let settled = await waitForJobBlessUninstallToSettle()
+            if settled {
+                logger.info("SMJobBless uninstall state settled after XPC request")
+            } else {
+                logger.warning("SMJobBless uninstall did not settle in \(self.uninstallSettleTimeout, privacy: .public)s; falling back to osascript")
                 try await uninstallForciblyWithAppleScript()
             }
 
         case nil:
             logger.info("Uninstall called but no active method — no-op")
         }
+
+        startStateBurstPollingWindow()
+    }
+
+    /// Sends uninstall route to helper and fails fast if no reply arrives.
+    /// Some failure modes can leave the XPC request hanging without an immediate error,
+    /// so we enforce a timeout and fall back to AppleScript-based removal.
+    @MainActor
+    private func sendUninstallRequestWithTimeout() async throws {
+        logger.info("Sending helper XPC uninstall request with timeout \(self.uninstallXPCTimeout, privacy: .public)s")
+
+        try await withCheckedThrowingContinuation { continuation in
+            let lock = NSLock()
+            var finished = false
+
+            let finish: (Result<Void, Error>) -> Void = { result in
+                lock.lock()
+                defer { lock.unlock() }
+                guard !finished else { return }
+                finished = true
+                switch result {
+                case .success:
+                    continuation.resume(returning: ())
+                case .failure(let error):
+                    continuation.resume(throwing: error)
+                }
+            }
+
+            let timeoutWorkItem = DispatchWorkItem {
+                finish(.failure(PrivilegedHelperError.xpcUninstallTimedOut(self.uninstallXPCTimeout)))
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + uninstallXPCTimeout, execute: timeoutWorkItem)
+
+            xpcClient.send(to: SharedConstant.uninstallRoute) { response in
+                timeoutWorkItem.cancel()
+                switch response {
+                case .success:
+                    finish(.success(()))
+                case .failure(let error):
+                    finish(.failure(error))
+                }
+            }
+        }
+    }
+
+    /// Waits briefly for SMJobBless uninstall side-effects to become observable.
+    /// Returns true once helper binary/launchd state is gone; false on timeout.
+    @MainActor
+    private func waitForJobBlessUninstallToSettle() async -> Bool {
+        let deadline = Date().addingTimeInterval(uninstallSettleTimeout)
+        while Date() < deadline {
+            refreshState()
+            if !isInstalledViaJobBless() {
+                return true
+            }
+            let sleepNs = UInt64(uninstallSettlePollInterval * 1_000_000_000)
+            try? await Task.sleep(nanoseconds: sleepNs)
+        }
+        return false
     }
 
     /// Fallback uninstall path using AppleScript when normal uninstall is unavailable.
@@ -312,7 +473,7 @@ final class PrivilegedHelperManager: ObservableObject {
         // is deleted — launchd retains a record until `unregister()` is called explicitly.
         // Ignoring errors here: if it was never registered via SMAppService, unregister() is a no-op.
         if #available(macOS 13, *) {
-            let service = SMAppService.daemon(plistName: "\(label).plist")
+            let service = SMAppService.daemon(plistName: "\(constants.appServiceLabel).plist")
             do {
                 try await service.unregister()
                 logger.info("SMAppService registration cleaned up after forced removal")
@@ -322,12 +483,68 @@ final class PrivilegedHelperManager: ObservableObject {
         }
     }
 
+    @MainActor
+    private func cleanupSMAppServiceRegistrationIfAny(reason: String) async {
+        guard #available(macOS 13, *) else { return }
+
+        let service = SMAppService.daemon(plistName: "\(constants.appServiceLabel).plist")
+        let status = service.status
+        guard status != .notRegistered else { return }
+
+        logger.info("Cleaning SMAppService registration (reason: \(reason, privacy: .public), status: \(String(describing: status), privacy: .public))")
+
+        do {
+            try await service.unregister()
+            logger.info("SMAppService registration cleanup succeeded (reason: \(reason, privacy: .public))")
+        } catch {
+            logger.warning("SMAppService registration cleanup failed (reason: \(reason, privacy: .public)): \(error.localizedDescription, privacy: .public)")
+        }
+    }
+
+    private func runLaunchctl(_ arguments: [String]) -> (status: Int32, output: String) {
+        let process = Process()
+        process.launchPath = "/bin/launchctl"
+        process.arguments = arguments
+        let pipe = Pipe()
+        process.standardOutput = pipe
+        process.standardError = pipe
+        process.launch()
+        process.waitUntilExit()
+
+        let data = pipe.fileHandleForReading.readDataToEndOfFile()
+        let output = String(data: data, encoding: .utf8) ?? ""
+        return (process.terminationStatus, output)
+    }
+
+    private func isSMAppServiceSubmittedSystemJobPresent() -> Bool {
+        let result = runLaunchctl(["print", "system/\(constants.appServiceLabel)"])
+        guard result.status == 0 else { return false }
+
+        let bundleProgramMarker = "Contents/Library/LaunchServices/\(constants.helperToolLabel)"
+        return result.output.contains("submitted by smd") || result.output.contains(bundleProgramMarker)
+    }
+
+    private enum JobBlessInstallVerification {
+        case succeeded
+        case conflictingSMAppService
+        case timedOut
+    }
+
     enum PrivilegedHelperError: LocalizedError {
         case forcedRemovalFailed(String)
+        case xpcUninstallTimedOut(TimeInterval)
+        case conflictingServiceRegistration
+        case smJobBlessVerificationFailed
         var errorDescription: String? {
             switch self {
             case .forcedRemovalFailed(let msg):
                 return "Uninstall failed: \(msg)"
+            case .xpcUninstallTimedOut(let seconds):
+                return "Uninstall request timed out after \(seconds)s"
+            case .conflictingServiceRegistration:
+                return "SMJobBless install conflict: SMAppService registration is still active"
+            case .smJobBlessVerificationFailed:
+                return "SMJobBless install did not become active"
             }
         }
     }

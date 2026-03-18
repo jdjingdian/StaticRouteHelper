@@ -143,6 +143,7 @@
 "settings.helper.background_switch.alert.message" = "This app needs permission to run in the background. Please enable it in System Settings > Login Items & Extensions, then try again.";
 "settings.helper.background_switch.alert.open_settings" = "Open System Settings";
 "settings.helper.background_switch.alert.cancel" = "Cancel";
+"settings.helper.pending_activation.open_settings" = "Open Login Items Settings";
 
 /* ── Install Method Chooser ── */
 "chooser.title" = "Choose Installation Method";
