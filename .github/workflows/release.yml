@@ -3,6 +3,17 @@ name: Release
 on:
   release:
     types: [published]
+  push:
+    branches: [dev]
+
+env:
+  # Keep `false` for default CI path (Xcode-native ad-hoc signing).
+  # Set to `true` only when diagnosing unsigned-build + explicit re-sign path.
+  DIAGNOSTIC_UNSIGNED_SIGNING: "false"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build-and-upload:
@@ -15,34 +26,83 @@ jobs:
 
       - name: Build (Release configuration)
         run: |
+          BUILD_EXTRA_ARGS=""
+          if [ "${DIAGNOSTIC_UNSIGNED_SIGNING}" = "true" ]; then
+            BUILD_EXTRA_ARGS="CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO"
+          fi
+
           xcodebuild \
             -scheme "Static Router" \
             -configuration Release \
             -derivedDataPath build/DerivedData \
-            CODE_SIGN_IDENTITY="" \
-            CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGNING_ALLOWED=NO
+            $BUILD_EXTRA_ARGS
 
-      - name: Ad-hoc sign the app bundle
+      - name: Diagnose build signature details
         run: |
           APP_PATH="build/DerivedData/Build/Products/Release/Static Router.app"
           HELPER_PATH="$APP_PATH/Contents/Library/LaunchServices/cn.magicdian.staticrouter.helper"
-          # Sign the helper explicitly first — --deep skips linker-signed binaries,
-          # leaving the helper without a bound Info.plist, which causes SMJobBless
-          # to fail with errSecInvalidSignature (-67062).
+
+          echo "[info] app signature"
+          codesign -dvvv "$APP_PATH" || true
+          echo "[info] app requirements"
+          codesign -d -r- "$APP_PATH" || true
+          echo "[info] app entitlements"
+          codesign -d --entitlements :- "$APP_PATH" || true
+
+          echo "[info] helper signature"
+          codesign -dvvv "$HELPER_PATH" || true
+          echo "[info] helper requirements"
+          codesign -d -r- "$HELPER_PATH" || true
+          echo "[info] helper entitlements"
+          codesign -d --entitlements :- "$HELPER_PATH" || true
+
+      - name: Re-sign in diagnostic mode only
+        if: env.DIAGNOSTIC_UNSIGNED_SIGNING == 'true'
+        run: |
+          APP_PATH="build/DerivedData/Build/Products/Release/Static Router.app"
+          HELPER_PATH="$APP_PATH/Contents/Library/LaunchServices/cn.magicdian.staticrouter.helper"
+
+          # Diagnostic branch: explicit helper-first ad-hoc signing.
           codesign --force --sign - "$HELPER_PATH"
-          # Now sign the app bundle (without --deep, since nested binaries are already signed)
           codesign --force --sign - "$APP_PATH"
-          codesign --verify --deep "$APP_PATH"
+
+      - name: Verify package signature strictly
+        run: |
+          APP_PATH="build/DerivedData/Build/Products/Release/Static Router.app"
+          codesign --verify --deep --strict --verbose=5 "$APP_PATH"
+
+      - name: Compute package metadata
+        run: |
+          REF_SLUG=$(printf '%s' "$GITHUB_REF_NAME" | tr '/[:space:]' '--')
+          SHORT_SHA=$(printf '%s' "$GITHUB_SHA" | cut -c1-7)
+
+          if [ "$GITHUB_EVENT_NAME" = "release" ]; then
+            ZIP_SUFFIX="${{ github.event.release.tag_name }}"
+          else
+            ZIP_SUFFIX="${REF_SLUG}-${SHORT_SHA}"
+          fi
+
+          ZIP_NAME="StaticRouteHelper-${ZIP_SUFFIX}.zip"
+          ARTIFACT_NAME="staticroutehelper-${REF_SLUG}-${SHORT_SHA}"
+
+          echo "ZIP_NAME=$ZIP_NAME" >> "$GITHUB_ENV"
+          echo "ARTIFACT_NAME=$ARTIFACT_NAME" >> "$GITHUB_ENV"
 
       - name: Package as zip with ditto
         run: |
           APP_PATH="build/DerivedData/Build/Products/Release/Static Router.app"
-          ZIP_NAME="StaticRouteHelper-${{ github.event.release.tag_name }}.zip"
-          ditto -c -k --keepParent "$APP_PATH" "$ZIP_NAME"
-          echo "ZIP_NAME=$ZIP_NAME" >> "$GITHUB_ENV"
+          ditto -c -k --keepParent "$APP_PATH" "${ZIP_NAME}"
 
       - name: Upload zip to GitHub Release
+        if: github.event_name == 'release'
         uses: softprops/action-gh-release@v2
         with:
           files: ${{ env.ZIP_NAME }}
+
+      - name: Upload zip as workflow artifact
+        if: github.event_name == 'push'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.ARTIFACT_NAME }}
+          path: ${{ env.ZIP_NAME }}
+          if-no-files-found: error
