@@ -168,6 +168,6 @@
 /* ── About ── */
 "about.app.subtitle" = "Help you manage macOS network routes.";
 "about.version" = "Version: %@";
-"about.license" = "StaticRouteHelper is licensed under the GPLv3 license.";
+"about.license" = "StaticRouteHelper is licensed under the Apache License 2.0.";
 "about.copyright" = "Copyright © 2021, Derek Jing";
 "about.homepage.button" = "Project Home Page";

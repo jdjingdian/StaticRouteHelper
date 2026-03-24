@@ -169,6 +169,6 @@
 /* ── About ── */
 "about.app.subtitle" = "帮助你管理 macOS 网络路由。";
 "about.version" = "版本：%@";
-"about.license" = "StaticRouteHelper 基于 GPLv3 协议开源。";
+"about.license" = "StaticRouteHelper 基于 Apache License 2.0 协议开源。";
 "about.copyright" = "版权所有 © 2021，Derek Jing";
 "about.homepage.button" = "项目主页";
