@@ -31,6 +31,5 @@ This is a helper tool for macOS written in Swift and SwiftUI. You can use it to 
 License
 -------
 
-StaticRouteHelper is licensed under the [GPLv3](./LICENSE) license.  
+StaticRouteHelper is licensed under the [Apache License 2.0](./LICENSE).  
 Copyright &copy; 2021, Derek Jing
-

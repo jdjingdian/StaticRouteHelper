@@ -34,6 +34,5 @@ xattr -cr /path/to/Static\ Router.app
 License
 -------
 
-StaticRouteHelper is licensed under the [GPLv3](./LICENSE) license.  
+StaticRouteHelper 基于 [Apache License 2.0](./LICENSE) 协议开源。  
 Copyright &copy; 2021, Derek Jing
-
