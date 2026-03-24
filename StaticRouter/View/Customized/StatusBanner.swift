@@ -41,8 +41,8 @@ enum BannerStyle {
 // MARK: - StatusBanner
 
 /// Generic banner with a style-driven icon/background and an arbitrary action button.
-/// Use the `@ViewBuilder actionButton` parameter to supply any button type (plain Button
-/// or SettingsLink) so callers control the navigation target.
+/// Use the `@ViewBuilder actionButton` parameter to supply any button type so callers
+/// control the navigation target.
 struct StatusBanner<ActionButton: View>: View {
     let style: BannerStyle
     let message: LocalizedStringKey

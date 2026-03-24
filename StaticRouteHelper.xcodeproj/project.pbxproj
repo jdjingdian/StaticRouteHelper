@@ -65,6 +65,7 @@
 		AA000004000000000000BB01 /* cn.magicdian.staticrouter.service.plist in CopyFiles */ = {isa = PBXBuildFile; fileRef = AA000004000000000000BB02 /* cn.magicdian.staticrouter.service.plist */; };
 		AA000001000000000000BB02 /* InstallMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000000000000BB02 /* InstallMethod.swift */; };
 		AA000001000000000000BB03 /* PrivilegedHelperManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000000000000BB03 /* PrivilegedHelperManager.swift */; };
+		AA900001000000000000CC01 /* SettingsNavigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA900002000000000000CC01 /* SettingsNavigator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXShellScriptBuildPhase section */
@@ -177,6 +178,7 @@
 		AA000002000000000000AA33 /* StaticRouteLegacy.xcdatamodeld */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodeld; path = StaticRouteLegacy.xcdatamodeld; sourceTree = "<group>"; };
 		AA000002000000000000BB02 /* InstallMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallMethod.swift; sourceTree = "<group>"; };
 		AA000002000000000000BB03 /* PrivilegedHelperManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivilegedHelperManager.swift; sourceTree = "<group>"; };
+		AA900002000000000000CC01 /* SettingsNavigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsNavigator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -376,6 +378,7 @@
 				AA000002000000000000AA21 /* SystemRouteReader.swift */,
 				AA000002000000000000BB02 /* InstallMethod.swift */,
 				AA000002000000000000BB03 /* PrivilegedHelperManager.swift */,
+				AA900002000000000000CC01 /* SettingsNavigator.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -542,6 +545,7 @@
 				3962561B296EE01B00DB6000 /* RouterCommand.swift in Sources */,
 				AA000001000000000000BB02 /* InstallMethod.swift in Sources */,
 				AA000001000000000000BB03 /* PrivilegedHelperManager.swift in Sources */,
+				AA900001000000000000CC01 /* SettingsNavigator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -567,7 +571,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 66;
+				CURRENT_PROJECT_VERSION = 68;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -598,7 +602,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 66;
+				CURRENT_PROJECT_VERSION = 68;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -760,9 +764,9 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				CURRENT_PROJECT_VERSION = 66;
+				CURRENT_PROJECT_VERSION = 68;
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 2.2.1;
+				MARKETING_VERSION = 2.2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = cn.magicdian.staticrouter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = ROUTER;
@@ -790,9 +794,9 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				CURRENT_PROJECT_VERSION = 66;
+				CURRENT_PROJECT_VERSION = 68;
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 2.2.1;
+				MARKETING_VERSION = 2.2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = cn.magicdian.staticrouter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = ROUTER;

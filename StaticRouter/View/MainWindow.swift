@@ -88,21 +88,21 @@ struct MainWindow14: View {
         if routerService.helperStatus == .pendingActivation {
             // Priority 1: installed but background switch is off — needs user approval
             StatusBanner(style: .warning, message: "helper.banner.pending_approval.message") {
-                SettingsLink {
+                SettingsNavigator.Entry {
                     Text(String(localized: "helper.banner.goto_settings"))
                 }
             }
         } else if routerService.helperStatus != .installed {
             // Priority 2: helper not installed / needs upgrade / not compatible
             StatusBanner(style: .warning, message: "helper.banner.message") {
-                SettingsLink {
+                SettingsNavigator.Entry {
                     Text(String(localized: "helper.banner.goto_settings"))
                 }
             }
         } else if routerService.helperManager.activeMethod == .smJobBless {
             // Priority 3 (macOS 14+ only): installed via bless, modern method available
             StatusBanner(style: .info, message: "helper.banner.bless_upgrade.message") {
-                SettingsLink {
+                SettingsNavigator.Entry {
                     Text(String(localized: "helper.banner.goto_settings"))
                 }
             }
@@ -142,8 +142,8 @@ struct LegacyMainWindow: View {
             // macOS 12–13: only show warning banner (no SMAppService upgrade suggestion)
             if routerService.helperStatus != .installed {
                 StatusBanner(style: .warning, message: "helper.banner.message") {
-                    Button(String(localized: "helper.banner.goto_settings")) {
-                        NSApp.sendAction(Selector(("showPreferencesWindow:")), to: nil, from: nil)
+                    SettingsNavigator.Entry {
+                        Text(String(localized: "helper.banner.goto_settings"))
                     }
                 }
             }
@@ -176,9 +176,7 @@ struct LegacySidebarView: View {
         .safeAreaInset(edge: .bottom) {
             HStack {
                 Spacer()
-                Button {
-                    NSApp.sendAction(Selector(("showPreferencesWindow:")), to: nil, from: nil)
-                } label: {
+                SettingsNavigator.Entry {
                     Image(systemName: "gearshape")
                         .font(.system(size: 13, weight: .semibold))
                         .frame(width: 26, height: 22)
