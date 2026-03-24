@@ -24,6 +24,8 @@
 2. **优先级 2** — `helperStatus != .installed` 且 `helperStatus != .pendingActivation`：显示 `.warning` 横幅，消息提示 Helper 未安装，按钮引导到设置页
 3. **优先级 3** — macOS 14+ 且 `activeMethod == .smJobBless` 且 `helperStatus == .installed`：显示 `.info` 横幅，消息提示有更现代的部署方式可用，按钮引导到设置页（卸载后重新安装）
 
+横幅中的“前往设置”按钮 SHALL 与 Sidebar 设置按钮复用同一设置导航策略，确保在 macOS 12–14+ 上均可用，且行为一致。
+
 #### Scenario: 待生效时显示 warning 横幅
 - **WHEN** `helperStatus` 为 `.pendingActivation`
 - **THEN** 主窗口顶部显示浅黄色 warning 横幅，图标为黄色感叹号，并提示需要开启后台运行开关
@@ -35,6 +37,10 @@
 #### Scenario: SMJobBless 已安装时显示 info 横幅
 - **WHEN** macOS 14+ 上 `activeMethod` 为 `.smJobBless` 且 `helperStatus` 为 `.installed`
 - **THEN** 主窗口顶部显示浅蓝色 info 横幅，提示可升级到 SMAppService，附带"前往设置"按钮
+
+#### Scenario: macOS 13 点击横幅“前往设置”
+- **WHEN** 用户在 macOS 13 点击横幅中的“前往设置”
+- **THEN** 设置窗口被成功打开，不得出现点击无响应
 
 #### Scenario: SMAppService 已安装时不显示横幅
 - **WHEN** `activeMethod` 为 `.smAppService` 且 `helperStatus` 为 `.installed`
