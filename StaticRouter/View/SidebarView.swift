@@ -22,6 +22,7 @@ struct SidebarView: View {
         List(selection: $selection) {
             // MARK: All Routes
             Label(String(localized: "sidebar.all_routes"), systemImage: "list.bullet")
+                .font(.body.weight(.medium))
                 .badge(allRoutes.count)
                 .tag(SidebarItem.allRoutes)
 
@@ -30,6 +31,7 @@ struct SidebarView: View {
                 Section(String(localized: "sidebar.section.groups")) {
                     ForEach(groups) { group in
                         Label(group.name, systemImage: group.iconName ?? "folder")
+                            .font(.body.weight(.medium))
                             .badge(group.routes.count)
                             .tag(SidebarItem.group(group))
                             .contextMenu {
@@ -47,9 +49,12 @@ struct SidebarView: View {
             // MARK: System Section
             Section(String(localized: "sidebar.section.system")) {
                 Label(String(localized: "sidebar.system.route_table"), systemImage: "network")
+                    .font(.body.weight(.medium))
                     .tag(SidebarItem.systemRoutes)
             }
         }
+        .listStyle(.sidebar)
+        .symbolRenderingMode(.hierarchical)
         .navigationTitle("Static Route Helper")
         .safeAreaInset(edge: .bottom) {
             bottomToolbar
@@ -96,21 +101,27 @@ struct SidebarView: View {
     // MARK: - Bottom Toolbar
 
     private var bottomToolbar: some View {
-        HStack {
+        HStack(spacing: 10) {
             Button {
                 showAddGroupSheet = true
             } label: {
                 Image(systemName: "plus")
+                    .font(.system(size: 13, weight: .semibold))
+                    .frame(width: 26, height: 22)
             }
-            .buttonStyle(.plain)
+            .buttonStyle(.bordered)
+            .controlSize(.small)
             .help(String(localized: "sidebar.toolbar.add_group.tooltip"))
 
             Spacer()
 
             SettingsLink {
-                Image(systemName: "gear")
+                Image(systemName: "gearshape")
+                    .font(.system(size: 13, weight: .semibold))
+                    .frame(width: 26, height: 22)
             }
-            .buttonStyle(.plain)
+            .buttonStyle(.bordered)
+            .controlSize(.small)
             .help(String(localized: "sidebar.toolbar.settings.tooltip"))
         }
         .padding(.horizontal, 12)

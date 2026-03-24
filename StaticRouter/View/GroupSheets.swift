@@ -54,7 +54,7 @@ struct AddGroupSheet: View {
                             Image(systemName: icon)
                                 .font(.system(size: 16))
                                 .frame(width: 36, height: 36)
-                                .background(iconName == icon ? Color.accentColor.opacity(0.2) : Color.secondary.opacity(0.1))
+                                .background(iconName == icon ? RouterTheme.accentSoft : RouterTheme.subtleFill)
                                 .clipShape(RoundedRectangle(cornerRadius: 6))
                         }
                         .buttonStyle(.plain)
@@ -126,7 +126,7 @@ struct AssignGroupsSheet: View {
                     } label: {
                         HStack(spacing: 10) {
                             Image(systemName: selectedGroupIDs.contains(group.persistentModelID) ? "checkmark.circle.fill" : "circle")
-                                .foregroundStyle(selectedGroupIDs.contains(group.persistentModelID) ? Color.accentColor : Color.secondary)
+                                .foregroundStyle(selectedGroupIDs.contains(group.persistentModelID) ? RouterTheme.accent : Color.secondary)
                             Image(systemName: group.iconName ?? "folder")
                                 .foregroundStyle(.secondary)
                             Text(group.name)

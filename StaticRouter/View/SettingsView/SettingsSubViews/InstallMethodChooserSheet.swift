@@ -72,7 +72,7 @@ struct InstallMethodChooserSheet: View {
             .clipShape(RoundedRectangle(cornerRadius: 8))
             .overlay(
                 RoundedRectangle(cornerRadius: 8)
-                    .stroke(Color.secondary.opacity(0.3), lineWidth: 1)
+                    .stroke(RouterTheme.subtleBorder, lineWidth: 1)
             )
 
             // Buttons
@@ -88,6 +88,7 @@ struct InstallMethodChooserSheet: View {
                 }
                 .keyboardShortcut(.defaultAction)
                 .buttonStyle(.borderedProminent)
+                .tint(RouterTheme.accent)
             }
         }
         .padding(24)
@@ -111,7 +112,7 @@ struct InstallMethodChooserSheet: View {
                 Image(systemName: selectedMethod == method
                       ? "largecircle.fill.circle"
                       : "circle")
-                    .foregroundStyle(selectedMethod == method ? Color.accentColor : Color.secondary)
+                    .foregroundStyle(selectedMethod == method ? RouterTheme.accent : Color.secondary)
                     .font(.title3)
                     .padding(.top, 2)
 
@@ -124,8 +125,8 @@ struct InstallMethodChooserSheet: View {
                                 .font(.caption.weight(.semibold))
                                 .padding(.horizontal, 6)
                                 .padding(.vertical, 2)
-                                .background(.blue.opacity(0.12))
-                                .foregroundStyle(.blue)
+                                .background(RouterTheme.accentSoft)
+                                .foregroundStyle(RouterTheme.accent)
                                 .clipShape(Capsule())
                         }
                     }
@@ -141,7 +142,7 @@ struct InstallMethodChooserSheet: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-        .background(selectedMethod == method ? Color.accentColor.opacity(0.06) : Color.clear)
+        .background(selectedMethod == method ? RouterTheme.accentSoft : Color.clear)
     }
 }
 

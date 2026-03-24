@@ -15,15 +15,23 @@ struct GeneralSettingsView: View {
     @State private var showUninstallErrorAlert = false
 
     var body: some View {
-        VStack(alignment: .leading) {
-            GeneralSettings_HelperStateView()
-            PaddedDivider(padding: nil)
-            HStack {
-                Spacer()
-                uninstallButton
+        VStack(alignment: .leading, spacing: 16) {
+            VStack(alignment: .leading, spacing: 10) {
+                GeneralSettings_HelperStateView()
+                Divider()
+                HStack {
+                    Spacer()
+                    uninstallButton
+                }
             }
+            .padding(16)
+            .background(Color(nsColor: .controlBackgroundColor), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+            .overlay(
+                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                    .stroke(RouterTheme.subtleBorder, lineWidth: 0.6)
+            )
         }
-        .padding()
+        .padding(20)
         // Background switch guidance alert (shown when SMAppService uninstall is blocked).
         .alert(
             String(localized: "settings.helper.background_switch.alert.title"),

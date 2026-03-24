@@ -28,10 +28,10 @@ struct GeneralSettings_HelperStateView: View {
     // MARK: - Body
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
+        VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Text(String(localized: "settings.helper.state.label"))
-                    .font(.title3.bold())
+                    .font(.title3.weight(.semibold))
                 helperStateIcon
                 Spacer()
                 Button {
@@ -40,13 +40,8 @@ struct GeneralSettings_HelperStateView: View {
                     Text(installButtonText)
                 }
                 .disabled(isInstallButtonDisabled)
-                .buttonStyle(DefaultButtonStyle(
-                    .buttonNeutral(.thin),
-                    disable: Binding<Bool>(
-                        get: { isInstallButtonDisabled },
-                        set: { _ in }
-                    )
-                ))
+                .buttonStyle(.borderedProminent)
+                .controlSize(.regular)
             }
             Text(helperStateFooter)
                 .font(.footnote.italic())
@@ -69,7 +64,8 @@ struct GeneralSettings_HelperStateView: View {
                     )
                     .font(.footnote)
                 }
-                .buttonStyle(DefaultButtonStyle(type: .buttonNeutral(.thin)))
+                .buttonStyle(.bordered)
+                .controlSize(.small)
             }
         }
         // Install method chooser sheet (macOS 14+ only; noop on 12–13 since showChooser stays false).
@@ -150,13 +146,13 @@ struct GeneralSettings_HelperStateView: View {
     private var helperStateIcon: some View {
         switch routerService.helperStatus {
         case .installed:
-            return Image(systemName: "checkmark.circle.fill").foregroundColor(.green)
+            return Image(systemName: "checkmark.circle.fill").foregroundStyle(RouterTheme.success)
         case .pendingActivation:
-            return Image(systemName: "exclamationmark.triangle.fill").foregroundColor(.yellow)
+            return Image(systemName: "exclamationmark.triangle.fill").foregroundStyle(RouterTheme.warning)
         case .needUpgrade, .notCompatible:
-            return Image(systemName: "exclamationmark.circle.fill").foregroundColor(.yellow)
+            return Image(systemName: "exclamationmark.circle.fill").foregroundStyle(RouterTheme.warning)
         case .notInstalled:
-            return Image(systemName: "x.circle.fill").foregroundColor(.red)
+            return Image(systemName: "x.circle.fill").foregroundStyle(RouterTheme.danger)
         }
     }
 

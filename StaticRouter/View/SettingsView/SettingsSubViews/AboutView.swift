@@ -11,8 +11,8 @@ struct AboutView: View {
     private let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "—"
 
     var body: some View {
-        VStack(alignment: .leading) {
-            HStack {
+        VStack(alignment: .leading, spacing: 16) {
+            HStack(spacing: 18) {
                 Image(nsImage: NSApplication.shared.applicationIconImage)
                     .resizable()
                     .scaledToFit()
@@ -21,17 +21,27 @@ struct AboutView: View {
                     Text("Static Route Helper")
                         .font(.largeTitle.bold())
                     Text(String(localized: "about.app.subtitle"))
-                        .font(.title3)
+                        .font(.title3.weight(.medium))
                     PaddedDivider(padding: nil)
                     Text(String(format: String(localized: "about.version"), appVersion))
-                        .font(.caption.italic())
+                        .font(.caption.weight(.medium))
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
+                        .background(RouterTheme.subtleFill, in: Capsule())
                 }
             }
-            PaddedDivider(padding: nil)
+            .padding(16)
+            .background(Color(nsColor: .controlBackgroundColor), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+            .overlay(
+                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                    .stroke(RouterTheme.subtleBorder, lineWidth: 0.6)
+            )
+
             HStack {
                 VStack(alignment: .leading) {
                     Text(String(localized: "about.license"))
                     Text(String(localized: "about.copyright"))
+                        .foregroundStyle(.secondary)
                 }
                 Spacer()
                 Button {
@@ -43,10 +53,17 @@ struct AboutView: View {
                             .font(.footnote)
                     }
                 }
-                .buttonStyle(DefaultButtonStyle(type: .buttonNeutral(.thin)))
+                .buttonStyle(.bordered)
+                .controlSize(.regular)
             }
+            .padding(16)
+            .background(Color(nsColor: .controlBackgroundColor), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+            .overlay(
+                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                    .stroke(RouterTheme.subtleBorder, lineWidth: 0.6)
+            )
         }
-        .padding()
+        .padding(20)
     }
 
     private func visitHomepage() {
