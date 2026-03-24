@@ -47,18 +47,18 @@ struct RouteEditSheet: View {
     // MARK: - Body
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        VStack(alignment: .leading, spacing: 14) {
             VStack(alignment: .leading, spacing: 4) {
                 Text(isEditing ? String(localized: "route.edit.title.edit") : String(localized: "route.edit.title.add"))
                     .font(.title2.bold())
-                Text("CIDR / Gateway / Group")
+                Text("Network / Gateway / Group")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
             }
 
             // Network Address + Prefix Length
             VStack(alignment: .leading, spacing: 10) {
-                Text(String(localized: "route.edit.field.destination.label"))
+                Label(String(localized: "route.edit.field.destination.label"), systemImage: "dot.scope")
                     .font(.subheadline.weight(.semibold))
                     .foregroundStyle(.secondary)
                 HStack(spacing: 8) {
@@ -103,7 +103,7 @@ struct RouteEditSheet: View {
 
             // Gateway Type Picker + Gateway Input
             VStack(alignment: .leading, spacing: 10) {
-                Text(String(localized: "route.edit.field.gateway.label"))
+                Label(String(localized: "route.edit.field.gateway.label"), systemImage: "arrow.triangle.turn.up.right.diamond")
                     .font(.subheadline.weight(.semibold))
                     .foregroundStyle(.secondary)
 
@@ -136,7 +136,7 @@ struct RouteEditSheet: View {
             // Group Multi-Select
             if !allGroups.isEmpty {
                 VStack(alignment: .leading, spacing: 10) {
-                    Text(String(localized: "route.edit.field.groups.label"))
+                    Label(String(localized: "route.edit.field.groups.label"), systemImage: "folder.badge.plus")
                         .font(.subheadline.weight(.semibold))
                         .foregroundStyle(.secondary)
                     LazyVGrid(columns: [GridItem(.adaptive(minimum: 130), spacing: 8)], spacing: 8) {
@@ -175,8 +175,6 @@ struct RouteEditSheet: View {
                 )
             }
 
-            Divider()
-
             HStack {
                 Spacer()
                 Button(String(localized: "route.edit.button.cancel")) { dismiss() }
@@ -187,6 +185,8 @@ struct RouteEditSheet: View {
                     .buttonStyle(.borderedProminent)
                     .disabled(!isFormValid)
             }
+            .padding(.top, 4)
+            .padding(.horizontal, 2)
         }
         .padding(20)
         .frame(width: 460)

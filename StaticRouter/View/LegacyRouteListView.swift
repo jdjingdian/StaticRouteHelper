@@ -305,76 +305,112 @@ struct LegacyRouteEditSheet: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 20) {
-            Text(isEditing ? String(localized: "route.edit.title.edit") : String(localized: "route.edit.title.add"))
-                .font(.headline)
+        VStack(alignment: .leading, spacing: 14) {
+            VStack(alignment: .leading, spacing: 4) {
+                Text(isEditing ? String(localized: "route.edit.title.edit") : String(localized: "route.edit.title.add"))
+                    .font(.title2.bold())
+                Text("Network / Gateway")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            }
 
             // Network + Prefix
-            VStack(alignment: .leading, spacing: 6) {
-                Text(String(localized: "route.edit.field.destination.label"))
-                    .font(.subheadline).foregroundStyle(.secondary)
+            VStack(alignment: .leading, spacing: 10) {
+                Label(String(localized: "route.edit.field.destination.label"), systemImage: "dot.scope")
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(.secondary)
                 HStack(spacing: 8) {
                     TextField("192.168.4.0", text: $network)
                         .textFieldStyle(.roundedBorder)
                         .overlay(
                             RoundedRectangle(cornerRadius: 5)
-                                .stroke(networkError != nil ? Color.red : Color.clear, lineWidth: 1)
+                                .stroke(networkError != nil ? RouterTheme.danger : Color.clear, lineWidth: 1)
                         )
                         .onChange(of: network) { _ in validateNetwork() }
 
                     Text("/").foregroundStyle(.secondary)
 
                     TextField("24", value: $prefixLength, format: .number)
+                        .multilineTextAlignment(.center)
                         .textFieldStyle(.roundedBorder)
-                        .frame(width: 50)
+                        .frame(width: 68)
                         .overlay(
                             RoundedRectangle(cornerRadius: 5)
-                                .stroke(prefixLengthError != nil ? Color.red : Color.clear, lineWidth: 1)
+                                .stroke(prefixLengthError != nil ? RouterTheme.danger : Color.clear, lineWidth: 1)
                         )
                 }
+
+                Text("= \(subnetMaskPreview)")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+
                 if let err = networkError {
-                    Text(err).font(.caption).foregroundStyle(.red)
+                    Text(err).font(.caption).foregroundStyle(RouterTheme.danger)
+                }
+                if let err = prefixLengthError {
+                    Text(err).font(.caption).foregroundStyle(RouterTheme.danger)
                 }
             }
+            .padding(14)
+            .background(Color(nsColor: .controlBackgroundColor), in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+            .overlay(
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                    .stroke(RouterTheme.subtleBorder, lineWidth: 0.6)
+            )
 
             // Gateway Type + Gateway
-            VStack(alignment: .leading, spacing: 6) {
-                Text(String(localized: "route.edit.field.gateway.label"))
-                    .font(.subheadline).foregroundStyle(.secondary)
+            VStack(alignment: .leading, spacing: 10) {
+                Label(String(localized: "route.edit.field.gateway.label"), systemImage: "arrow.triangle.turn.up.right.diamond")
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(.secondary)
                 Picker(String(localized: "route.edit.field.gateway.label"), selection: $gatewayTypeStr) {
                     Text(String(localized: "route.edit.gateway.ip_option")).tag("ipAddress")
                     Text(String(localized: "route.edit.gateway.interface_option")).tag("interface")
                 }
-                .pickerStyle(.radioGroup)
+                .pickerStyle(.segmented)
                 .onChange(of: gatewayTypeStr) { _ in gateway = ""; validateGateway() }
 
                 TextField(gatewayTypeStr == "ipAddress" ? "10.0.0.1" : "utun3", text: $gateway)
                     .textFieldStyle(.roundedBorder)
                     .overlay(
                         RoundedRectangle(cornerRadius: 5)
-                            .stroke(gatewayError != nil ? Color.red : Color.clear, lineWidth: 1)
+                            .stroke(gatewayError != nil ? RouterTheme.danger : Color.clear, lineWidth: 1)
                     )
                     .onChange(of: gateway) { _ in validateGateway() }
 
                 if let err = gatewayError {
-                    Text(err).font(.caption).foregroundStyle(.red)
+                    Text(err).font(.caption).foregroundStyle(RouterTheme.danger)
                 }
             }
-
-            Divider()
+            .padding(14)
+            .background(Color(nsColor: .controlBackgroundColor), in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+            .overlay(
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                    .stroke(RouterTheme.subtleBorder, lineWidth: 0.6)
+            )
 
             HStack {
                 Spacer()
                 Button(String(localized: "route.edit.button.cancel")) { dismiss() }
                     .keyboardShortcut(.cancelAction)
+                    .buttonStyle(.bordered)
                 Button(isEditing ? String(localized: "route.edit.button.save") : String(localized: "route.edit.button.add")) { save() }
                     .keyboardShortcut(.defaultAction)
+                    .buttonStyle(.borderedProminent)
                     .disabled(!isFormValid)
             }
+            .padding(.top, 4)
+            .padding(.horizontal, 2)
         }
-        .padding(24)
-        .frame(width: 360)
+        .padding(20)
+        .frame(width: 460)
         .onAppear { populate() }
+    }
+
+    private var subnetMaskPreview: String {
+        guard prefixLength >= 0, prefixLength <= 32 else { return String(localized: "route.edit.mask_preview.invalid") }
+        let mask: UInt32 = prefixLength == 0 ? 0 : (~UInt32(0) << (32 - prefixLength))
+        return "\((mask>>24)&0xFF).\((mask>>16)&0xFF).\((mask>>8)&0xFF).\(mask&0xFF)"
     }
 
     private func populate() {

@@ -115,7 +115,7 @@ struct SidebarView: View {
 
             Spacer()
 
-            SettingsLink {
+            SettingsNavigator.Entry {
                 Image(systemName: "gearshape")
                     .font(.system(size: 13, weight: .semibold))
                     .frame(width: 26, height: 22)
