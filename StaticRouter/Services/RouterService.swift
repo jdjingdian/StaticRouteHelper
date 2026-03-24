@@ -5,6 +5,7 @@
 
 import Foundation
 import Combine
+import AppKit
 import SecureXPC
 import Blessed
 import Authorized
@@ -104,6 +105,11 @@ final class RouterService: ObservableObject {
 
     /// Combine subscriptions for helperManager state propagation.
     private var helperManagerCancellables = Set<AnyCancellable>()
+    /// Fallback polling when helper monitor cannot create filesystem watchers.
+    private var helperStatusFallbackPollingCancellable: AnyCancellable?
+    private var appDidBecomeActiveCancellable: AnyCancellable?
+    private let helperStatusFallbackInterval: TimeInterval = 10
+    private var isHelperStatusFallbackEnabled = false
 
     // MARK: Init
 
@@ -126,18 +132,14 @@ final class RouterService: ObservableObject {
         )
 
         // Watch helper directories; on change, refresh manager state and re-derive helperStatus
-        helperMonitor.start { [weak self] _ in
+        let monitorStartReport = helperMonitor.start { [weak self] _ in
             guard let self else { return }
-            self.helperManager.refreshState()
-            let state = Self.resolveInstallationState(
-                activeMethod: self.helperManager.activeMethod,
-                isPendingApproval: self.helperManager.isPendingApproval,
-                constants: self.sharedConstants
-            )
-            DispatchQueue.main.async {
-                self.helperStatus = state
-            }
+            self.refreshHelperStatusFromManager()
         }
+        if monitorStartReport.isDegraded {
+            enableHelperStatusFallbackPolling()
+        }
+        observeAppActivationForHelperStatusRefresh()
 
         // Propagate helperManager state changes (from didBecomeActive / Timer monitoring)
         // to helperStatus so the UI reflects switch state changes in real time.
@@ -146,11 +148,14 @@ final class RouterService: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] (activeMethod, isPendingApproval) in
                 guard let self else { return }
-                self.helperStatus = Self.resolveInstallationState(
+                let nextState = Self.resolveInstallationState(
                     activeMethod: activeMethod,
                     isPendingApproval: isPendingApproval,
                     constants: self.sharedConstants
                 )
+                if self.helperStatus != nextState {
+                    self.helperStatus = nextState
+                }
             }
             .store(in: &helperManagerCancellables)
 
@@ -159,6 +164,9 @@ final class RouterService: ObservableObject {
     }
 
     deinit {
+        helperMonitor.stop()
+        helperStatusFallbackPollingCancellable?.cancel()
+        appDidBecomeActiveCancellable?.cancel()
         monitoringTask?.cancel()
     }
 
@@ -403,6 +411,49 @@ final class RouterService: ObservableObject {
         if !reply.success {
             throw RouterError.routeWriteFailed(reply.errorMessage ?? "Unknown error")
         }
+    }
+
+    /// Refreshes helper manager state and safely updates helperStatus on the main queue.
+    private func refreshHelperStatusFromManager() {
+        helperManager.refreshState()
+        let nextState = Self.resolveInstallationState(
+            activeMethod: helperManager.activeMethod,
+            isPendingApproval: helperManager.isPendingApproval,
+            constants: sharedConstants
+        )
+        DispatchQueue.main.async {
+            if self.helperStatus != nextState {
+                self.helperStatus = nextState
+            }
+        }
+    }
+
+    private func enableHelperStatusFallbackPolling() {
+        guard !isHelperStatusFallbackEnabled else { return }
+        isHelperStatusFallbackEnabled = true
+
+        // Run one immediate refresh so the UI is updated without waiting a full polling interval.
+        refreshHelperStatusFromManager()
+
+        helperStatusFallbackPollingCancellable = Timer.publish(
+            every: helperStatusFallbackInterval,
+            on: .main,
+            in: .common
+        )
+        .autoconnect()
+        .sink { [weak self] _ in
+            self?.refreshHelperStatusFromManager()
+        }
+    }
+
+    private func observeAppActivationForHelperStatusRefresh() {
+        appDidBecomeActiveCancellable = NotificationCenter.default
+            .publisher(for: NSApplication.didBecomeActiveNotification)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                guard let self, self.isHelperStatusFallbackEnabled else { return }
+                self.refreshHelperStatusFromManager()
+            }
     }
 
     // MARK: - PF_ROUTE Monitor
