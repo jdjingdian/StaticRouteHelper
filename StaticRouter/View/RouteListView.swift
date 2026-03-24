@@ -49,21 +49,28 @@ struct RouteListView: View {
             // Header stats bar
             HStack {
                 Text(title)
-                    .font(.headline)
+                    .font(.title3.weight(.semibold))
                 Spacer()
                 Text(String(format: String(localized: "route.list.stats"), routes.count, activeCount))
                     .font(.caption)
                     .foregroundStyle(.secondary)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 4)
+                    .background(RouterTheme.subtleFill, in: Capsule())
                 Button {
                     showAddSheet = true
                 } label: {
-                    Image(systemName: "plus")
+                    Label(String(localized: "route.list.add.tooltip"), systemImage: "plus")
+                        .labelStyle(.iconOnly)
+                        .font(.system(size: 13, weight: .semibold))
+                        .frame(width: 26, height: 22)
                 }
-                .buttonStyle(.plain)
+                .buttonStyle(.borderedProminent)
+                .controlSize(.small)
                 .help(String(localized: "route.list.add.tooltip"))
             }
             .padding(.horizontal, 12)
-            .padding(.vertical, 8)
+            .padding(.vertical, 10)
 
             Divider()
 
@@ -142,6 +149,7 @@ struct RouteListView: View {
                 .foregroundStyle(.secondary)
             Button(String(localized: "route.list.empty.add_button")) { showAddSheet = true }
                 .buttonStyle(.borderedProminent)
+                .controlSize(.regular)
             Spacer()
         }
     }
@@ -153,6 +161,7 @@ struct RouteListView: View {
             TableColumn(String(localized: "route.list.column.destination")) { rule in
                 Text(rule.cidrNotation)
                     .font(.system(.body, design: .monospaced))
+                    .padding(.vertical, 1)
             }
             TableColumn(String(localized: "route.list.column.gateway")) { rule in
                 HStack(spacing: 4) {
@@ -162,6 +171,7 @@ struct RouteListView: View {
                     Text(rule.gateway)
                         .font(.system(.body, design: .monospaced))
                 }
+                .padding(.vertical, 1)
             }
             TableColumn(String(localized: "route.list.column.groups")) { rule in
                 if rule.groups.isEmpty {
@@ -189,10 +199,9 @@ struct RouteListView: View {
                     } label: {
                         Image(systemName: "pencil")
                             .imageScale(.small)
-                            .frame(width: 22, height: 22)
+                            .frame(width: 24, height: 24)
                     }
-                    .buttonStyle(.borderedProminent)
-                    .tint(.green)
+                    .buttonStyle(RouteActionIconButtonStyle(tint: RouterTheme.accent))
                     .help(String(localized: "route.list.action.edit.tooltip"))
 
                     Button {
@@ -200,10 +209,9 @@ struct RouteListView: View {
                     } label: {
                         Image(systemName: "folder.badge.person.crop")
                             .imageScale(.small)
-                            .frame(width: 22, height: 22)
+                            .frame(width: 24, height: 24)
                     }
-                    .buttonStyle(.borderedProminent)
-                    .tint(.blue)
+                    .buttonStyle(RouteActionIconButtonStyle(tint: RouterTheme.success))
                     .help(String(localized: "route.list.action.assign_groups.tooltip"))
 
                     Button {
@@ -211,14 +219,13 @@ struct RouteListView: View {
                     } label: {
                         Image(systemName: "trash")
                             .imageScale(.small)
-                            .frame(width: 22, height: 22)
+                            .frame(width: 24, height: 24)
                     }
-                    .buttonStyle(.borderedProminent)
-                    .tint(.red)
+                    .buttonStyle(RouteActionIconButtonStyle(tint: RouterTheme.danger))
                     .help(String(localized: "route.list.action.delete.tooltip"))
                 }
             }
-            .width(120)
+            .width(128)
         }
         .contextMenu(forSelectionType: UUID.self) { selectedIDs in
             if let id = selectedIDs.first, let rule = routes.first(where: { $0.id == id }) {
@@ -271,6 +278,25 @@ struct RouteListView: View {
                 showActivationError = true
             }
         }
+    }
+}
+
+@available(macOS 14, *)
+private struct RouteActionIconButtonStyle: ButtonStyle {
+    let tint: Color
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .foregroundStyle(configuration.isPressed ? tint.opacity(0.95) : tint)
+            .background(
+                RoundedRectangle(cornerRadius: 7, style: .continuous)
+                    .fill(configuration.isPressed ? tint.opacity(0.22) : tint.opacity(0.12))
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 7, style: .continuous)
+                    .stroke(tint.opacity(0.26), lineWidth: 0.6)
+            )
+            .animation(.easeInOut(duration: 0.16), value: configuration.isPressed)
     }
 }
 

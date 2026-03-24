@@ -27,11 +27,14 @@ struct MainWindow: View {
     @EnvironmentObject private var routerService: RouterService
 
     var body: some View {
-        if #available(macOS 14, *) {
-            MainWindow14()
-        } else {
-            LegacyMainWindow()
+        Group {
+            if #available(macOS 14, *) {
+                MainWindow14()
+            } else {
+                LegacyMainWindow()
+            }
         }
+        .tint(RouterTheme.accent)
     }
 }
 
@@ -49,6 +52,16 @@ struct MainWindow14: View {
         } detail: {
             detail(for: selection)
                 .frame(minWidth: 400)
+                .background(
+                    LinearGradient(
+                        colors: [
+                            Color(nsColor: .windowBackgroundColor),
+                            Color(nsColor: .underPageBackgroundColor)
+                        ],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                )
         }
         .frame(minWidth: 600, minHeight: 420)
     }
@@ -109,6 +122,16 @@ struct LegacyMainWindow: View {
                 .frame(minWidth: 180, idealWidth: 220, maxWidth: 280)
             legacyDetail(for: selection)
                 .frame(minWidth: 400)
+                .background(
+                    LinearGradient(
+                        colors: [
+                            Color(nsColor: .windowBackgroundColor),
+                            Color(nsColor: .underPageBackgroundColor)
+                        ],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                )
         }
         .frame(minWidth: 600, minHeight: 420)
     }
@@ -156,9 +179,12 @@ struct LegacySidebarView: View {
                 Button {
                     NSApp.sendAction(Selector(("showPreferencesWindow:")), to: nil, from: nil)
                 } label: {
-                    Image(systemName: "gear")
+                    Image(systemName: "gearshape")
+                        .font(.system(size: 13, weight: .semibold))
+                        .frame(width: 26, height: 22)
                 }
-                .buttonStyle(.plain)
+                .buttonStyle(.bordered)
+                .controlSize(.small)
                 .help(String(localized: "sidebar.toolbar.settings.tooltip"))
             }
             .padding(.horizontal, 12)

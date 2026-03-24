@@ -8,6 +8,17 @@
 import Foundation
 import SwiftUI
 
+enum RouterTheme {
+    static let accent = Color(red: 0.16, green: 0.44, blue: 0.90)
+    static let accentSoft = accent.opacity(0.12)
+    static let success = Color(red: 0.14, green: 0.62, blue: 0.40)
+    static let warning = Color(red: 0.91, green: 0.59, blue: 0.11)
+    static let danger = Color(red: 0.84, green: 0.26, blue: 0.22)
+    static let subtleFill = Color.primary.opacity(0.05)
+    static let subtleBorder = Color.primary.opacity(0.12)
+    static let strongerBorder = Color.primary.opacity(0.20)
+}
+
 struct DefaultButtonStyle: ButtonStyle {
     private var type: DefaultButtonType
     @Binding var focus: Bool
@@ -23,7 +34,7 @@ struct DefaultButtonStyle: ButtonStyle {
         type = buttonType
         self.type = buttonType
         self._focus = focus
-        self._disable = Binding<Bool>.constant(false)
+        self._disable = disable
     }
     
     init(_ buttonType: DefaultButtonType, disable: Binding<Bool>){
@@ -48,7 +59,12 @@ struct DefaultButtonStyle: ButtonStyle {
             .foregroundColor(GetForegroundColor())
             .background(GetBackgroundColor(configuration.isPressed))
             .cornerRadius(GetRadius())
-            .overlay(RoundedRectangle(cornerRadius: GetRadius()).stroke(lineWidth: 0.5).opacity(0.2))
+            .overlay(
+                RoundedRectangle(cornerRadius: GetRadius())
+                    .stroke(_disable.wrappedValue ? RouterTheme.subtleBorder : RouterTheme.strongerBorder, lineWidth: 0.5)
+            )
+            .opacity(_disable.wrappedValue ? 0.72 : 1.0)
+            .animation(.easeInOut(duration: 0.18), value: configuration.isPressed)
     }
     
     enum DefaultButtonType{
@@ -142,17 +158,17 @@ extension DefaultButtonStyle {
                 case .buttonConfirm(_):
                     return Color.white
                 case .buttonCancel(_):
-                    return Color.black
+                    return Color.primary
                 case .buttonDestory(_):
                     return Color.white
                 case .buttonNeutral(_):
-                    return Color.black
+                    return Color.primary
                 }
             }else{
                 return Color.primary
             }
         }else{
-            return Color.primary.opacity(0.5)
+            return Color.primary.opacity(0.7)
         }
     }
     
@@ -161,22 +177,19 @@ extension DefaultButtonStyle {
             if(focus){
                 switch type{
                 case .buttonConfirm(_):
-                    return isPressed ? Color.blue.opacity(0.7): Color.accentColor
+                    return isPressed ? RouterTheme.accent.opacity(0.82): RouterTheme.accent
                 case .buttonCancel(_):
-                    return isPressed ? Color.secondary.opacity(0.2): Color.white.opacity(0.6)
+                    return isPressed ? RouterTheme.subtleFill.opacity(1.4): RouterTheme.subtleFill
                 case .buttonDestory(_):
-                    return isPressed ? Color.red.opacity(0.7): Color.red
+                    return isPressed ? RouterTheme.danger.opacity(0.82): RouterTheme.danger
                 case .buttonNeutral(_):
-                    return isPressed ? Color.secondary.opacity(0.2): Color.white.opacity(0.6)
+                    return isPressed ? RouterTheme.subtleFill.opacity(1.4): RouterTheme.subtleFill
                 }
             }else{
-                return Color.white
+                return RouterTheme.subtleFill
             }
         }else{
-            return Color.secondary.opacity(0.5)
+            return RouterTheme.subtleFill
         }
-        
-        
-        
     }
 }

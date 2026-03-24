@@ -7,3 +7,4 @@ xcuserdata/
 UserInterface.xcuserstate
 .DS_Store
 *.xcbkptlist
+build/

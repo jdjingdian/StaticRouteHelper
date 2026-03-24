@@ -18,8 +18,8 @@ enum BannerStyle {
 
     var backgroundColor: Color {
         switch self {
-        case .warning: return .yellow.opacity(0.12)
-        case .info:    return .blue.opacity(0.12)
+        case .warning: return RouterTheme.warning.opacity(0.14)
+        case .info:    return RouterTheme.accentSoft
         }
     }
 
@@ -32,8 +32,8 @@ enum BannerStyle {
 
     var iconColor: Color {
         switch self {
-        case .warning: return .yellow
-        case .info:    return .blue
+        case .warning: return RouterTheme.warning
+        case .info:    return RouterTheme.accent
         }
     }
 }
@@ -55,6 +55,7 @@ struct StatusBanner<ActionButton: View>: View {
                     .foregroundStyle(style.iconColor)
                 Text(message)
                     .font(.callout)
+                    .fontWeight(.medium)
                 Spacer()
                 actionButton()
                     .font(.callout)
@@ -62,7 +63,11 @@ struct StatusBanner<ActionButton: View>: View {
             .padding(.horizontal, 12)
             .padding(.vertical, 8)
             .background(style.backgroundColor)
-            Divider()
+            .overlay(alignment: .bottom) {
+                Rectangle()
+                    .fill(RouterTheme.subtleBorder)
+                    .frame(height: 0.5)
+            }
         }
     }
 }

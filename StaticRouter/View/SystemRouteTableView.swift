@@ -138,15 +138,17 @@ private struct SystemRouteTableContent: View {
             // Header with search + refresh
             HStack {
                 Text(String(localized: "system.route.title"))
-                    .font(.headline)
+                    .font(.title3.weight(.semibold))
                 Spacer()
                 TextField(String(localized: "system.route.search.placeholder"), text: $searchText)
                     .textFieldStyle(.roundedBorder)
-                    .frame(width: 200)
+                    .controlSize(.regular)
+                    .frame(width: 260)
                 Toggle(isOn: $showOnlyMyRoutes) {
                     Label(String(localized: "system.route.filter.my_routes"), systemImage: "person.fill")
                 }
                 .toggleStyle(.button)
+                .controlSize(.regular)
                 .help(String(localized: "system.route.filter.my_routes.tooltip"))
                 Button {
                     refresh()
@@ -155,14 +157,17 @@ private struct SystemRouteTableContent: View {
                         ProgressView().controlSize(.small)
                     } else {
                         Image(systemName: "arrow.clockwise")
+                            .font(.system(size: 13, weight: .semibold))
+                            .frame(width: 24, height: 20)
                     }
                 }
-                .buttonStyle(.plain)
+                .buttonStyle(.bordered)
+                .controlSize(.regular)
                 .disabled(isRefreshing || routerService.helperStatus != .installed)
                 .help(String(localized: "system.route.refresh.tooltip"))
             }
             .padding(.horizontal, 12)
-            .padding(.vertical, 8)
+            .padding(.vertical, 10)
 
             Divider()
 
@@ -171,7 +176,7 @@ private struct SystemRouteTableContent: View {
                 VStack(spacing: 8) {
                     Image(systemName: "exclamationmark.triangle")
                         .font(.system(size: 36))
-                        .foregroundStyle(.yellow)
+                        .foregroundStyle(RouterTheme.warning)
                     Text(String(localized: "system.route.helper_required"))
                         .foregroundStyle(.secondary)
                 }
@@ -220,17 +225,19 @@ private struct SystemRouteTableContent: View {
                 if let err = errorMessage {
                     Text(err)
                         .font(.caption)
-                        .foregroundStyle(.red)
+                        .foregroundStyle(RouterTheme.danger)
                 }
             }
             .padding(.horizontal, 12)
             .padding(.vertical, 6)
+            .background(RouterTheme.subtleFill)
         }
         .task {
             if routerService.systemRoutes.isEmpty && routerService.helperStatus == .installed {
                 await performRefresh()
             }
         }
+        .animation(.easeInOut(duration: 0.18), value: showOnlyMyRoutes)
     }
 
     // MARK: - Route Table
@@ -258,19 +265,17 @@ private struct SystemRouteTableContent: View {
                         HStack(spacing: 4) {
                             if isUserRoute(entry) {
                                 Image(systemName: "person.fill")
-                                    .foregroundStyle(Color.accentColor)
+                                    .foregroundStyle(RouterTheme.accent)
                                     .imageScale(.small)
                             }
                             Text(entry.destination)
                                 .font(.system(.body, design: .monospaced))
                         }
                         .padding(.vertical, 1)
-                        .background(isUserRoute(entry) ? Color.accentColor.opacity(0.08) : Color.clear)
                     }
                     TableColumn(String(localized: "system.route.column.gateway")) { entry in
                         Text(entry.gateway)
                             .font(.system(.body, design: .monospaced))
-                            .background(isUserRoute(entry) ? Color.accentColor.opacity(0.08) : Color.clear)
                     }
                     TableColumn(String(localized: "system.route.column.flags")) { entry in
                         Text(entry.flags)

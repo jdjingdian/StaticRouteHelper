@@ -32,21 +32,27 @@ struct LegacyRouteListView: View {
             // Header stats bar
             HStack {
                 Text(String(localized: "route.list.all_routes.title"))
-                    .font(.headline)
+                    .font(.title3.weight(.semibold))
                 Spacer()
                 Text(String(format: String(localized: "route.list.stats"), routes.count, activeCount))
                     .font(.caption)
                     .foregroundStyle(.secondary)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 4)
+                    .background(RouterTheme.subtleFill, in: Capsule())
                 Button {
                     showAddSheet = true
                 } label: {
                     Image(systemName: "plus")
+                        .font(.system(size: 13, weight: .semibold))
+                        .frame(width: 26, height: 22)
                 }
-                .buttonStyle(.plain)
+                .buttonStyle(.borderedProminent)
+                .controlSize(.small)
                 .help(String(localized: "route.list.add.tooltip"))
             }
             .padding(.horizontal, 12)
-            .padding(.vertical, 8)
+            .padding(.vertical, 10)
 
             Divider()
 
@@ -160,10 +166,9 @@ struct LegacyRouteListView: View {
                     } label: {
                         Image(systemName: "pencil")
                             .imageScale(.small)
-                            .frame(width: 22, height: 22)
+                            .frame(width: 24, height: 24)
                     }
-                    .buttonStyle(.borderedProminent)
-                    .tint(.green)
+                    .buttonStyle(LegacyRouteActionIconButtonStyle(tint: RouterTheme.accent))
                     .help(String(localized: "route.list.action.edit.tooltip"))
 
                     Button {
@@ -171,14 +176,13 @@ struct LegacyRouteListView: View {
                     } label: {
                         Image(systemName: "trash")
                             .imageScale(.small)
-                            .frame(width: 22, height: 22)
+                            .frame(width: 24, height: 24)
                     }
-                    .buttonStyle(.borderedProminent)
-                    .tint(.red)
+                    .buttonStyle(LegacyRouteActionIconButtonStyle(tint: RouterTheme.danger))
                     .help(String(localized: "route.list.action.delete.tooltip"))
                 }
             }
-            .width(80)
+            .width(90)
         }
     }
 
@@ -210,6 +214,24 @@ struct LegacyRouteListView: View {
                 showActivationError = true
             }
         }
+    }
+}
+
+private struct LegacyRouteActionIconButtonStyle: ButtonStyle {
+    let tint: Color
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .foregroundStyle(configuration.isPressed ? tint.opacity(0.95) : tint)
+            .background(
+                RoundedRectangle(cornerRadius: 7, style: .continuous)
+                    .fill(configuration.isPressed ? tint.opacity(0.22) : tint.opacity(0.12))
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 7, style: .continuous)
+                    .stroke(tint.opacity(0.26), lineWidth: 0.6)
+            )
+            .animation(.easeInOut(duration: 0.16), value: configuration.isPressed)
     }
 }
 
