@@ -17,8 +17,13 @@ import Foundation
 
 final class AppStoreUpdateController: UpdateChecking {
 
+    /// 进程内唯一实例（与 SparkleUpdateController 保持一致的单例约定）
+    static let shared = AppStoreUpdateController()
+
     /// Siren 未接入前置为 false；接入后改为 true 并实现两个检查方法
     let isSupported = false
+
+    private init() {}
 
     func checkForUpdates() {
         // TODO: 接入 Siren 后由其触发

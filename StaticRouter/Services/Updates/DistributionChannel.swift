@@ -41,15 +41,15 @@ protocol UpdateChecking: AnyObject {
     func checkForUpdatesInBackground()
 }
 
-/// 按当前分发渠道构造更新检查器
+/// 按当前分发渠道构造更新检查器（各渠道实现均为进程内单例）
 enum UpdateControllerFactory {
 
     static func makeUpdateChecker() -> UpdateChecking {
         switch DistributionChannel.current {
         case .sparkleGitHub:
-            return SparkleUpdateController()
+            return SparkleUpdateController.shared
         case .appStore:
-            return AppStoreUpdateController()
+            return AppStoreUpdateController.shared
         }
     }
 }

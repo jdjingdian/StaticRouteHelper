@@ -15,12 +15,17 @@ import Sparkle
 
 final class SparkleUpdateController: NSObject, UpdateChecking {
 
+    /// 进程内唯一实例。
+    /// SPUStandardUpdaterController 每创建一次就会启动一个独立的 updater 并触发
+    /// 首次检查——多实例会导致同一更新弹出多个提示窗（且互相干扰无法关闭）。
+    static let shared = SparkleUpdateController()
+
     let isSupported = true
 
     /// Sparkle 标准控制器：负责启动 updater 并挂接系统驱动
     private let updaterController: SPUStandardUpdaterController
 
-    override init() {
+    private override init() {
         // updaterDelegate/userDriverDelegate 暂无定制需求；需要拦截更新决策时再实现
         updaterController = SPUStandardUpdaterController(
             startingUpdater: true,

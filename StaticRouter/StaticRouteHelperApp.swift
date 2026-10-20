@@ -19,9 +19,6 @@ struct StaticRouteHelperApp: App {
     // 编辑场景保存失败的用户可见提示
     @StateObject private var persistenceAlert = PersistenceAlertController()
 
-    // 分发渠道更新检查器（GitHub 分发 = Sparkle；App Store 预留 = Siren）
-    private let updateChecker = UpdateControllerFactory.makeUpdateChecker()
-
     var body: some Scene {
         WindowGroup {
             AppRootView()
@@ -57,8 +54,8 @@ struct StaticRouteHelperApp: App {
             // 12–13 路径同样需要定期 checkpoint，保证 Core Data 的 WAL 落盘
             StoreFlusher.shared.start(backend: legacyStack)
         }
-        // 启动后后台检查更新（Sparkle 自带调度与提示）
-        updateChecker.checkForUpdatesInBackground()
+        // 更新检查完全交给 Sparkle 的启动调度（startingUpdater 自带首次检查），
+        // 不再手动触发——手动触发曾与 Sparkle 的自动首检叠加出两个提示窗（issue 反馈）
     }
 
     @available(macOS 14, *)
