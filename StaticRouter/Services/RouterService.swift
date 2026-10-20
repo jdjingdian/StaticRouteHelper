@@ -494,6 +494,14 @@ final class RouterService: ObservableObject {
                     continue
                 }
 
+                // 扩大接收缓冲：拔插网线时事件风暴（接口 + 路由 + ARP 条目变化）
+                // 很容易撑爆默认缓冲（约 8KB），丢事件会让状态收敛退化到
+                // "防抖对账"路径（1.5s+），而 RTM_DELETE 即时同步本可毫秒级生效
+                var rcvbuf: Int32 = 1 << 20 // 1MB
+                if setsockopt(sock, SOL_SOCKET, SO_RCVBUF, &rcvbuf, socklen_t(MemoryLayout<Int32>.size)) != 0 {
+                    AppLog.persistence.info("[RouteMonitor] 扩大接收缓冲失败（不影响功能）：\(String(cString: strerror(errno)), privacy: .public)")
+                }
+
                 while !Task.isCancelled {
                     let n = read(sock, &buf, buf.count)
                     if n < 0 {
