@@ -12,6 +12,7 @@ import SwiftData
 struct AddGroupSheet: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
+    @EnvironmentObject private var persistenceAlert: PersistenceAlertController
     @Query(sort: \RouteGroup.sortOrder) private var groups: [RouteGroup]
 
     @State private var name = ""
@@ -73,6 +74,7 @@ struct AddGroupSheet: View {
         }
         .frame(width: 280)
         .padding(20)
+        .persistenceFailureAlert(persistenceAlert)
     }
 
     private func save() {
@@ -84,7 +86,8 @@ struct AddGroupSheet: View {
             sortOrder: groups.count
         )
         modelContext.insert(newGroup)
-        try? modelContext.save()
+        // 保存失败时保留编辑界面并弹窗提示
+        guard persistenceAlert.save(modelContext, operation: "AddGroupSheet") else { return }
         dismiss()
     }
 }
@@ -96,6 +99,7 @@ struct AssignGroupsSheet: View {
     let rule: RouteRule
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
+    @EnvironmentObject private var persistenceAlert: PersistenceAlertController
     @Query(sort: \RouteGroup.sortOrder) private var allGroups: [RouteGroup]
 
     @State private var selectedGroupIDs: Set<PersistentIdentifier> = []
@@ -150,6 +154,7 @@ struct AssignGroupsSheet: View {
         }
         .padding(20)
         .frame(width: 300)
+        .persistenceFailureAlert(persistenceAlert)
         .task {
             // Pre-select current groups
             selectedGroupIDs = Set(rule.groups.map(\.persistentModelID))
@@ -171,7 +176,7 @@ struct AssignGroupsSheet: View {
             }
         }
 
-        try? modelContext.save()
+        guard persistenceAlert.save(modelContext, operation: "AssignGroupsSheet") else { return }
         dismiss()
     }
 }
@@ -183,6 +188,7 @@ struct RenameGroupSheet: View {
     let group: RouteGroup
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
+    @EnvironmentObject private var persistenceAlert: PersistenceAlertController
     @State private var name: String
 
     init(group: RouteGroup) {
@@ -213,13 +219,14 @@ struct RenameGroupSheet: View {
         }
         .padding(20)
         .frame(width: 280)
+        .persistenceFailureAlert(persistenceAlert)
     }
 
     private func save() {
         let trimmed = name.trimmingCharacters(in: .whitespaces)
         guard !trimmed.isEmpty else { return }
         group.name = trimmed
-        try? modelContext.save()
+        guard persistenceAlert.save(modelContext, operation: "RenameGroupSheet") else { return }
         dismiss()
     }
 }

@@ -254,7 +254,7 @@ struct RouteListView: View {
                 group.routes.removeAll { $0.id == rule.id }
             }
             modelContext.delete(rule)
-            try? modelContext.save()
+            modelContext.saveOrLog(operation: "RouteListView.performDelete")
         }
     }
 

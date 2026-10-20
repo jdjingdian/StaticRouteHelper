@@ -91,7 +91,7 @@ struct SidebarView: View {
             route.groups.removeAll { $0.id == group.id }
         }
         modelContext.delete(group)
-        try? modelContext.save()
+        modelContext.saveOrLog(operation: "SidebarView.deleteGroup")
 
         if isCurrentlySelected {
             selection = .allRoutes
@@ -139,7 +139,7 @@ struct SidebarView: View {
         for (index, group) in reordered.enumerated() {
             group.sortOrder = index
         }
-        try? modelContext.save()
+        modelContext.saveOrLog(operation: "SidebarView.moveGroups")
     }
 }
 
