@@ -527,10 +527,13 @@ final class RouterService: ObservableObject {
                     switch Int32(header.rtm_type) {
                     case RTM_ADD, RTM_DELETE:
                         break
-                    case RTM_IFINFO, RTM_NEWADDR, RTM_DELADDR:
-                        // 接口 link 变化 / 地址增删：拔插网线的可靠触发源
-                        // （NWPathMonitor 对非默认接口的拔插不可靠），防抖后全量对账
-                        await self?.postRecalibrationDebounced(reason: "interfaceStateChange")
+                    case RTM_IFINFO:
+                        // 接口 link 翻转：拔插网线的第一个信号，短防抖尽快收敛
+                        await self?.postRecalibrationDebounced(reason: "interfaceLinkChange", interval: 300_000_000)
+                        continue
+                    case RTM_NEWADDR, RTM_DELADDR:
+                        // 接口地址增删（拔线时 IPv4 被回收），与 IFINFO 成串出现
+                        await self?.postRecalibrationDebounced(reason: "interfaceAddressChange")
                         continue
                     default:
                         continue
@@ -561,8 +564,12 @@ final class RouterService: ObservableObject {
     }
 
     @MainActor
-    private func postRecalibrationDebounced(reason: String) {
-        recalibrationDebounceTask = scheduleRecalibrationDebounced(reason: reason, previous: recalibrationDebounceTask)
+    private func postRecalibrationDebounced(reason: String, interval: UInt64 = 1_500_000_000) {
+        recalibrationDebounceTask = scheduleRecalibrationDebounced(
+            reason: reason,
+            previous: recalibrationDebounceTask,
+            interval: interval
+        )
     }
 
     /// 请求视图层对 isActive 做一次全量对账（与实际路由表比对并修正）。
@@ -590,15 +597,26 @@ final class RouterService: ObservableObject {
     @MainActor
     private func scheduleRecalibrationAfterPathChange() {
         // 防抖：一次接口波动会触发多次 path 回调
-        recalibrationDebounceTask = scheduleRecalibrationDebounced(reason: "networkPathChange", previous: recalibrationDebounceTask)
+        recalibrationDebounceTask = scheduleRecalibrationDebounced(
+            reason: "networkPathChange",
+            previous: recalibrationDebounceTask,
+            interval: 1_500_000_000
+        )
     }
 
-    /// 对账防抖：接口波动会连发多个事件，1.5s 内合并为一次对账
+    /// 对账防抖：接口波动会连发多个事件，合并为一次对账。
+    /// interval 可按事件类型调整：RTM_IFINFO 是低频的 link 翻转事件，
+    /// 用短防抖（300ms）让拔线后的开关状态尽快收敛（载波检测的硬件延迟
+    /// 不可控）；地址增删与路径变化可能成串，用较长防抖合并。
     @MainActor
-    private func scheduleRecalibrationDebounced(reason: String, previous: Task<Void, Never>?) -> Task<Void, Never> {
+    private func scheduleRecalibrationDebounced(
+        reason: String,
+        previous: Task<Void, Never>?,
+        interval: UInt64
+    ) -> Task<Void, Never> {
         previous?.cancel()
         return Task { [weak self] in
-            try? await Task.sleep(nanoseconds: 1_500_000_000)
+            try? await Task.sleep(nanoseconds: interval)
             guard !Task.isCancelled else { return }
             guard let self else { return }
             await self.postRecalibration(reason: reason)

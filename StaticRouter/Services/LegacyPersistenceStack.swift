@@ -30,17 +30,22 @@ final class LegacyPersistenceStack: ObservableObject {
             fatalError("[LegacyPersistenceStack] Cannot find Core Data model '\(Self.modelName).momd' in bundle.")
         }
         container = NSPersistentContainer(name: Self.modelName, managedObjectModel: model)
-        // 显式声明存储位置（与 NSPersistentContainer 的默认落点一致：
-        // Application Support/<name>/<name>.sqlite），不再隐式依赖框架默认值。
-        let description = NSPersistentStoreDescription(url: Self.defaultStoreURL)
-        container.persistentStoreDescriptions = [description]
-        container.loadPersistentStores { _, error in
-            if let error = error as NSError? {
-                fatalError("[LegacyPersistenceStack] Failed to load persistent stores: \(error), \(error.userInfo)")
+        if #available(macOS 14, *) {
+            // macOS 14+ 使用 SwiftData。legacy 容器保持未装载状态：
+            // 否则每次启动都会创建空库，迁移器又"归档"一遍，产生噪音与文件累积。
+        } else {
+            // 显式声明存储位置（与 NSPersistentContainer 的默认落点一致：
+            // Application Support/<name>/<name>.sqlite），不再隐式依赖框架默认值。
+            let description = NSPersistentStoreDescription(url: Self.defaultStoreURL)
+            container.persistentStoreDescriptions = [description]
+            container.loadPersistentStores { _, error in
+                if let error = error as NSError? {
+                    fatalError("[LegacyPersistenceStack] Failed to load persistent stores: \(error), \(error.userInfo)")
+                }
             }
+            container.viewContext.automaticallyMergesChangesFromParent = true
+            container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         }
-        container.viewContext.automaticallyMergesChangesFromParent = true
-        container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
     }
 
     /// 与 NSPersistentContainer(name:) 默认落点一致的存储位置，显式化便于维护。
