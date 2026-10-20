@@ -29,6 +29,10 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>SUFeedURL</key>
+	<string>https://github.com/jdjingdian/StaticRouteHelper/releases/latest/download/appcast.xml</string>
+	<key>SUPublicEDKey</key>
+	<string>KeB+JYLgZ17E561p54kFW0SVI8ju1GQiNONIApWTc/o=</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
 	<key>LSUIElement</key>

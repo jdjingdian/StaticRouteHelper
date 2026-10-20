@@ -177,3 +177,13 @@
 "persistence.alert.save_failed.title" = "保存失败";
 "persistence.alert.save_failed.message" = "更改未能写入磁盘。编辑窗口已保留，可重试保存；若反复出现，请携带 Console.app 日志（subsystem: cn.magicdian.staticrouter）反馈。";
 "common.ok" = "好";
+
+/* ── 软件更新 ── */
+"settings.update.section" = "软件更新与诊断";
+"settings.update.current" = "当前版本：";
+"settings.update.check" = "检查更新";
+
+/* ── 诊断 ── */
+"diagnostics.export.menu" = "导出诊断日志…";
+"diagnostics.export.hint" = "一键收集应用/助手日志、路由表快照与规则列表，便于反馈问题时定位。";
+"settings.update.sparkle_hint" = "应用会自动检查 GitHub Releases 更新，下载完成后提示重启安装。";

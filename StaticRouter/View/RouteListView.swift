@@ -336,8 +336,11 @@ struct RouteToggle: View {
                 rule.isActive = false
             }
         } catch let error as RouterError {
+            // 失败后立即以真实路由表校准开关显示（如接口拔线后激活会失败）
+            routerService.reconcileActiveState(for: rule)
             onError(error)
         } catch {
+            routerService.reconcileActiveState(for: rule)
             onError(.xpcError(error.localizedDescription))
         }
     }

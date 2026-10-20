@@ -65,7 +65,7 @@ StaticRouteHelper helps you manage IPv4 static routes on macOS with a desktop UI
 | 12-13 | Core Data | Legacy navigation | SMJobBless |
 | 14+ | SwiftData (with legacy migration) | NavigationSplitView + sidebar groups | SMAppService (recommended) or SMJobBless |
 
-Current project version in Xcode settings: `2.3.0` (build `74`).
+Current project version in Xcode settings: `2.4.0` (build `75`).
 
 ## Download & Installation
 
