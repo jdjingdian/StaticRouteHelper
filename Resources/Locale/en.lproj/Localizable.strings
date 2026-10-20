@@ -176,3 +176,13 @@
 "persistence.alert.save_failed.title" = "Save Failed";
 "persistence.alert.save_failed.message" = "Your change could not be written to disk. The edit window stays open so you can try again. If this keeps happening, please report it with the logs from Console.app (subsystem: cn.magicdian.staticrouter).";
 "common.ok" = "OK";
+
+/* ── Software Update ── */
+"settings.update.section" = "Software Update & Diagnostics";
+"settings.update.current" = "Current:";
+"settings.update.check" = "Check for Updates";
+
+/* ── Diagnostics ── */
+"diagnostics.export.menu" = "Export Diagnostics Log…";
+"diagnostics.export.hint" = "Collect app/helper logs, route table snapshot and rules for issue reports.";
+"settings.update.sparkle_hint" = "The app checks GitHub Releases automatically and prompts to install updates.";

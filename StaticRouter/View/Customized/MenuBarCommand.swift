@@ -11,5 +11,11 @@ import SwiftUI
 struct MenuBarCommand: Commands {
     var body: some Commands {
         SidebarCommands()
+        CommandGroup(after: .help) {
+            Button(String(localized: "diagnostics.export.menu")) {
+                DiagnosticsExporter.exportViaSavePanel()
+            }
+            .keyboardShortcut("d", modifiers: [.command, .shift])
+        }
     }
 }

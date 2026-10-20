@@ -41,6 +41,32 @@ enum SystemRouteReader {
         return parseRouteBuffer(buffer, size: bufferSize)
     }
 
+    /// 当前拥有 IPv4 地址且已启用的接口名集合。
+    ///
+    /// 接口拔线后内核会移除其 IPv4 地址（media/status 变为 inactive，但 IFF_RUNNING
+    /// 标志并不可靠），因此"接口是否有 IPv4 地址"是判断接口型路由是否实际可用的
+    /// 可靠代理信号。
+    static func interfaceNamesWithIPv4() -> Set<String> {
+        var names: Set<String> = []
+        var ifap: UnsafeMutablePointer<ifaddrs>?
+        guard getifaddrs(&ifap) == 0, let first = ifap else { return names }
+        defer { freeifaddrs(first) }
+
+        var cursor = first
+        while true {
+            let ifa = cursor.pointee
+            if let addr = ifa.ifa_addr, addr.pointee.sa_family == UInt8(AF_INET) {
+                let flags = Int32(ifa.ifa_flags)
+                if flags & IFF_UP != 0, flags & IFF_LOOPBACK == 0 {
+                    names.insert(String(cString: ifa.ifa_name))
+                }
+            }
+            guard let next = ifa.ifa_next else { break }
+            cursor = next
+        }
+        return names
+    }
+
     // MARK: - Private Parsing
 
     /// 解析 sysctl 返回的路由表缓冲区，提取所有 IPv4 条目。
@@ -109,18 +135,18 @@ enum SystemRouteReader {
                 if saFamily == AF_INET {
                     gateway = extractIPv4(buffer: buffer, offset: addrOffset)
                 } else if saFamily == AF_LINK {
-                    gateway = extractInterfaceName(buffer: buffer, offset: addrOffset)
+                    gateway = resolveLinkName(buffer: buffer, offset: addrOffset)
                 }
             case 4: // RTA_IFP (interface)
                 if saFamily == AF_LINK {
-                    networkInterface = extractInterfaceName(buffer: buffer, offset: addrOffset)
+                    networkInterface = resolveLinkName(buffer: buffer, offset: addrOffset)
                 }
             default:
                 break
             }
 
-            // sockaddr 在内核消息中按 sizeof(long) 对齐
-            let aligned = (effectiveLen + MemoryLayout<Int>.size - 1) & ~(MemoryLayout<Int>.size - 1)
+            // sockaddr 在内核路由报文中按 4 字节对齐（ROUNDUP(4)，与 netstat 解析一致）
+            let aligned = (effectiveLen + 3) & ~3
             addrOffset += max(aligned, 1)
         }
 
@@ -154,16 +180,25 @@ enum SystemRouteReader {
         return String(cString: result)
     }
 
-    /// 从缓冲区的 sockaddr_dl 中提取接口名称。
-    private static func extractInterfaceName(buffer: [UInt8], offset: Int) -> String {
+    /// 从缓冲区的 sockaddr_dl 中解析接口名。
+    /// 内核路由报文里的 sockaddr_dl 通常只携带 sdl_index（sdl_nlen=0，无名字），
+    /// 因此优先用 if_indextoname 把索引翻译成接口名，再回退到内嵌名字。
+    private static func resolveLinkName(buffer: [UInt8], offset: Int) -> String {
         guard offset + MemoryLayout<sockaddr_dl>.size <= buffer.count else { return "" }
         let sdl: sockaddr_dl = buffer.withUnsafeBytes { ptr in
             ptr.load(fromByteOffset: offset, as: sockaddr_dl.self)
         }
+        let index = Int(sdl.sdl_index)
+        if index > 0 {
+            var nameBuf = [CChar](repeating: 0, count: Int(IF_NAMESIZE))
+            if if_indextoname(UInt32(index), &nameBuf) != nil {
+                return String(cString: nameBuf)
+            }
+        }
         let nlen = Int(sdl.sdl_nlen)
         guard nlen > 0 else { return "" }
-        // 接口名称紧跟在 sockaddr_dl 固定字段之后
-        let nameOffset = offset + MemoryLayout<sockaddr_dl>.offset(of: \.sdl_data)!
+        // sockaddr_dl 固定头为 8 字节（len/family/index/type/nlen/alen/slen），sdl_data 紧随其后
+        let nameOffset = offset + 8
         guard nameOffset + nlen <= buffer.count else { return "" }
         let nameBytes = buffer[nameOffset..<nameOffset + nlen]
         return String(bytes: nameBytes, encoding: .utf8) ?? ""
