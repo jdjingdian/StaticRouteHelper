@@ -65,7 +65,7 @@ StaticRouteHelper 用于在 macOS 上管理 IPv4 静态路由，提供桌面 UI 
 | 12-13 | Core Data | 兼容模式导航 | SMJobBless |
 | 14+ | SwiftData（含旧数据迁移） | NavigationSplitView + 分组侧边栏 | SMAppService（推荐）或 SMJobBless |
 
-当前 Xcode 工程版本：`2.2.3`（build `73`）。
+当前 Xcode 工程版本：`2.3.0`（build `74`）。
 
 ## 下载与安装
 
