@@ -645,23 +645,32 @@ final class RouterService: ObservableObject {
                 break
             }
 
-            let aligned = (effectiveLen + MemoryLayout<Int>.size - 1) & ~(MemoryLayout<Int>.size - 1)
-            offset += max(aligned, 1)
+            // 内核路由报文 sockaddr 按 4 字节对齐；netmask 等 sockaddr 可能短于 16 字节
+            let aligned = (saLen + 3) & ~3
+            offset += max(aligned, 4)
         }
 
         guard let dest = destination else { return nil }
         return (dest, gateway)
     }
 
-    /// 从 sockaddr_dl 中提取接口名（与 SystemRouteReader 保持一致）。
+    /// 从 sockaddr_dl 中解析接口名（与 SystemRouteReader 保持一致）。
+    /// 内核事件的 sockaddr_dl 通常只带 sdl_index 不带名字，需 if_indextoname 翻译。
     private static func interfaceName(fromDl buffer: [UInt8], offset: Int) -> String {
         guard offset + MemoryLayout<sockaddr_dl>.size <= buffer.count else { return "" }
         let sdl: sockaddr_dl = buffer.withUnsafeBytes { ptr in
             ptr.load(fromByteOffset: offset, as: sockaddr_dl.self)
         }
+        let index = Int(sdl.sdl_index)
+        if index > 0 {
+            var nameBuf = [CChar](repeating: 0, count: Int(IF_NAMESIZE))
+            if if_indextoname(UInt32(index), &nameBuf) != nil {
+                return String(cString: nameBuf)
+            }
+        }
         let nlen = Int(sdl.sdl_nlen)
         guard nlen > 0 else { return "" }
-        let nameOffset = offset + MemoryLayout<sockaddr_dl>.offset(of: \.sdl_data)!
+        let nameOffset = offset + 8
         guard nameOffset + nlen <= buffer.count else { return "" }
         let nameBytes = buffer[nameOffset..<nameOffset + nlen]
         return String(bytes: nameBytes, encoding: .utf8) ?? ""

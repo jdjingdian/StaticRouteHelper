@@ -45,6 +45,23 @@ struct RouteEditSheet: View {
     private var isEditing: Bool { existingRule != nil }
     private var wasActive: Bool { existingRule?.isActive ?? false }
 
+    /// 在 init 阶段完成预填：若在 onAppear 中赋值，gatewayType 从默认值
+    /// 变为接口类型时会触发 onChange 清空 gateway，导致接口型路由编辑时
+    /// 字段丢失（IP 型不变更 gatewayType 所以从未暴露）。
+    init(existingRule: RouteRule?, preselectedGroup: RouteGroup?) {
+        self.existingRule = existingRule
+        self.preselectedGroup = preselectedGroup
+        if let rule = existingRule {
+            _network = State(initialValue: rule.network)
+            _prefixLength = State(initialValue: rule.prefixLength)
+            _gatewayType = State(initialValue: rule.gatewayType)
+            _gateway = State(initialValue: rule.gateway)
+            _selectedGroupIDs = State(initialValue: Set(rule.groups.map(\.id)))
+        } else if let preselectedGroup {
+            _selectedGroupIDs = State(initialValue: [preselectedGroup.id])
+        }
+    }
+
     // MARK: - Body
 
     var body: some View {
@@ -191,7 +208,6 @@ struct RouteEditSheet: View {
         }
         .padding(20)
         .frame(width: 460)
-        .onAppear { populateFromExisting() }
         .persistenceFailureAlert(persistenceAlert)
     }
 
@@ -226,20 +242,6 @@ struct RouteEditSheet: View {
             selectedGroupIDs.remove(id)
         } else {
             selectedGroupIDs.insert(id)
-        }
-    }
-
-    // MARK: - Pre-populate
-
-    private func populateFromExisting() {
-        if let rule = existingRule {
-            network = rule.network
-            prefixLength = rule.prefixLength
-            gatewayType = rule.gatewayType
-            gateway = rule.gateway
-            selectedGroupIDs = Set(rule.groups.map(\.id))
-        } else if let preselectedGroup {
-            selectedGroupIDs = [preselectedGroup.id]
         }
     }
 

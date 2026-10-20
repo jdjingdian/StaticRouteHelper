@@ -101,7 +101,13 @@ enum PFRouteWriter {
 
     // MARK: - Interface Gateway Path
 
-    /// Build and send RTM_ADD/RTM_DELETE with RTA_DST | RTA_NETMASK | RTA_IFP.
+    /// Build and send RTM_ADD/RTM_DELETE with RTA_DST | RTA_GATEWAY(AF_LINK) | RTA_NETMASK.
+    ///
+    /// 即 `route add -net <dst>/<mask> -interface <if>` 的等价报文：
+    /// 网关位置放一个携带接口索引（sdl_index）的 sockaddr_dl，内核据此选定出接口。
+    /// 历史教训：旧实现用 RTA_IFP 且只填 sdl_index 不填接口名，内核校验
+    /// RTA_IFP 要求 sdl_data 携带接口名字符串，缺失即返回 EINVAL（errno 22）
+    /// ——接口型路由在旧版本中从未生效过。
     private static func writeInterfaceRoute(sock: Int32,
                                             rtmType: UInt8,
                                             network: String,
@@ -121,17 +127,18 @@ enum PFRouteWriter {
                                    errorMessage: "Invalid IPv4 address in request (dst=\(network) mask=\(mask))")
         }
 
-        // Build sockaddr_dl for the interface
+        // Build sockaddr_dl for the interface gateway
         var sdl = sockaddr_dl()
         sdl.sdl_len    = UInt8(MemoryLayout<sockaddr_dl>.size)
         sdl.sdl_family = UInt8(AF_LINK)
         sdl.sdl_index  = UInt16(ifIndex)
 
-        // Layout: rt_msghdr | sockaddr_in (dst) | sockaddr_in (netmask) | sockaddr_dl (ifp)
+        // sockaddr 顺序必须与 RTA 位序一致：RTA_DST(0) | RTA_GATEWAY(1) | RTA_NETMASK(2)
+        // Layout: rt_msghdr | sockaddr_in (dst) | sockaddr_dl (gateway) | sockaddr_in (netmask)
         let hdrSize  = MemoryLayout<rt_msghdr>.size
         let sinSize  = MemoryLayout<sockaddr_in>.size
         let sdlSize  = MemoryLayout<sockaddr_dl>.size
-        let totalLen = hdrSize + sinSize * 2 + sdlSize
+        let totalLen = hdrSize + sinSize + sdlSize + sinSize
 
         var buf = Data(count: totalLen)
         buf.withUnsafeMutableBytes { raw in
@@ -140,7 +147,7 @@ enum PFRouteWriter {
             hdr.rtm_version = UInt8(RTM_VERSION)
             hdr.rtm_type    = rtmType
             hdr.rtm_msglen  = UInt16(totalLen)
-            hdr.rtm_addrs   = Int32(RTA_DST | RTA_NETMASK | RTA_IFP)
+            hdr.rtm_addrs   = Int32(RTA_DST | RTA_GATEWAY | RTA_NETMASK)
             hdr.rtm_flags   = Int32(RTF_UP | RTF_STATIC)
             hdr.rtm_seq     = nextSeq()
             hdr.rtm_pid     = getpid()
@@ -148,10 +155,10 @@ enum PFRouteWriter {
 
             // --- RTA_DST ---
             raw.storeBytes(of: dstSin, toByteOffset: hdrSize, as: sockaddr_in.self)
+            // --- RTA_GATEWAY（AF_LINK + 接口索引，即 -interface 语义）---
+            raw.storeBytes(of: sdl,    toByteOffset: hdrSize + sinSize, as: sockaddr_dl.self)
             // --- RTA_NETMASK ---
-            raw.storeBytes(of: nmSin,  toByteOffset: hdrSize + sinSize, as: sockaddr_in.self)
-            // --- RTA_IFP ---
-            raw.storeBytes(of: sdl,    toByteOffset: hdrSize + sinSize * 2, as: sockaddr_dl.self)
+            raw.storeBytes(of: nmSin,  toByteOffset: hdrSize + sinSize + sdlSize, as: sockaddr_in.self)
         }
 
         return sendBuffer(sock: sock, buf: buf, isAdd: rtmType == UInt8(RTM_ADD))

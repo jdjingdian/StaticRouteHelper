@@ -121,7 +121,7 @@ enum DiagnosticsExporter {
     private static func unifiedLogSection() async -> String {
         let predicate = "subsystem CONTAINS 'cn.magicdian.staticrouter' OR processImagePath CONTAINS 'cn.magicdian.staticrouter.helper'"
         let arguments = [
-            "show", "--last", "24h", "--style", "compact",
+            "show", "--last", "24h", "--info", "--style", "compact",
             "--predicate", predicate,
         ]
 
