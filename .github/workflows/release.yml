@@ -110,14 +110,19 @@ jobs:
           SPARKLE_EDDSA_PRIVATE_KEY: ${{ secrets.SPARKLE_EDDSA_PRIVATE_KEY }}
         run: |
           if [ -z "$SPARKLE_EDDSA_PRIVATE_KEY" ]; then
-            echo "::warning::Secret SPARKLE_EDDSA_PRIVATE_KEY is not set; appcast will be unsigned and updates will fail verification"
+            echo "::error::Secret SPARKLE_EDDSA_PRIVATE_KEY is not set; appcast cannot be signed and updates will fail verification"
+            exit 1
           fi
           curl -sL -o sparkle.tar.xz https://github.com/sparkle-project/Sparkle/releases/download/2.8.0/Sparkle-2.8.0.tar.xz
           tar -xf sparkle.tar.xz
           mkdir -p appcast_dir
           cp "${ZIP_NAME}" appcast_dir/
+          KEY_FILE="$(mktemp)"
+          printf '%s' "$SPARKLE_EDDSA_PRIVATE_KEY" > "$KEY_FILE"
           ./bin/generate_appcast appcast_dir \
+            --ed-key-file "$KEY_FILE" \
             --download-url-prefix "https://github.com/${{ github.repository }}/releases/download/"
+          rm -f "$KEY_FILE"
           python3 - <<'PY'
           import pathlib
           p = pathlib.Path("appcast_dir/appcast.xml")
