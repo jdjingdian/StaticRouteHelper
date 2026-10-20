@@ -37,6 +37,16 @@ jobs:
             -derivedDataPath build/DerivedData \
             $BUILD_EXTRA_ARGS
 
+      - name: Re-sign embedded Sparkle framework (ad-hoc, must match app Team ID)
+        run: |
+          APP_PATH="build/DerivedData/Build/Products/Release/Static Router.app"
+          FRAMEWORK="$APP_PATH/Contents/Frameworks/Sparkle.framework"
+          # SPM 二进制工件保留 Sparkle 官方签名，与 ad-hoc 签名的主程序
+          # Team ID 不一致会导致 dyld 拒绝加载（启动即崩），统一重签
+          codesign --force --deep --sign - "$FRAMEWORK"
+          codesign --force --sign - "$APP_PATH"
+          codesign --verify --deep --strict "$APP_PATH"
+
       - name: Diagnose build signature details
         run: |
           APP_PATH="build/DerivedData/Build/Products/Release/Static Router.app"
