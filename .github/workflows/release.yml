@@ -107,7 +107,7 @@ jobs:
           mkdir -p appcast_dir
           cp "${ZIP_NAME}" appcast_dir/
           ./bin/generate_appcast appcast_dir \
-            --download-url-prefix "https://github.com/${{ github.repository }}/releases/download/"
+            --download-url-prefix "https://github.com/${{ github.repository }}/releases/download/${{ github.event.release.tag_name }}/"
           python3 - <<'PY'
           import pathlib
           p = pathlib.Path("appcast_dir/appcast.xml")
