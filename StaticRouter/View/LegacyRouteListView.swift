@@ -195,7 +195,7 @@ struct LegacyRouteListView: View {
             }
             await MainActor.run {
                 viewContext.delete(mo)
-                try? viewContext.save()
+                viewContext.saveOrLog(operation: "LegacyRouteListView.performDelete")
             }
         }
     }
@@ -452,7 +452,7 @@ struct LegacyRouteEditSheet: View {
             mo.prefixLength = Int16(prefixLength)
             mo.gatewayType = gatewayTypeStr
             mo.gateway = trimGateway
-            try? viewContext.save()
+            viewContext.saveOrLog(operation: "LegacyRouteListView.edit")
 
             if wasActive && networkChanged {
                 Task {
@@ -468,7 +468,7 @@ struct LegacyRouteEditSheet: View {
                 gatewayType: gatewayTypeStr,
                 gateway: trimGateway
             )
-            try? viewContext.save()
+            viewContext.saveOrLog(operation: "LegacyRouteListView.add")
         }
 
         dismiss()

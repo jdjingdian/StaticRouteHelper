@@ -16,6 +16,7 @@ struct RouteEditSheet: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var routerService: RouterService
+    @EnvironmentObject private var persistenceAlert: PersistenceAlertController
 
     @Query(sort: \RouteGroup.sortOrder) private var allGroups: [RouteGroup]
 
@@ -191,6 +192,7 @@ struct RouteEditSheet: View {
         .padding(20)
         .frame(width: 460)
         .onAppear { populateFromExisting() }
+        .persistenceFailureAlert(persistenceAlert)
     }
 
     // MARK: - Computed
@@ -272,7 +274,8 @@ struct RouteEditSheet: View {
             }
             rule.groups = selectedGroups
 
-            try? modelContext.save()
+            // 保存失败时保留编辑界面并弹窗提示，避免用户误以为已保存
+            guard persistenceAlert.save(modelContext, operation: "RouteEditSheet.edit") else { return }
 
             // Re-activate if route was active and network config changed (task 6.4)
             if wasActive && networkChanged {
@@ -296,7 +299,7 @@ struct RouteEditSheet: View {
             for group in selectedGroups {
                 group.routes.append(rule)
             }
-            try? modelContext.save()
+            guard persistenceAlert.save(modelContext, operation: "RouteEditSheet.add") else { return }
         }
 
         dismiss()

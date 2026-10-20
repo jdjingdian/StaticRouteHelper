@@ -16,11 +16,15 @@ struct StaticRouteHelperApp: App {
     // Legacy Core Data stack (macOS 12–13). Always initialized, only used on older OS.
     @StateObject private var legacyStack = LegacyPersistenceStack()
 
+    // 编辑场景保存失败的用户可见提示
+    @StateObject private var persistenceAlert = PersistenceAlertController()
+
     var body: some Scene {
         WindowGroup {
             AppRootView()
                 .environmentObject(routerService)
                 .environmentObject(legacyStack)
+                .environmentObject(persistenceAlert)
                 .environment(\.managedObjectContext, legacyStack.viewContext)
                 .task { await onStartup() }
                 .onReceive(NotificationCenter.default.publisher(for: .routeDidChange)) { note in
@@ -44,6 +48,8 @@ struct StaticRouteHelperApp: App {
             await startupCalibration14()
         } else {
             await routerService.refreshSystemRoutes()
+            // 12–13 路径同样需要定期 checkpoint，保证 Core Data 的 WAL 落盘
+            StoreFlusher.shared.start(backend: legacyStack)
         }
     }
 
@@ -51,59 +57,25 @@ struct StaticRouteHelperApp: App {
     private func startupCalibration14() async {
         let context = Self.sharedModelContainer.mainContext
 
-        // Migrate old Core Data (CoreDataMigrator – pre-existing v1.3 → v1.4)
-        CoreDataMigrator.migrateIfNeeded(into: context)
+        // 一次性迁移：v1.x Core Data → SwiftData（读失败时保留源库）
+        CoreDataMigrator().migrateIfNeeded(into: context)
 
-        // Migrate legacy Core Data (macOS 12–13 store) if user upgraded OS
-        migrateLegacyStoreIfNeeded14(into: context)
+        // 一次性迁移：macOS 12–13 Core Data → SwiftData（出错即中止，成功才归档）
+        LegacyOS13StoreMigrator(legacyStack: legacyStack).migrateIfNeeded(into: context)
 
         await routerService.refreshSystemRoutes()
 
         let descriptor = FetchDescriptor<RouteRule>()
         if let rules = try? context.fetch(descriptor) {
             RouteStateCalibrator.calibrate(rules: rules, systemRoutes: routerService.systemRoutes)
-            try? context.save()
-        }
-    }
-
-    // MARK: - Legacy → SwiftData Migration
-
-    @available(macOS 14, *)
-    private func migrateLegacyStoreIfNeeded14(into context: ModelContext) {
-        guard legacyStack.storeFileExists else { return }
-
-        let routeData = legacyStack.fetchAllRouteData()
-        guard !routeData.isEmpty else {
-            legacyStack.deleteLegacyStoreFiles()
-            return
+            context.saveOrLog(operation: "startupCalibration")
+        } else {
+            AppLog.persistence.error("启动时读取规则失败，跳过校准。")
         }
 
-        for data in routeData {
-            guard
-                let network = data["network"] as? String,
-                let prefixLength = data["prefixLength"] as? Int,
-                let gatewayTypeRaw = data["gatewayType"] as? String,
-                let gateway = data["gateway"] as? String
-            else { continue }
-
-            let gatewayType: GatewayType = gatewayTypeRaw == "ipAddress" ? .ipAddress : .interface
-            let isActive = data["isActive"] as? Bool ?? false
-            let createdAt = data["createdAt"] as? Date ?? Date()
-
-            let rule = RouteRule(
-                network: network,
-                prefixLength: prefixLength,
-                gatewayType: gatewayType,
-                gateway: gateway,
-                isActive: isActive,
-                groups: [],
-                createdAt: createdAt
-            )
-            context.insert(rule)
-        }
-
-        try? context.save()
-        legacyStack.deleteLegacyStoreFiles()
+        // 启动后立即把迁移/校准产生的写入 checkpoint 进主文件，并开始定期刷新
+        StoreFlusher.shared.start(backend: SwiftDataBackend.shared)
+        StoreFlusher.shared.flushNow()
     }
 
     // MARK: - Route Change Notification Handler
@@ -129,21 +101,14 @@ struct StaticRouteHelperApp: App {
                 changed = true
             }
         }
-        if changed { try? context.save() }
+        if changed { context.saveOrLog(operation: "handleRouteChange") }
     }
 
     // MARK: - SwiftData Container
 
+    /// 专属路径的 SwiftData 容器（迁移、恢复与 checkpoint 逻辑见 SwiftDataBackend）
     @available(macOS 14, *)
-    static let sharedModelContainer: ModelContainer = {
-        let schema = Schema([RouteRule.self, RouteGroup.self])
-        let config = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-        do {
-            return try ModelContainer(for: schema, configurations: [config])
-        } catch {
-            fatalError("ModelContainer 初始化失败：\(error)")
-        }
-    }()
+    static let sharedModelContainer: ModelContainer = SwiftDataBackend.shared.container
 }
 
 // MARK: - AppRootView

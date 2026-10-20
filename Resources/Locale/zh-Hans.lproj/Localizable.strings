@@ -172,3 +172,8 @@
 "about.license" = "StaticRouteHelper 基于 Apache License 2.0 协议开源。";
 "about.copyright" = "版权所有 © 2021，Derek Jing";
 "about.homepage.button" = "项目主页";
+
+/* ── Persistence ── */
+"persistence.alert.save_failed.title" = "保存失败";
+"persistence.alert.save_failed.message" = "更改未能写入磁盘。编辑窗口已保留，可重试保存；若反复出现，请携带 Console.app 日志（subsystem: cn.magicdian.staticrouter）反馈。";
+"common.ok" = "好";

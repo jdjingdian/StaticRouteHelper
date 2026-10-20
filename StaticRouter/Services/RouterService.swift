@@ -221,7 +221,7 @@ final class RouterService: ObservableObject {
         try await sendCommand(request)
         await MainActor.run {
             mo.isActive = true
-            try? context.save()
+            context.saveOrLog(operation: "activateRouteMO")
         }
     }
 
@@ -240,7 +240,7 @@ final class RouterService: ObservableObject {
         try await sendCommand(request)
         await MainActor.run {
             mo.isActive = false
-            try? context.save()
+            context.saveOrLog(operation: "deactivateRouteMO")
         }
     }
 
