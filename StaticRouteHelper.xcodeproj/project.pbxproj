@@ -66,6 +66,17 @@
 		AA000001000000000000BB02 /* InstallMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000000000000BB02 /* InstallMethod.swift */; };
 		AA000001000000000000BB03 /* PrivilegedHelperManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000000000000BB03 /* PrivilegedHelperManager.swift */; };
 		AA900001000000000000CC01 /* SettingsNavigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA900002000000000000CC01 /* SettingsNavigator.swift */; };
+		AAEF00000000000000000102 /* StoreLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEF00000000000000000101 /* StoreLocation.swift */; };
+		AAEF00000000000000000202 /* PersistenceBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEF00000000000000000201 /* PersistenceBackend.swift */; };
+		AAEF00000000000000000302 /* SwiftDataBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEF00000000000000000301 /* SwiftDataBackend.swift */; };
+		AAEF00000000000000000402 /* SQLiteCheckpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEF00000000000000000401 /* SQLiteCheckpoint.swift */; };
+		AAEF00000000000000000502 /* StoreFlusher.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEF00000000000000000501 /* StoreFlusher.swift */; };
+		AAEF00000000000000000602 /* StoreMigrating.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEF00000000000000000601 /* StoreMigrating.swift */; };
+		AAEF00000000000000000702 /* DefaultStoreMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEF00000000000000000701 /* DefaultStoreMigrator.swift */; };
+		AAEF00000000000000000802 /* LegacyOS13StoreMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEF00000000000000000801 /* LegacyOS13StoreMigrator.swift */; };
+		AAEF00000000000000000902 /* AppLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEF00000000000000000901 /* AppLog.swift */; };
+		AAEF00000000000000001002 /* ContextSave.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEF00000000000000001001 /* ContextSave.swift */; };
+		AAEF00000000000000001102 /* PersistenceAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEF00000000000000001101 /* PersistenceAlertController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXShellScriptBuildPhase section */
@@ -179,6 +190,17 @@
 		AA000002000000000000BB02 /* InstallMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallMethod.swift; sourceTree = "<group>"; };
 		AA000002000000000000BB03 /* PrivilegedHelperManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivilegedHelperManager.swift; sourceTree = "<group>"; };
 		AA900002000000000000CC01 /* SettingsNavigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsNavigator.swift; sourceTree = "<group>"; };
+		AAEF00000000000000000101 /* StoreLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = StoreLocation.swift; path = StoreLocation.swift; sourceTree = "<group>"; };
+		AAEF00000000000000000201 /* PersistenceBackend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PersistenceBackend.swift; path = PersistenceBackend.swift; sourceTree = "<group>"; };
+		AAEF00000000000000000301 /* SwiftDataBackend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SwiftDataBackend.swift; path = SwiftDataBackend.swift; sourceTree = "<group>"; };
+		AAEF00000000000000000401 /* SQLiteCheckpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SQLiteCheckpoint.swift; path = SQLiteCheckpoint.swift; sourceTree = "<group>"; };
+		AAEF00000000000000000501 /* StoreFlusher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = StoreFlusher.swift; path = StoreFlusher.swift; sourceTree = "<group>"; };
+		AAEF00000000000000000601 /* StoreMigrating.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = StoreMigrating.swift; path = StoreMigrating.swift; sourceTree = "<group>"; };
+		AAEF00000000000000000701 /* DefaultStoreMigrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DefaultStoreMigrator.swift; path = DefaultStoreMigrator.swift; sourceTree = "<group>"; };
+		AAEF00000000000000000801 /* LegacyOS13StoreMigrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LegacyOS13StoreMigrator.swift; path = LegacyOS13StoreMigrator.swift; sourceTree = "<group>"; };
+		AAEF00000000000000000901 /* AppLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppLog.swift; path = AppLog.swift; sourceTree = "<group>"; };
+		AAEF00000000000000001001 /* ContextSave.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ContextSave.swift; path = ContextSave.swift; sourceTree = "<group>"; };
+		AAEF00000000000000001101 /* PersistenceAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PersistenceAlertController.swift; path = PersistenceAlertController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -351,6 +373,7 @@
 				39229F3B2971085B0013B40F /* Components */,
 				39229F3A297107FF0013B40F /* Model */,
 				AA000003000000000000AA01 /* Services */,
+				AAEF00000000000000009001 /* Persistence */,
 				39E84C6A260B32BF00776AE7 /* Assets.xcassets */,
 				39E84C6F260B32BF00776AE7 /* Info.plist */,
 				39E84C70260B32BF00776AE7 /* StaticRouteHelper.entitlements */,
@@ -381,6 +404,48 @@
 				AA900002000000000000CC01 /* SettingsNavigator.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		AAEF00000000000000009101 /* Store */ = {
+			isa = PBXGroup;
+			children = (
+				AAEF00000000000000000101 /* StoreLocation.swift */,
+				AAEF00000000000000000201 /* PersistenceBackend.swift */,
+				AAEF00000000000000000301 /* SwiftDataBackend.swift */,
+				AAEF00000000000000000401 /* SQLiteCheckpoint.swift */,
+				AAEF00000000000000000501 /* StoreFlusher.swift */,
+			);
+			path = Store;
+			sourceTree = "<group>";
+		};
+		AAEF00000000000000009201 /* Migration */ = {
+			isa = PBXGroup;
+			children = (
+				AAEF00000000000000000601 /* StoreMigrating.swift */,
+				AAEF00000000000000000701 /* DefaultStoreMigrator.swift */,
+				AAEF00000000000000000801 /* LegacyOS13StoreMigrator.swift */,
+			);
+			path = Migration;
+			sourceTree = "<group>";
+		};
+		AAEF00000000000000009301 /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				AAEF00000000000000000901 /* AppLog.swift */,
+				AAEF00000000000000001001 /* ContextSave.swift */,
+				AAEF00000000000000001101 /* PersistenceAlertController.swift */,
+			);
+			path = Support;
+			sourceTree = "<group>";
+		};
+		AAEF00000000000000009001 /* Persistence */ = {
+			isa = PBXGroup;
+			children = (
+				AAEF00000000000000009101 /* Store */,
+				AAEF00000000000000009201 /* Migration */,
+				AAEF00000000000000009301 /* Support */,
+			);
+			path = Persistence;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -546,6 +611,17 @@
 				AA000001000000000000BB02 /* InstallMethod.swift in Sources */,
 				AA000001000000000000BB03 /* PrivilegedHelperManager.swift in Sources */,
 				AA900001000000000000CC01 /* SettingsNavigator.swift in Sources */,
+				AAEF00000000000000000102 /* StoreLocation.swift in Sources */,
+				AAEF00000000000000000202 /* PersistenceBackend.swift in Sources */,
+				AAEF00000000000000000302 /* SwiftDataBackend.swift in Sources */,
+				AAEF00000000000000000402 /* SQLiteCheckpoint.swift in Sources */,
+				AAEF00000000000000000502 /* StoreFlusher.swift in Sources */,
+				AAEF00000000000000000602 /* StoreMigrating.swift in Sources */,
+				AAEF00000000000000000702 /* DefaultStoreMigrator.swift in Sources */,
+				AAEF00000000000000000802 /* LegacyOS13StoreMigrator.swift in Sources */,
+				AAEF00000000000000000902 /* AppLog.swift in Sources */,
+				AAEF00000000000000001002 /* ContextSave.swift in Sources */,
+				AAEF00000000000000001102 /* PersistenceAlertController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

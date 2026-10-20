@@ -171,3 +171,8 @@
 "about.license" = "StaticRouteHelper is licensed under the Apache License 2.0.";
 "about.copyright" = "Copyright © 2021, Derek Jing";
 "about.homepage.button" = "Project Home Page";
+
+/* ── Persistence ── */
+"persistence.alert.save_failed.title" = "Save Failed";
+"persistence.alert.save_failed.message" = "Your change could not be written to disk. The edit window stays open so you can try again. If this keeps happening, please report it with the logs from Console.app (subsystem: cn.magicdian.staticrouter).";
+"common.ok" = "OK";

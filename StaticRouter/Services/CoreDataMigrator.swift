@@ -2,14 +2,21 @@
 //  CoreDataMigrator.swift
 //  StaticRouteHelper
 //
-//  迁移逻辑：检测旧 Core Data 存储，将 JSON blob 路由数据导入 SwiftData，然后删除旧存储。
+//  迁移逻辑：检测 v1.x Core Data 存储（JSON blob），将数据导入 SwiftData。
+//
+//  历史教训：旧实现里「读不到旧模型 / 加载失败」都被当成空数据处理，
+//  而读完之后源库会被无条件删除——v1.x 升级用户必然丢失全部规则。
+//  现在遵守 StoreMigrating 的数据安全红线：
+//  - 读取失败 ≠ 数据为空：读不出内容时中止迁移并保留源库；
+//  - 源库只改名归档，绝不删除。
+//
 
 import Foundation
 import CoreData
 import SwiftData
 
 /// 旧版 routeData 结构体（用于解码 Core Data JSON blob）
-private struct LegacyRouteData: Codable {
+struct LegacyRouteData: Codable {
     var network: String
     var mask: String
     var gateway: String
@@ -19,26 +26,40 @@ private struct LegacyRouteData: Codable {
 
 /// Core Data → SwiftData 数据迁移工具
 @available(macOS 14, *)
-enum CoreDataMigrator {
+struct CoreDataMigrator: StoreMigrating {
 
-    /// 执行迁移：若旧 Core Data 存储存在，则读取并导入，然后删除旧存储。
-    /// 应在 ModelContainer 初始化完成后、视图加载前调用。
-    static func migrateIfNeeded(into context: ModelContext) {
-        guard let storeURL = legacyStoreURL() else { return }
+    /// 读取结果：loaded 与 unreadable 严格区分，后者必须保留源库
+    enum LegacyReadOutcome {
+        case loaded([LegacyRouteData])
+        case unreadable(String)
+    }
+
+    func migrateIfNeeded(into context: ModelContext) {
+        guard let storeURL = Self.legacyStoreURL() else { return }
         guard FileManager.default.fileExists(atPath: storeURL.path) else { return }
 
-        print("[Migration] 检测到旧 Core Data 存储，开始迁移...")
+        AppLog.migration.info("检测到 v1.x Core Data 存储，开始迁移...")
 
-        let legacyRoutes = readLegacyRoutes(storeURL: storeURL)
-        if !legacyRoutes.isEmpty {
-            importRoutes(legacyRoutes, into: context)
-            print("[Migration] 已导入 \(legacyRoutes.count) 条路由。")
-        } else {
-            print("[Migration] 旧存储为空，跳过导入。")
+        switch Self.readLegacyRoutes(storeURL: storeURL) {
+        case .loaded(let legacyRoutes) where !legacyRoutes.isEmpty:
+            do {
+                try Self.importRoutes(legacyRoutes, into: context)
+                StoreLocation.archiveStore(at: storeURL, reason: "migrated")
+                AppLog.migration.info("已导入 \(legacyRoutes.count) 条路由，旧存储已归档。")
+            } catch {
+                // 导入失败：源库原地保留，下次启动重试。
+                AppLog.migration.error("v1.x 存储导入失败（源库已保留）：\(String(describing: error), privacy: .public)")
+            }
+
+        case .loaded:
+            // 能读但确实为空：归档旧库，避免每次启动重复检测。
+            StoreLocation.archiveStore(at: storeURL, reason: "migrated-empty")
+            AppLog.migration.info("v1.x 存储为空，已归档。")
+
+        case .unreadable(let reason):
+            // 读不出内容（模型缺失 / 存储损坏）：保留源库，绝不删除。
+            AppLog.migration.error("v1.x 存储不可读，跳过迁移并保留源库：\(reason, privacy: .public)")
         }
-
-        deleteLegacyStore(storeURL: storeURL)
-        print("[Migration] 旧 Core Data 存储已删除，迁移完成。")
     }
 
     // MARK: - Private
@@ -58,13 +79,13 @@ enum CoreDataMigrator {
         return nil
     }
 
-    /// 读取旧 Core Data 中的路由数据（JSON blob）
-    private static func readLegacyRoutes(storeURL: URL) -> [LegacyRouteData] {
+    /// 读取旧 Core Data 中的路由数据（JSON blob）。
+    /// 任何失败都以 unreadable 返回，绝不与「确实为空」混淆。
+    private static func readLegacyRoutes(storeURL: URL) -> LegacyReadOutcome {
         // 临时构建一个不持久化到现有路径的 NSPersistentContainer 读取旧数据
         guard let modelURL = Bundle.main.url(forResource: "DataModel", withExtension: "momd"),
               let model = NSManagedObjectModel(contentsOf: modelURL) else {
-            print("[Migration] 找不到旧 Core Data 模型（DataModel.momd），跳过迁移。")
-            return []
+            return .unreadable("bundle 中找不到 DataModel.momd（v1.x 模型已随新版移除），无法解读旧库")
         }
 
         let container = NSPersistentContainer(name: "DataModel", managedObjectModel: model)
@@ -72,21 +93,23 @@ enum CoreDataMigrator {
         description.isReadOnly = true
         container.persistentStoreDescriptions = [description]
 
-        var routes: [LegacyRouteData] = []
+        var loadError: Error?
         let semaphore = DispatchSemaphore(value: 0)
         container.loadPersistentStores { _, error in
-            defer { semaphore.signal() }
-            if let error {
-                print("[Migration] 加载旧存储失败：\(error)，跳过迁移。")
-                return
-            }
+            loadError = error
+            semaphore.signal()
         }
         semaphore.wait()
+
+        if let loadError {
+            return .unreadable("加载旧存储失败：\(loadError)")
+        }
 
         let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "RouteData")
         do {
             let objects = try container.viewContext.fetch(fetchRequest)
             let decoder = JSONDecoder()
+            var routes: [LegacyRouteData] = []
             for obj in objects {
                 if let data = obj.value(forKey: "values") as? Data {
                     if let list = try? decoder.decode([LegacyRouteData].self, from: data) {
@@ -94,15 +117,14 @@ enum CoreDataMigrator {
                     }
                 }
             }
+            return .loaded(routes)
         } catch {
-            print("[Migration] 读取旧数据失败：\(error)")
+            return .unreadable("读取旧数据失败：\(error)")
         }
-
-        return routes
     }
 
     /// 将旧路由数据导入 SwiftData（isActive = false，groups = 空）
-    private static func importRoutes(_ routes: [LegacyRouteData], into context: ModelContext) {
+    private static func importRoutes(_ routes: [LegacyRouteData], into context: ModelContext) throws {
         for legacy in routes {
             // 将子网掩码转换为前缀长度
             let prefixLength = prefixLengthFromMask(legacy.mask)
@@ -126,23 +148,7 @@ enum CoreDataMigrator {
             )
             context.insert(rule)
         }
-        do {
-            try context.save()
-        } catch {
-            print("[Migration] 保存导入数据失败：\(error)")
-        }
-    }
-
-    /// 删除旧 Core Data 存储及相关文件（.sqlite, -wal, -shm）
-    private static func deleteLegacyStore(storeURL: URL) {
-        let fm = FileManager.default
-        let extensions = ["", "-wal", "-shm"]
-        for ext in extensions {
-            let url = URL(fileURLWithPath: storeURL.path + ext)
-            if fm.fileExists(atPath: url.path) {
-                try? fm.removeItem(at: url)
-            }
-        }
+        try context.save()
     }
 
     /// 将子网掩码字符串（如 "255.255.255.0"）转换为前缀长度（如 24）
