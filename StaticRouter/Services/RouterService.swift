@@ -108,7 +108,7 @@ final class RouterService: ObservableObject {
     /// 网络路径监听（拔插网线 / 切换 Wi-Fi 时触发对账）
     private var networkPathMonitor: NWPathMonitor?
     /// 网络变化对账的防抖任务
-    private var pathChangeDebounceTask: Task<Void, Never>?
+    private var recalibrationDebounceTask: Task<Void, Never>?
 
     /// Combine subscriptions for helperManager state propagation.
     private var helperManagerCancellables = Set<AnyCancellable>()
@@ -178,7 +178,14 @@ final class RouterService: ObservableObject {
         appDidBecomeActiveCancellable?.cancel()
         monitoringTask?.cancel()
         networkPathMonitor?.cancel()
-        pathChangeDebounceTask?.cancel()
+        recalibrationDebounceTask?.cancel()
+    }
+
+    /// 操作失败后将单条规则的 isActive 校准到真实状态（避免开关卡在错误显示）。
+    @available(macOS 14, *)
+    @MainActor
+    func reconcileActiveState(for rule: RouteRule) {
+        RouteStateCalibrator.calibrate(rules: [rule], systemRoutes: SystemRouteReader.readRoutes())
     }
 
     // MARK: - Route Operations (SwiftData path – macOS 14+)
@@ -509,8 +516,17 @@ final class RouterService: ObservableObject {
                         ptr.load(fromByteOffset: 0, as: rt_msghdr.self)
                     }
 
-                    // 仅处理 RTM_ADD 和 RTM_DELETE
-                    guard header.rtm_type == RTM_ADD || header.rtm_type == RTM_DELETE else { continue }
+                    switch Int32(header.rtm_type) {
+                    case RTM_ADD, RTM_DELETE:
+                        break
+                    case RTM_IFINFO, RTM_NEWADDR, RTM_DELADDR:
+                        // 接口 link 变化 / 地址增删：拔插网线的可靠触发源
+                        // （NWPathMonitor 对非默认接口的拔插不可靠），防抖后全量对账
+                        await self?.postRecalibrationDebounced(reason: "interfaceStateChange")
+                        continue
+                    default:
+                        continue
+                    }
 
                     // 过滤非 IPv4 消息（通过解析第一个 sockaddr 的地址族）
                     guard let (destination, gateway) = Self.extractAddrsFromMessage(buf, size: n, header: header) else {
@@ -534,6 +550,11 @@ final class RouterService: ObservableObject {
                 }
             }
         }
+    }
+
+    @MainActor
+    private func postRecalibrationDebounced(reason: String) {
+        recalibrationDebounceTask = scheduleRecalibrationDebounced(reason: reason, previous: recalibrationDebounceTask)
     }
 
     /// 请求视图层对 isActive 做一次全量对账（与实际路由表比对并修正）。
@@ -561,12 +582,18 @@ final class RouterService: ObservableObject {
     @MainActor
     private func scheduleRecalibrationAfterPathChange() {
         // 防抖：一次接口波动会触发多次 path 回调
-        pathChangeDebounceTask?.cancel()
-        pathChangeDebounceTask = Task { [weak self] in
+        recalibrationDebounceTask = scheduleRecalibrationDebounced(reason: "networkPathChange", previous: recalibrationDebounceTask)
+    }
+
+    /// 对账防抖：接口波动会连发多个事件，1.5s 内合并为一次对账
+    @MainActor
+    private func scheduleRecalibrationDebounced(reason: String, previous: Task<Void, Never>?) -> Task<Void, Never> {
+        previous?.cancel()
+        return Task { [weak self] in
             try? await Task.sleep(nanoseconds: 1_500_000_000)
             guard !Task.isCancelled else { return }
             guard let self else { return }
-            await self.postRecalibration(reason: "networkPathChange")
+            await self.postRecalibration(reason: reason)
         }
     }
 

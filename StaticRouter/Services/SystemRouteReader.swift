@@ -41,6 +41,32 @@ enum SystemRouteReader {
         return parseRouteBuffer(buffer, size: bufferSize)
     }
 
+    /// 当前拥有 IPv4 地址且已启用的接口名集合。
+    ///
+    /// 接口拔线后内核会移除其 IPv4 地址（media/status 变为 inactive，但 IFF_RUNNING
+    /// 标志并不可靠），因此"接口是否有 IPv4 地址"是判断接口型路由是否实际可用的
+    /// 可靠代理信号。
+    static func interfaceNamesWithIPv4() -> Set<String> {
+        var names: Set<String> = []
+        var ifap: UnsafeMutablePointer<ifaddrs>?
+        guard getifaddrs(&ifap) == 0, let first = ifap else { return names }
+        defer { freeifaddrs(first) }
+
+        var cursor = first
+        while true {
+            let ifa = cursor.pointee
+            if let addr = ifa.ifa_addr, addr.pointee.sa_family == UInt8(AF_INET) {
+                let flags = Int32(ifa.ifa_flags)
+                if flags & IFF_UP != 0, flags & IFF_LOOPBACK == 0 {
+                    names.insert(String(cString: ifa.ifa_name))
+                }
+            }
+            guard let next = ifa.ifa_next else { break }
+            cursor = next
+        }
+        return names
+    }
+
     // MARK: - Private Parsing
 
     /// 解析 sysctl 返回的路由表缓冲区，提取所有 IPv4 条目。
