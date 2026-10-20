@@ -93,11 +93,41 @@ jobs:
           APP_PATH="build/DerivedData/Build/Products/Release/Static Router.app"
           ditto -c -k --keepParent "$APP_PATH" "${ZIP_NAME}"
 
+      - name: Generate Sparkle appcast (EdDSA signed)
+        if: github.event_name == 'release'
+        env:
+          # Sparkle 私钥（generate_keys 生成）；未配置时 appcast 无签名，Sparkle 会拒绝更新
+          SPARKLE_EDDSA_PRIVATE_KEY: ${{ secrets.SPARKLE_EDDSA_PRIVATE_KEY }}
+        run: |
+          if [ -z "$SPARKLE_EDDSA_PRIVATE_KEY" ]; then
+            echo "::warning::Secret SPARKLE_EDDSA_PRIVATE_KEY is not set; appcast will be unsigned and updates will fail verification"
+          fi
+          curl -sL -o sparkle.tar.xz https://github.com/sparkle-project/Sparkle/releases/download/2.8.0/Sparkle-2.8.0.tar.xz
+          tar -xf sparkle.tar.xz
+          mkdir -p appcast_dir
+          cp "${ZIP_NAME}" appcast_dir/
+          ./bin/generate_appcast appcast_dir \
+            --download-url-prefix "https://github.com/${{ github.repository }}/releases/download/"
+          python3 - <<'PY'
+          import pathlib
+          p = pathlib.Path("appcast_dir/appcast.xml")
+          xml = p.read_text()
+          if "<link>" not in xml:
+              xml = xml.replace(
+                  "</channel>",
+                  "  <link>https://github.com/jdjingdian/StaticRouteHelper</link>\n</channel>",
+              )
+          p.write_text(xml)
+          PY
+          cp appcast_dir/appcast.xml appcast.xml
+
       - name: Upload zip to GitHub Release
         if: github.event_name == 'release'
         uses: softprops/action-gh-release@v2
         with:
-          files: ${{ env.ZIP_NAME }}
+          files: |
+            ${{ env.ZIP_NAME }}
+            appcast.xml
 
       - name: Upload zip as workflow artifact
         if: github.event_name == 'push'

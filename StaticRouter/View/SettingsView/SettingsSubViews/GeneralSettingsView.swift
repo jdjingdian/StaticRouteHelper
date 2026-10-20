@@ -1,14 +1,15 @@
 //
 //  GeneralSettingsView.swift
-//  StaticRouteHelper
 //
 
 import Foundation
 import SwiftUI
 import ServiceManagement
+import Sparkle
 
 struct GeneralSettingsView: View {
     @EnvironmentObject private var routerService: RouterService
+    private let updateChecker = UpdateControllerFactory.makeUpdateChecker()
     @State private var showUninstallAlert = false
     @State private var showBackgroundSwitchAlert = false
     @State private var uninstallError: String? = nil
@@ -30,6 +31,8 @@ struct GeneralSettingsView: View {
                 RoundedRectangle(cornerRadius: 12, style: .continuous)
                     .stroke(RouterTheme.subtleBorder, lineWidth: 0.6)
             )
+
+            updateAndDiagnosticsCard
         }
         .padding(20)
         // Background switch guidance alert (shown when SMAppService uninstall is blocked).
@@ -56,6 +59,53 @@ struct GeneralSettingsView: View {
             Text(uninstallError ?? "")
         }
     }
+
+    // MARK: - 更新与诊断卡片
+
+    private var updateAndDiagnosticsCard: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack {
+                Text(String(localized: "settings.update.section"))
+                    .font(.headline)
+                Spacer()
+                Text("\(String(localized: "settings.update.current")) \(AppVersion.current)")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            }
+
+            HStack {
+                Text(String(localized: "settings.update.sparkle_hint"))
+                    .font(.callout)
+                    .foregroundStyle(.secondary)
+                Spacer()
+                if updateChecker.isSupported {
+                    Button(String(localized: "settings.update.check")) {
+                        updateChecker.checkForUpdates()
+                    }
+                }
+            }
+
+            Divider()
+
+            HStack {
+                Text(String(localized: "diagnostics.export.hint"))
+                    .font(.callout)
+                    .foregroundStyle(.secondary)
+                Spacer()
+                Button(String(localized: "diagnostics.export.menu")) {
+                    DiagnosticsExporter.exportViaSavePanel()
+                }
+            }
+        }
+        .padding(16)
+        .background(Color(nsColor: .controlBackgroundColor), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                .stroke(RouterTheme.subtleBorder, lineWidth: 0.6)
+        )
+    }
+
+    // MARK: - Uninstall
 
     private var uninstallButton: some View {
         Button {

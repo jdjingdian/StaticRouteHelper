@@ -77,6 +77,11 @@
 		AAEF00000000000000000902 /* AppLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEF00000000000000000901 /* AppLog.swift */; };
 		AAEF00000000000000001002 /* ContextSave.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEF00000000000000001001 /* ContextSave.swift */; };
 		AAEF00000000000000001102 /* PersistenceAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEF00000000000000001101 /* PersistenceAlertController.swift */; };
+		AAEF00000000000000001302 /* DiagnosticsExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEF00000000000000001301 /* DiagnosticsExporter.swift */; };
+		AAEF0000000000000000C301 /* DistributionChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEF0000000000000000C201 /* DistributionChannel.swift */; };
+		AAEF0000000000000000C302 /* SparkleUpdateController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEF0000000000000000C202 /* SparkleUpdateController.swift */; };
+		AAEF0000000000000000C303 /* AppStoreUpdateController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEF0000000000000000C203 /* AppStoreUpdateController.swift */; };
+		AAEF0000000000000000D003 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = AAEF0000000000000000D002 /* Sparkle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXShellScriptBuildPhase section */
@@ -201,6 +206,10 @@
 		AAEF00000000000000000901 /* AppLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppLog.swift; path = AppLog.swift; sourceTree = "<group>"; };
 		AAEF00000000000000001001 /* ContextSave.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ContextSave.swift; path = ContextSave.swift; sourceTree = "<group>"; };
 		AAEF00000000000000001101 /* PersistenceAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PersistenceAlertController.swift; path = PersistenceAlertController.swift; sourceTree = "<group>"; };
+		AAEF00000000000000001301 /* DiagnosticsExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DiagnosticsExporter.swift; path = DiagnosticsExporter.swift; sourceTree = "<group>"; };
+		AAEF0000000000000000C201 /* DistributionChannel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DistributionChannel.swift; path = DistributionChannel.swift; sourceTree = "<group>"; };
+		AAEF0000000000000000C202 /* SparkleUpdateController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SparkleUpdateController.swift; path = SparkleUpdateController.swift; sourceTree = "<group>"; };
+		AAEF0000000000000000C203 /* AppStoreUpdateController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppStoreUpdateController.swift; path = AppStoreUpdateController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -219,6 +228,7 @@
 			files = (
 				396255EA296C0D7E00DB6000 /* Blessed in Frameworks */,
 				396255ED296C0D9300DB6000 /* SecureXPC in Frameworks */,
+				AAEF0000000000000000D003 /* Sparkle in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -402,6 +412,8 @@
 				AA000002000000000000BB02 /* InstallMethod.swift */,
 				AA000002000000000000BB03 /* PrivilegedHelperManager.swift */,
 				AA900002000000000000CC01 /* SettingsNavigator.swift */,
+				AAEF00000000000000001301 /* DiagnosticsExporter.swift */,
+				AAEF0000000000000000C101 /* Updates */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -448,6 +460,16 @@
 			path = Persistence;
 			sourceTree = "<group>";
 		};
+		AAEF0000000000000000C101 /* Updates */ = {
+			isa = PBXGroup;
+			children = (
+				AAEF0000000000000000C201 /* DistributionChannel.swift */,
+				AAEF0000000000000000C202 /* SparkleUpdateController.swift */,
+				AAEF0000000000000000C203 /* AppStoreUpdateController.swift */,
+			);
+			path = Updates;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -491,6 +513,7 @@
 			packageProductDependencies = (
 				396255E9296C0D7E00DB6000 /* Blessed */,
 				396255EC296C0D9300DB6000 /* SecureXPC */,
+				AAEF0000000000000000D002 /* Sparkle */,
 			);
 			productName = StaticRouteHelper;
 			productReference = 39E84C63260B32BD00776AE7 /* Static Router.app */;
@@ -524,6 +547,7 @@
 			);
 			mainGroup = 39E84C5A260B32BD00776AE7;
 			packageReferences = (
+				AAEF0000000000000000D001 /* XCRemoteSwiftPackageReference "Sparkle" */,
 				396255E8296C0D7E00DB6000 /* XCRemoteSwiftPackageReference "Blessed" */,
 				396255EB296C0D9300DB6000 /* XCRemoteSwiftPackageReference "SecureXPC" */,
 			);
@@ -622,6 +646,10 @@
 				AAEF00000000000000000902 /* AppLog.swift in Sources */,
 				AAEF00000000000000001002 /* ContextSave.swift in Sources */,
 				AAEF00000000000000001102 /* PersistenceAlertController.swift in Sources */,
+				AAEF00000000000000001302 /* DiagnosticsExporter.swift in Sources */,
+				AAEF0000000000000000C301 /* DistributionChannel.swift in Sources */,
+				AAEF0000000000000000C302 /* SparkleUpdateController.swift in Sources */,
+				AAEF0000000000000000C303 /* AppStoreUpdateController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -929,6 +957,14 @@
 				minimumVersion = 0.8.0;
 			};
 		};
+		AAEF0000000000000000D001 /* XCRemoteSwiftPackageReference "Sparkle" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sparkle-project/Sparkle";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.8.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -951,6 +987,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 396255EB296C0D9300DB6000 /* XCRemoteSwiftPackageReference "SecureXPC" */;
 			productName = SecureXPC;
+		};
+		AAEF0000000000000000D002 /* Sparkle */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AAEF0000000000000000D001 /* XCRemoteSwiftPackageReference "Sparkle" */;
+			productName = Sparkle;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

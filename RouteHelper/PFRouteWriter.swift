@@ -55,7 +55,6 @@ enum PFRouteWriter {
                                        ifaceName: request.gateway)
         }
     }
-
     // MARK: - IP Gateway Path
 
     /// Build and send RTM_ADD/RTM_DELETE with RTA_DST | RTA_GATEWAY | RTA_NETMASK.
@@ -97,7 +96,7 @@ enum PFRouteWriter {
             raw.storeBytes(of: nmSin,  toByteOffset: hdrSize + sinSize * 2, as: sockaddr_in.self)
         }
 
-        return sendBuffer(sock: sock, buf: buf)
+        return sendBuffer(sock: sock, buf: buf, isAdd: rtmType == UInt8(RTM_ADD))
     }
 
     // MARK: - Interface Gateway Path
@@ -155,13 +154,17 @@ enum PFRouteWriter {
             raw.storeBytes(of: sdl,    toByteOffset: hdrSize + sinSize * 2, as: sockaddr_dl.self)
         }
 
-        return sendBuffer(sock: sock, buf: buf)
+        return sendBuffer(sock: sock, buf: buf, isAdd: rtmType == UInt8(RTM_ADD))
     }
 
     // MARK: - Helpers
 
     /// Write the assembled buffer to the PF_ROUTE socket and map errno to a reply.
-    private static func sendBuffer(sock: Int32, buf: Data) -> RouteWriteReply {
+    ///
+    /// 幂等语义（issue #20）：网络拔插时内核会自行增删路由，应用随后发起的
+    /// 写操作命中 ESRCH（删除不存在的路由）或 EEXIST（添加已存在的路由）
+    /// 属于"目标状态已达成"，按成功处理，否则开关会永远卡在错误状态。
+    private static func sendBuffer(sock: Int32, buf: Data, isAdd: Bool) -> RouteWriteReply {
         let n = buf.withUnsafeBytes { ptr in
             Darwin.write(sock, ptr.baseAddress!, buf.count)
         }
@@ -169,17 +172,26 @@ enum PFRouteWriter {
             return RouteWriteReply(success: true, errorMessage: nil)
         }
         let err = errno
-        let msg: String
         switch err {
-        case EEXIST:
-            msg = "Route already exists"
-        case ESRCH:
-            msg = "Route not found"
+        case EEXIST where isAdd:
+            NSLog("PFRouteWriter: ADD hit EEXIST — route already present, treating as success")
+            return RouteWriteReply(success: true, errorMessage: nil)
+        case ESRCH where !isAdd:
+            NSLog("PFRouteWriter: DELETE hit ESRCH — route already absent, treating as success")
+            return RouteWriteReply(success: true, errorMessage: nil)
         default:
-            msg = "Route operation failed: \(String(cString: strerror(err)))"
+            let msg: String
+            switch err {
+            case EEXIST:
+                msg = "A different route to this destination already exists"
+            case ESRCH:
+                msg = "Route not found"
+            default:
+                msg = "Route operation failed: \(String(cString: strerror(err)))"
+            }
+            NSLog("PFRouteWriter: write failed errno=%d — %@", err, msg)
+            return RouteWriteReply(success: false, errorMessage: msg)
         }
-        NSLog("PFRouteWriter: write failed errno=%d — %@", err, msg)
-        return RouteWriteReply(success: false, errorMessage: msg)
     }
 
     /// Construct a `sockaddr_in` from a dotted-decimal IPv4 string.

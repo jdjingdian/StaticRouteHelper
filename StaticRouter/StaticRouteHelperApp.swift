@@ -19,6 +19,9 @@ struct StaticRouteHelperApp: App {
     // 编辑场景保存失败的用户可见提示
     @StateObject private var persistenceAlert = PersistenceAlertController()
 
+    // 分发渠道更新检查器（GitHub 分发 = Sparkle；App Store 预留 = Siren）
+    private let updateChecker = UpdateControllerFactory.makeUpdateChecker()
+
     var body: some Scene {
         WindowGroup {
             AppRootView()
@@ -29,6 +32,9 @@ struct StaticRouteHelperApp: App {
                 .task { await onStartup() }
                 .onReceive(NotificationCenter.default.publisher(for: .routeDidChange)) { note in
                     handleRouteChange(note)
+                }
+                .onReceive(NotificationCenter.default.publisher(for: .routeTableNeedsRecalibration)) { _ in
+                    handleRouteTableRecalibration()
                 }
         }
         .commands { MenuBarCommand() }
@@ -51,6 +57,8 @@ struct StaticRouteHelperApp: App {
             // 12–13 路径同样需要定期 checkpoint，保证 Core Data 的 WAL 落盘
             StoreFlusher.shared.start(backend: legacyStack)
         }
+        // 启动后后台检查更新（Sparkle 自带调度与提示）
+        updateChecker.checkForUpdatesInBackground()
     }
 
     @available(macOS 14, *)
@@ -102,6 +110,21 @@ struct StaticRouteHelperApp: App {
             }
         }
         if changed { context.saveOrLog(operation: "handleRouteChange") }
+    }
+
+    /// 路由表可能失配（事件丢失 / 网络拔插）时的全量对账（issue #20）：
+    /// 以当前系统路由表为准修正所有规则的 isActive 并落盘。
+    @MainActor
+    private func handleRouteTableRecalibration() {
+        guard #available(macOS 14, *) else { return }
+        let context = Self.sharedModelContainer.mainContext
+        let descriptor = FetchDescriptor<RouteRule>()
+        guard let rules = try? context.fetch(descriptor) else {
+            AppLog.persistence.error("对账时读取规则失败")
+            return
+        }
+        RouteStateCalibrator.calibrate(rules: rules, systemRoutes: routerService.systemRoutes)
+        context.saveOrLog(operation: "routeTableRecalibration")
     }
 
     // MARK: - SwiftData Container

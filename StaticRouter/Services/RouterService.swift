@@ -6,6 +6,7 @@
 import Foundation
 import Combine
 import AppKit
+import Network
 import SecureXPC
 import Blessed
 import Authorized
@@ -18,6 +19,8 @@ extension Notification.Name {
     /// 当 PF_ROUTE 监听到路由变化（RTM_ADD / RTM_DELETE）时发布。
     /// userInfo keys: "destination" (String), "gateway" (String), "isAdd" (Bool)
     static let routeDidChange = Notification.Name("cn.magicdian.staticrouter.routeDidChange")
+    /// 路由表可能与应用状态失配（事件丢失 / 网络变化），需要全量对账 isActive。
+    static let routeTableNeedsRecalibration = Notification.Name("cn.magicdian.staticrouter.routeTableNeedsRecalibration")
 }
 
 // MARK: - SystemRouteEntry
@@ -102,6 +105,10 @@ final class RouterService: ObservableObject {
 
     /// 后台 PF_ROUTE 监听任务
     private var monitoringTask: Task<Void, Never>?
+    /// 网络路径监听（拔插网线 / 切换 Wi-Fi 时触发对账）
+    private var networkPathMonitor: NWPathMonitor?
+    /// 网络变化对账的防抖任务
+    private var pathChangeDebounceTask: Task<Void, Never>?
 
     /// Combine subscriptions for helperManager state propagation.
     private var helperManagerCancellables = Set<AnyCancellable>()
@@ -161,6 +168,8 @@ final class RouterService: ObservableObject {
 
         // 启动 PF_ROUTE 实时监听
         startRouteMonitor()
+        // 网络变化（拔插网线 / 切换接口）时主动对账（issue #20）
+        startNetworkPathMonitor()
     }
 
     deinit {
@@ -168,6 +177,8 @@ final class RouterService: ObservableObject {
         helperStatusFallbackPollingCancellable?.cancel()
         appDidBecomeActiveCancellable?.cancel()
         monitoringTask?.cancel()
+        networkPathMonitor?.cancel()
+        pathChangeDebounceTask?.cancel()
     }
 
     // MARK: - Route Operations (SwiftData path – macOS 14+)
@@ -462,44 +473,100 @@ final class RouterService: ObservableObject {
     /// 自动同步受影响 RouteRule 的 isActive 状态到内存（不触发 XPC 重新激活）。
     private func startRouteMonitor() {
         monitoringTask = Task.detached(priority: .background) { [weak self] in
-            // 打开 PF_ROUTE raw socket（不需要 root 权限）
-            let sock = socket(PF_ROUTE, SOCK_RAW, AF_UNSPEC)
-            guard sock >= 0 else {
-                print("[RouteMonitor] 无法打开 PF_ROUTE socket：\(String(cString: strerror(errno)))")
-                return
-            }
-            defer { close(sock) }
-
             var buf = [UInt8](repeating: 0, count: 4096)
 
+            // 外层循环：socket 出现致命错误时重建，而不是永久退出。
+            // 历史实现（issue #20）中任何 read 失败都会跳出循环且不再重启，
+            // 导致网络波动后 isActive 永久失配。
             while !Task.isCancelled {
-                let n = read(sock, &buf, buf.count)
-                guard n > 0, !Task.isCancelled else { break }
-
-                guard n >= MemoryLayout<rt_msghdr>.size else { continue }
-
-                let header: rt_msghdr = buf.withUnsafeBytes { ptr in
-                    ptr.load(fromByteOffset: 0, as: rt_msghdr.self)
-                }
-
-                // 仅处理 RTM_ADD 和 RTM_DELETE
-                guard header.rtm_type == RTM_ADD || header.rtm_type == RTM_DELETE else { continue }
-
-                // 过滤非 IPv4 消息（通过解析第一个 sockaddr 的地址族）
-                guard let (destination, gateway) = Self.extractAddrsFromMessage(buf, size: n, header: header) else {
+                // 打开 PF_ROUTE raw socket（不需要 root 权限）
+                let sock = socket(PF_ROUTE, SOCK_RAW, AF_UNSPEC)
+                guard sock >= 0 else {
+                    AppLog.persistence.error("[RouteMonitor] 无法打开 PF_ROUTE socket：\(String(cString: strerror(errno)), privacy: .public)")
+                    try? await Task.sleep(nanoseconds: 3_000_000_000)
                     continue
                 }
 
-                let isAdd = header.rtm_type == RTM_ADD
+                while !Task.isCancelled {
+                    let n = read(sock, &buf, buf.count)
+                    if n < 0 {
+                        let err = errno
+                        if err == EINTR { continue }
+                        if err == ENOBUFS {
+                            // 拔插网线时路由事件风暴会撑爆接收缓冲，部分事件丢失——
+                            // 用全量对账补偿，socket 本身仍然可用
+                            AppLog.persistence.info("[RouteMonitor] 接收缓冲溢出（ENOBUFS），部分事件丢失，触发对账")
+                            await self?.postRecalibration(reason: "eventBufferOverflow")
+                            continue
+                        }
+                        AppLog.persistence.error("[RouteMonitor] read 失败（errno=\(err)）：\(String(cString: strerror(err)), privacy: .public)，重建 socket")
+                        break
+                    }
+                    if Task.isCancelled { break }
+                    guard n >= MemoryLayout<rt_msghdr>.size else { continue }
 
-                if let self = self {
-                    await self.handleRouteEvent(
-                        destination: destination,
-                        gateway: gateway,
-                        isAdd: isAdd
-                    )
+                    let header: rt_msghdr = buf.withUnsafeBytes { ptr in
+                        ptr.load(fromByteOffset: 0, as: rt_msghdr.self)
+                    }
+
+                    // 仅处理 RTM_ADD 和 RTM_DELETE
+                    guard header.rtm_type == RTM_ADD || header.rtm_type == RTM_DELETE else { continue }
+
+                    // 过滤非 IPv4 消息（通过解析第一个 sockaddr 的地址族）
+                    guard let (destination, gateway) = Self.extractAddrsFromMessage(buf, size: n, header: header) else {
+                        continue
+                    }
+
+                    let isAdd = header.rtm_type == RTM_ADD
+
+                    if let self = self {
+                        await self.handleRouteEvent(
+                            destination: destination,
+                            gateway: gateway,
+                            isAdd: isAdd
+                        )
+                    }
+                }
+
+                close(sock)
+                if !Task.isCancelled {
+                    try? await Task.sleep(nanoseconds: 1_000_000_000)
                 }
             }
+        }
+    }
+
+    /// 请求视图层对 isActive 做一次全量对账（与实际路由表比对并修正）。
+    @MainActor
+    private func postRecalibration(reason: String) async {
+        await refreshSystemRoutes()
+        NotificationCenter.default.post(name: .routeTableNeedsRecalibration, object: nil)
+        AppLog.persistence.info("[RouteMonitor] 已请求 isActive 全量对账（\(reason, privacy: .public)）")
+    }
+
+    /// 监听系统网络路径变化（issue #20）：拔插网线、接口切换时内核会增删路由，
+    /// 而 PF_ROUTE 事件可能丢失（缓冲溢出、接口型网关事件无法按网关匹配），
+    /// 以主动对账兜底，保证开关状态自愈。
+    private func startNetworkPathMonitor() {
+        let monitor = NWPathMonitor()
+        networkPathMonitor = monitor
+        monitor.pathUpdateHandler = { [weak self] _ in
+            DispatchQueue.main.async {
+                self?.scheduleRecalibrationAfterPathChange()
+            }
+        }
+        monitor.start(queue: DispatchQueue(label: "cn.magicdian.staticrouter.pathmonitor", qos: .utility))
+    }
+
+    @MainActor
+    private func scheduleRecalibrationAfterPathChange() {
+        // 防抖：一次接口波动会触发多次 path 回调
+        pathChangeDebounceTask?.cancel()
+        pathChangeDebounceTask = Task { [weak self] in
+            try? await Task.sleep(nanoseconds: 1_500_000_000)
+            guard !Task.isCancelled else { return }
+            guard let self else { return }
+            await self.postRecalibration(reason: "networkPathChange")
         }
     }
 
@@ -569,6 +636,10 @@ final class RouterService: ObservableObject {
                     if inet_ntop(AF_INET, &addr, &result, socklen_t(INET_ADDRSTRLEN)) != nil {
                         gateway = String(cString: result)
                     }
+                } else if saFamily == AF_LINK, offset + MemoryLayout<sockaddr_dl>.size <= size {
+                    // 接口型路由的网关是 AF_LINK，报告接口名（如 "en8"），
+                    // 与 rule.gateway（接口名）匹配，否则这类规则的事件永远失配（issue #20）
+                    gateway = Self.interfaceName(fromDl: buf, offset: offset)
                 }
             default:
                 break
@@ -580,6 +651,20 @@ final class RouterService: ObservableObject {
 
         guard let dest = destination else { return nil }
         return (dest, gateway)
+    }
+
+    /// 从 sockaddr_dl 中提取接口名（与 SystemRouteReader 保持一致）。
+    private static func interfaceName(fromDl buffer: [UInt8], offset: Int) -> String {
+        guard offset + MemoryLayout<sockaddr_dl>.size <= buffer.count else { return "" }
+        let sdl: sockaddr_dl = buffer.withUnsafeBytes { ptr in
+            ptr.load(fromByteOffset: offset, as: sockaddr_dl.self)
+        }
+        let nlen = Int(sdl.sdl_nlen)
+        guard nlen > 0 else { return "" }
+        let nameOffset = offset + MemoryLayout<sockaddr_dl>.offset(of: \.sdl_data)!
+        guard nameOffset + nlen <= buffer.count else { return "" }
+        let nameBytes = buffer[nameOffset..<nameOffset + nlen]
+        return String(bytes: nameBytes, encoding: .utf8) ?? ""
     }
 
     // MARK: - Status Resolution
